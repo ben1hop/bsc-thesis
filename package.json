@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "concurrently": "^8.2.1"
+  },
+  "scripts": {
+  "run": "concurrently \"node ./client/index.js\" \"cd ./client/tool_analytics_frontend && quasar dev\""
+  }
+}
