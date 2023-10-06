@@ -35,7 +35,7 @@ fs.readdir(inputDirectory, (err, files) => {
   }
 
   // Filter the files that match the naming pattern
-  const sqlFiles = files.filter(file => /^EventLog\(\d+\)\.sql$/i.test(file));
+  const sqlFiles = files.filter(file => /^StudioInstance\(\d+\)\.sql$/i.test(file));
 
   // Process each SQL file
   sqlFiles.forEach(inputFileName => {
@@ -44,6 +44,8 @@ fs.readdir(inputDirectory, (err, files) => {
     const inputFileNumber = parseInt(inputFileName.split('(')[1].split(')')[0]);
 
     const incrementValue = incrementFactor*inputFileNumber
+
+    console.log(incrementValue)
     
     // Read and process the input file
     fs.readFile(path.join(inputDirectory, inputFileName), 'utf8', (err, data) => {

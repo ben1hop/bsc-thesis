@@ -90,10 +90,6 @@ CREATE TABLE `StudioInstance` (
   `lastActive` timestamp NULL DEFAULT NULL,
   `firstActive` timestamp NULL DEFAULT NULL,
   `computerOS` varchar(45) NOT NULL,
-  `computerOSVersion` varchar(45) NOT NULL,
-  `computerCPU` varchar(256) DEFAULT NULL,
-  `computerHDDSize` bigint(20) DEFAULT NULL,
-  `computerOSArch` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=546536 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -108,13 +104,11 @@ DROP TABLE IF EXISTS `StudioLocation`;
 CREATE TABLE `StudioLocation` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `idStudioRef` int(11) NOT NULL,
-  `date` date NOT NULL,
   `idLocationRef` int(11) NOT NULL,
-  `ipAddress` bigint(20) NOT NULL,
+  `ipAddress` varchar(25) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `studiolocation_UNIQUE` (`idStudioRef`,`date`,`idLocationRef`,`ipAddress`),
+  UNIQUE KEY `studiolocation_UNIQUE` (`idStudioRef`,`idLocationRef`,`ipAddress`),
   KEY `idStudio_idx` (`idStudioRef`),
-  KEY `date_idx` (`date`),
   KEY `idLocationRef_idx` (`idLocationRef`),
   KEY `ipAddress_idx` (`ipAddress`),
   CONSTRAINT `fk_idLocationRef` FOREIGN KEY (`idLocationRef`) REFERENCES `Location` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
@@ -133,12 +127,10 @@ CREATE TABLE `StudioSoftware` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `idStudioRef` int(11) NOT NULL,
   `idSoftwareRef` int(11) NOT NULL,
-  `synthesized` int(11) DEFAULT '0',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `studiosoftware_UNIQUE` (`idStudioRef`,`idSoftwareRef`,`synthesized`),
+  UNIQUE KEY `studiosoftware_UNIQUE` (`idStudioRef`,`idSoftwareRef`),
   KEY `fk_software_idx` (`idSoftwareRef`),
   KEY `fk_studio_idx` (`idStudioRef`),
-  KEY `synthesized_idx` (`synthesized`),
   CONSTRAINT `fk_software` FOREIGN KEY (`idSoftwareRef`) REFERENCES `Software` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_studio` FOREIGN KEY (`idStudioRef`) REFERENCES `StudioInstance` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=851979 DEFAULT CHARSET=latin1;
