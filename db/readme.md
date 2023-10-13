@@ -22,3 +22,15 @@
 ### docker-compose.yml info:
 - DB password: `MYSQL_ROOT_PASSWORD:`
 - Access Port: `ports:`
+
+
+
+
+## Docker info:
+
+### Every script placed under mock/data will be loaded and run on creating the container
+### Every script placed under mock/runtime-scripts are placed in a same named folder at the root of the container
+- Runtime scripts can be run as: `mysql -u user -p -e runtime-scripts/script.sql`
+- Any change under this folder will be hot loaded into the container , no need to restart or anything
+- Openning terminal for a running container: `docker exec -it *db id or name* bash -l`
+- 

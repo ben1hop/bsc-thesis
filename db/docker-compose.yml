@@ -15,3 +15,4 @@ services:
       - '8082'
     volumes:
       - ./mock/data:/docker-entrypoint-initdb.d
+      - ./mock/runtime-scripts:/runtime-scripts
