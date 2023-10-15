@@ -17,7 +17,7 @@ DROP TABLE IF EXISTS `Regions`;
 create table Regions as select distinct region from Location;
 
 DROP TABLE IF EXISTS `Tools`;
-create table ...
+create table Tools as select distinct result from EventLog;
 
 
 
