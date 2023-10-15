@@ -3,55 +3,59 @@ import pool from './connection';
 
 export const analyticsApi: Map<string, RequestHandler> = new Map();
 
-const SELECT = 'SELECT * FROM analytics_dev';
+const SELECT = 'SELECT * FROM ';
 
 analyticsApi.set('getYears', async (req, res) => {
   pool.query(
-    SELECT + '.Years;',
+    SELECT + 'Years;',
     (err: any, rows: any[], fields: { name: string | number }[]) => {
       if (err) {
         throw err;
+      }else{
+        res.send(rows.map((value) => value[fields[0].name]));
       }
-      res.send(rows.map((value) => value[fields[0].name]));
     }
   );
 });
 
 analyticsApi.set('getTools', async (req, res) => {
   pool.query(
-    SELECT + '.Tools;',
+    SELECT + 'Tools;',
     (err: any, rows: any[], fields: { name: string | number }[]) => {
-      if (err) throw err;
+      if (err) {throw err;}else{
       res.send(rows.map((value) => value[fields[0].name]));
+      }
     }
   );
 });
 
 analyticsApi.set('getOsTypes', async (req, res) => {
   pool.query(
-    SELECT + '.OSTypes;',
+    SELECT + 'OSTypes;',
     (err: any, rows: any[], fields: { name: string | number }[]) => {
-      if (err) throw err;
+      if (err) {throw err;}else{
       res.send(rows.map((value) => value[fields[0].name]));
+      }
     }
   );
 });
 
 analyticsApi.set('getCountries', async (req, res) => {
   pool.query(
-    SELECT + '.Countries;',
+    SELECT + 'Countries;',
     (err: any, rows: any[], fields: { name: string | number }[]) => {
-      if (err) throw err;
+      if (err) {throw err;}else{
       res.send(rows.map((value) => value[fields[0].name]));
+      }
     }
   );
 });
 
 analyticsApi.set('totalUsageByYear', async (req, res) => {
   pool.query(
-    SELECT + '.TotalUsageByYear;',
+    SELECT + 'TotalUsageByYear;',
     (err: any, rows: any[], fields: { name: string | number }[]) => {
-      if (err) throw err;
+      if (err) {throw err;}else{
       res.send(
         rows.map((value) => ({
           tool: value[fields[0].name],
@@ -59,15 +63,16 @@ analyticsApi.set('totalUsageByYear', async (req, res) => {
           total: value[fields[2].name],
         }))
       );
+      }
     }
   );
 });
 
 analyticsApi.set('totalUsageThroughYear', async (req, res) => {
   pool.query(
-    SELECT + '.TotalUsageThroughYear;',
+    SELECT + 'TotalUsageThroughYear;',
     (err: any, rows: any[], fields: { name: string | number }[]) => {
-      if (err) throw err;
+      if (err) {throw err;}else{
       res.send(
         rows.map((value) => ({
           year: value[fields[0].name],
@@ -75,15 +80,16 @@ analyticsApi.set('totalUsageThroughYear', async (req, res) => {
           total: value[fields[2].name],
         }))
       );
+      }
     }
   );
 });
 
 analyticsApi.set('totalUsageThroughYearPerTool', async (req, res) => {
   pool.query(
-    SELECT + '.TotalUsageThroughYearPerTool;',
+    SELECT + 'TotalUsageThroughYearPerTool;',
     (err: any, rows: any[], fields: { name: string | number }[]) => {
-      if (err) throw err;
+      if (err) {throw err;}else{
       res.send(
         rows.map((value) => ({
           tool: value[fields[0].name],
@@ -92,15 +98,16 @@ analyticsApi.set('totalUsageThroughYearPerTool', async (req, res) => {
           total: value[fields[3].name],
         }))
       );
+      }
     }
   );
 });
 
 analyticsApi.set('uniqueUsers', async (req, res) => {
   pool.query(
-    SELECT + '.UniqueUsers;',
+    SELECT + 'UniqueUsers;',
     (err: any, rows: any[], fields: { name: string | number }[]) => {
-      if (err) throw err;
+      if (err) {throw err;}else{
       res.send(
         rows.map((value) => ({
           tool: value[fields[0].name],
@@ -109,36 +116,39 @@ analyticsApi.set('uniqueUsers', async (req, res) => {
           user: value[fields[3].name],
         }))
       );
+      }
     }
   );
 });
 
 analyticsApi.set('totalUsageByCountries', async (req, res) => {
   pool.query(
-    SELECT + '.TotalUsageByCountries;',
+    SELECT + 'TotalUsageByCountries;',
     (err: any, rows: any[], fields: { name: string | number }[]) => {
-      if (err) throw err;
+      if (err) {throw err;}else{
       res.send(
         rows.map((value) => ({
           country: value[fields[0].name],
           total: value[fields[1].name],
         }))
       );
+      }
     }
   );
 });
 
 analyticsApi.set('totalUsageByOS', async (req, res) => {
   pool.query(
-    SELECT + '.TotalUsageByOS;',
+    SELECT + 'TotalUsageByOS;',
     (err: any, rows: any[], fields: { name: string | number }[]) => {
-      if (err) throw err;
+      if (err) {throw err;}else{
       res.send(
         rows.map((value) => ({
           OS: value[fields[0].name],
           total: value[fields[1].name],
         }))
       );
+      }
     }
   );
 });
