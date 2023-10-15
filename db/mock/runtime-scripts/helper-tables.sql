@@ -17,7 +17,13 @@ DROP TABLE IF EXISTS `Regions`;
 create table Regions as select distinct region from Location;
 
 DROP TABLE IF EXISTS `Tools`;
-create table Tools as select distinct result from EventLog;
+create table Tools as select distinct result as tool from EventLog;
+
+DROP TABLE IF EXISTS `Years`;
+create table Years as SELECT distinct Year(actionTime) as year FROM `bsc-dev-db`.EventLog;
+
+DROP TABLE IF EXISTS `Months`;
+create table Months as SELECT distinct Month(actionTime) as month FROM `bsc-dev-db`.EventLog;
 
 
 
@@ -47,7 +53,7 @@ create table TotalUsageThroughYear as
 -- 3) querry - total usage by OS -- itt számolhatjuk tetszőleges kapcsoló táblából ugyanis az összes event-hez tartozó software-user-location ugyanazt a studioref-et kapja soronként
 DROP VIEW IF EXISTS `StudiosWithSoftwareIds`;
 create view StudiosWithSoftwareIds as 
-    select y.id, y.computerOS , y.computerOSVersion , x.id as SoftwareId 
+    select y.id, y.computerOS , x.id as SoftwareId 
     from StudioInstance as y , StudioSoftware as x 
     where y.id = x.idStudioRef 
     order by computerOS;
