@@ -1,45 +1,44 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
+    <q-header elevated class="text-text-primary-light">
       <q-toolbar>
-        <q-btn
-          flat
-          dense
-          round
-          icon="menu"
-          aria-label="Menu"
-          @click="toggleLeftDrawer"
-        />
-
-        <q-toolbar-title>
+        <q-toolbar-title
+          class="text-center button hvr-grow"
+          @click="toggleTopDrawer"
+        >
           Quasar App
+          <q-icon v-if="!topDrawer" name="sym_r_south" />
+          <q-icon v-else name="sym_r_north" />
         </q-toolbar-title>
-
-        <div>Quasar v{{ $q.version }}</div>
       </q-toolbar>
     </q-header>
 
-    <q-drawer
-      v-model="leftDrawerOpen"
-      show-if-above
-      bordered
-    >
-      <q-list>
-        <q-item-label
-          header
-        >
-          Essential Links
-        </q-item-label>
-
-        <EssentialLink
-          v-for="link in essentialLinks"
-          :key="link.title"
-          v-bind="link"
-        />
-      </q-list>
-    </q-drawer>
-
     <q-page-container>
+      <transition
+        appear
+        enter-active-class="animate__animated animate__fadeIn"
+        leave-active-class="animate__animated animate__fadeOut"
+      >
+        <div
+          v-if="topDrawer"
+          class="row text-text-primary justify-center top-drawer"
+          style="width: 100%; background-color: $snow !important"
+        >
+          <q-tabs
+            no-caps
+            active-color="primary"
+            indicator-color="transparent"
+            class="text-grey-8"
+            align="justify"
+            v-model="routerRef"
+          >
+            <q-tab name="total" label="Total page" to="Total" />
+            <q-tab name="pertool" label="Per tool" to="PerTool" />
+            <q-tab name="utils" label="Utils" to="Utils" />
+          </q-tabs>
+        </div>
+      </transition>
+      <!-- <div class="row justify-end">Quasar v{{ $q.version }}</div> -->
       <router-view />
     </q-page-container>
   </q-layout>
@@ -47,70 +46,45 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-import EssentialLink from 'components/EssentialLink.vue';
-
-const linksList = [
-  {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
-  },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
-  }
-];
 
 export default defineComponent({
   name: 'MainLayout',
 
-  components: {
-    EssentialLink
-  },
+  components: {},
 
-  setup () {
-    const leftDrawerOpen = ref(false)
+  setup() {
+    const topDrawer = ref(false);
+    const routerRef = ref('images');
 
     return {
-      essentialLinks: linksList,
-      leftDrawerOpen,
-      toggleLeftDrawer () {
-        leftDrawerOpen.value = !leftDrawerOpen.value
-      }
-    }
-  }
+      topDrawer,
+      routerRef,
+      toggleTopDrawer() {
+        topDrawer.value = !topDrawer.value;
+      },
+    };
+  },
 });
 </script>
+
+<style lang="scss" scoped>
+.q-tab {
+  margin-right: 2%; /* Add margin to create space between tabs */
+  margin-left: 2%; /* Add margin to create space between tabs */
+  margin-top: 2%;
+  background-color: $secondary !important;
+  color: $text-primary-light;
+  width: 10px !important;
+  border-radius: 0.5em !important;
+}
+
+.top-drawer {
+  position: absolute;
+  z-index: 1;
+}
+
+.q-tabs {
+  border-radius: 0.55em !important;
+  width: 33%;
+}
+</style>
