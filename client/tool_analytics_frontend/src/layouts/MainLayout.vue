@@ -32,9 +32,13 @@
             align="justify"
             v-model="routerRef"
           >
-            <q-tab name="total" label="Total page" to="Total" />
-            <q-tab name="pertool" label="Per tool" to="PerTool" />
-            <q-tab name="utils" label="Utils" to="Utils" />
+            <q-tab name="total" label="Total page" @click="navigate('total')" />
+            <q-tab
+              name="pertool"
+              label="Per tool"
+              @click="navigate('perTool')"
+            />
+            <q-tab name="utils" label="Utils" @click="navigate('utils')" />
           </q-tabs>
         </div>
       </transition>
@@ -46,6 +50,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
   name: 'MainLayout',
@@ -56,11 +61,16 @@ export default defineComponent({
     const topDrawer = ref(false);
     const routerRef = ref('images');
 
+    const router = useRouter();
+
     return {
       topDrawer,
       routerRef,
       toggleTopDrawer() {
         topDrawer.value = !topDrawer.value;
+      },
+      navigate(path: string) {
+        router.push(path);
       },
     };
   },

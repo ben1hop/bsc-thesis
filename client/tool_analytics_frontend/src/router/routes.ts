@@ -4,22 +4,22 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/IndexPage.vue') }],
+    children: [{ path: '', component: () => import('pages/TotalPage.vue') }],
   },
   {
-    path: '/Total',
+    path: '/total',
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/IndexPage.vue') }],
+    children: [{ path: '', component: () => import('pages/TotalPage.vue') }],
   },
   {
-    path: '/PerTool',
+    path: '/perTool',
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/IndexPage.vue') }],
+    children: [{ path: '', component: () => import('pages/PerToolPage.vue') }],
   },
   {
-    path: '/Utils',
+    path: '/utils',
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/IndexPage.vue') }],
+    children: [{ path: '', component: () => import('pages/UtilsPage.vue') }],
   },
 
   // Always leave this as last one,
