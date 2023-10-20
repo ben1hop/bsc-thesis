@@ -24,6 +24,7 @@
 import chroma from 'chroma-js';
 import Map_ from './MapChartMap.vue';
 import { defineComponent } from 'vue';
+import { getCssVar } from 'quasar';
 
 import {
   getDynamicMapCss,
@@ -57,7 +58,7 @@ export default defineComponent({
     },
     highColor: {
       type: String,
-      default: '#d83737',
+      default: getCssVar('secondary'),
     },
     countryData: {
       type: Object,

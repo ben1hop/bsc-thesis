@@ -1,10 +1,14 @@
 <template>
-  <div class="column">
-    <div class="row text-text-primary-dark">
-      <div>Total yearly usage</div>
-      <div><q-icon name="sym_r_help"></q-icon></div>
+  <div class="container q-mx-md column justify-around" style="height: 100%">
+    <div class="col-1 q-mt-sm row justify-between items-center">
+      <div class="text-bold text-h5 text-text-primary-dark">
+        Total yearly usage
+      </div>
+      <div>
+        <q-icon name="sym_r_help"></q-icon>
+      </div>
     </div>
-    <div><Bar :data="data" :options="options" /></div>
+    <div class="col-10"><Bar :data="data" :options="options" /></div>
   </div>
 </template>
 
@@ -19,6 +23,7 @@ import {
   LinearScale,
 } from 'chart.js';
 import { Bar } from 'vue-chartjs';
+import { getCssVar } from 'quasar';
 
 ChartJS.register(
   CategoryScale,
@@ -47,7 +52,7 @@ export const data = {
   datasets: [
     {
       label: 'Data One',
-      backgroundColor: '#f87979',
+      backgroundColor: getCssVar('secondary'),
       data: [40, 20, 12, 39, 10, 40, 39, 80, 40, 20, 12, 11],
     },
   ],
@@ -68,3 +73,8 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.container {
+}
+</style>

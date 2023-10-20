@@ -16,7 +16,10 @@ body {
 }
 
 .q-page {
-  padding: 3.5%;
+  padding-left: 3.5%;
+  padding-right: 3.5%;
+  padding-top: 2.75%;
+  padding-left: 2.75%;
 }
 
 .q-card {
@@ -25,4 +28,5 @@ body {
 
 .q-icon {
   color: $accent;
+  font-size: 1.75em;
 }
