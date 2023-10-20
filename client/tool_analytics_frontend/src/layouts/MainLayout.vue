@@ -6,14 +6,11 @@
           class="text-center button hvr-grow"
           @click="toggleTopDrawer"
         >
-          Quasar App
+          Wireless Tools Analytics
           <q-icon v-if="!topDrawer" name="sym_r_south" />
           <q-icon v-else name="sym_r_north" />
         </q-toolbar-title>
       </q-toolbar>
-    </q-header>
-
-    <q-page-container>
       <transition
         appear
         enter-active-class="animate__animated animate__fadeIn"
@@ -42,7 +39,9 @@
           </q-tabs>
         </div>
       </transition>
-      <!-- <div class="row justify-end">Quasar v{{ $q.version }}</div> -->
+    </q-header>
+
+    <q-page-container>
       <router-view />
     </q-page-container>
   </q-layout>
