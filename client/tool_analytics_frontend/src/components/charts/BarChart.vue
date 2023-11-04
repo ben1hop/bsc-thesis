@@ -24,6 +24,8 @@ import {
 } from 'chart.js';
 import { Bar } from 'vue-chartjs';
 import { getCssVar } from 'quasar';
+import { PropType, ref } from 'vue';
+import { ChartData } from 'chart.js';
 
 ChartJS.register(
   CategoryScale,
@@ -33,30 +35,6 @@ ChartJS.register(
   Tooltip,
   Legend
 );
-
-export const data = {
-  labels: [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ],
-  datasets: [
-    {
-      label: 'Data One',
-      backgroundColor: getCssVar('secondary'),
-      data: [40, 20, 12, 39, 10, 40, 39, 80, 40, 20, 12, 11],
-    },
-  ],
-};
 
 export const options = {
   responsive: true,
@@ -68,13 +46,19 @@ export default {
   components: {
     Bar,
   },
-  data() {
-    return { data, options };
+  props: {
+    data: {
+      type: Object as PropType<ChartData>,
+      default: null,
+    },
+  },
+  data(props: any) {
+    console.log(props.data);
+    return {
+      options,
+    };
   },
 };
 </script>
 
-<style lang="scss" scoped>
-.container {
-}
-</style>
+<style lang="scss" scoped></style>
