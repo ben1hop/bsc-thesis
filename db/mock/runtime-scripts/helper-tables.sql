@@ -37,7 +37,7 @@ create table Months as SELECT distinct Month(actionTime) as month FROM `bsc-dev-
 DROP TABLE IF EXISTS `TotalUsageByYear`;
 create table TotalUsageByYear as
     (select tool , year ,( select count(*) from EventLog y 
-    where y.action like CONCAT( '%' , x.tool , '%' ) and year(y.actionTime) = z.year) as total 
+    where y.result like CONCAT( '%' , x.tool , '%' ) and year(y.actionTime) = z.year) as total 
     from Tools x , Years z 
     group by tool , year , total );
 
@@ -81,6 +81,7 @@ create table TotalUsageByCountries as
 
 
 -- 7) querry - weighted countries and states and cities by region
+DROP TABLE IF EXISTS `TotalUsageByRegions`;
 create table TotalUsageByRegions as 
     select y.region , y.country , y.state , y.city , count(x.id) 
     from EventLog x , LocationsWithLocationIds as y 
