@@ -39,7 +39,8 @@ create table TotalUsageByYear as
     (select tool , year ,( select count(*) from EventLog y 
     where y.result like CONCAT( '%' , x.tool , '%' ) and year(y.actionTime) = z.year) as total 
     from Tools x , Years z 
-    group by tool , year , total );
+    group by tool , year , total )
+    order by tool, year;
 
 
 -- 2) querry - total usage through a year
@@ -47,7 +48,8 @@ DROP TABLE IF EXISTS `TotalUsageThroughYear`;
 create table TotalUsageThroughYear as
     (select year , month, (select count(*) from EventLog z where year(z.actionTime) = x.year and month(z.actionTime) = y.month ) as total 
     from Years x , Months y 
-    group by year , month ,total);
+    group by year , month ,total)
+    order by year, month;
 
 
 -- 3) querry - total usage by OS -- itt számolhatjuk tetszőleges kapcsoló táblából ugyanis az összes event-hez tartozó software-user-location ugyanazt a studioref-et kapja soronként
