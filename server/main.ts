@@ -28,6 +28,20 @@ const baseTables: Map<string, string[]> = new Map();
 async function fetchAndPopulateBaseTables() {
   try {
     baseTables.set('years', await fetch('getYears'));
+    baseTables.set('months', [
+      '1',
+      '2',
+      '3',
+      '4',
+      '5',
+      '6',
+      '7',
+      '8',
+      '9',
+      '10',
+      '11',
+      '12',
+    ]);
     baseTables.set('tools', await fetch('getTools'));
     baseTables.set('osTypes', await fetch('getOsTypes'));
     baseTables.set('countries', await fetch('getCountries'));

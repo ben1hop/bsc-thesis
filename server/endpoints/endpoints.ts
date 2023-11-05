@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express';
 import pool from '../connection';
 import { baseTables } from '../main';
-import { loadTotalUsageByYear } from '../dataparser';
+import { loadTotalThroughYear, loadTotalUsageByYear, realMonths } from '../dataparser';
 import { ChartData } from '../types/types';
 
 export const analyticsApi: Map<string, RequestHandler> = new Map();
@@ -90,13 +90,15 @@ analyticsApi.set('totalUsageThroughYear', async (req, res) => {
       if (err) {
         throw err;
       } else {
-        res.send(
+        const datasets = loadTotalThroughYear(
           rows.map((value) => ({
             year: value[fields[0].name],
             month: value[fields[1].name],
             total: value[fields[2].name],
-          }))
+          })),
+          baseTables.get('years').map((x: string) => Number(x))
         );
+        res.send(new ChartData(realMonths(), datasets));
       }
     }
   );

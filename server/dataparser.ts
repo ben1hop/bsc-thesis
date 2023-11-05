@@ -107,7 +107,8 @@ export function loadTotalUsageByCountries(table: any): MapData {
 
 export function loadTotalThroughYear(table: any, years: number[]): DataSet[] {
   const datasets: DataSet[] = [];
-  // I suppose that the data is comming in ordered by tool name - so we can process it linear time
+  // The data should be ordered by year , month
+  console.log(table);
   for (let i = 0; i < years.length; i++) {
     const yearlyData = table
       .slice(i * 12, i * 12 + 12)
@@ -116,4 +117,20 @@ export function loadTotalThroughYear(table: any, years: number[]): DataSet[] {
   }
 
   return datasets;
+}
+
+export function realMonths() {
+  return [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'December',
+  ];
 }
