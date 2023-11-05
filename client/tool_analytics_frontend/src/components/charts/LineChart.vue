@@ -2,7 +2,7 @@
   <div class="container q-mx-md column justify-around" style="height: 100%">
     <div class="col-1 q-mt-sm row justify-between items-center">
       <div class="text-bold text-h5 text-text-primary-dark">
-        Total yearly usage
+        {{ title }}
       </div>
       <div><q-icon name="sym_r_help"></q-icon></div>
     </div>
@@ -55,6 +55,10 @@ export default {
     data: {
       type: Object as PropType<ChartData> | null,
       default: null,
+    },
+    title: {
+      type: String,
+      default: 'Chart',
     },
   },
   data(props: any) {

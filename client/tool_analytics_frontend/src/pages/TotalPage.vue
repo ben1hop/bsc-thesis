@@ -8,11 +8,17 @@
     </div>
     <SectionSeparator title="Tool usage based on time" />
     <q-card class="q-pb-lg self-center chart-container" style="width: 85%">
-      <BarChart :data="getChartData(TotalChartIds.TOTAL_YEARLY)" />
+      <BarChart
+        :data="getChartData(TotalChartIds.TOTAL_YEARLY)"
+        :title="TotalChartIds.TOTAL_YEARLY"
+      />
     </q-card>
     <div class="row justify-evenly q-py-lg chart-container">
       <q-card class="col-8">
-        <LineChart :data="getChartData(TotalChartIds.TOTAL_THROUGHOUT_YEAR)" />
+        <LineChart
+          :data="getChartData(TotalChartIds.TOTAL_THROUGHOUT_YEAR)"
+          :title="TotalChartIds.TOTAL_THROUGHOUT_YEAR"
+        />
       </q-card>
       <q-card class="col-3"> <PieChart /></q-card>
     </div>
