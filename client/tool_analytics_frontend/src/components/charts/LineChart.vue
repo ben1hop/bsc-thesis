@@ -6,7 +6,9 @@
       </div>
       <div><q-icon name="sym_r_help"></q-icon></div>
     </div>
-    <div class="col-10"><QLine :data="data" :options="options" /></div>
+    <div class="col-10">
+      <QLine :data="data" :options="options" />
+    </div>
   </div>
 </template>
 
@@ -20,9 +22,11 @@ import {
   Title,
   Tooltip,
   Legend,
+  ChartData,
+  ChartDataset,
 } from 'chart.js';
 import { Line as QLine } from 'vue-chartjs';
-import { getCssVar } from 'quasar';
+import { PropType } from 'vue';
 
 ChartJS.register(
   CategoryScale,
@@ -34,33 +38,12 @@ ChartJS.register(
   Legend
 );
 
-export const data = {
-  labels: [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ],
-  datasets: [
-    {
-      label: 'Data One',
-      backgroundColor: getCssVar('secondary'),
-      data: [40, 20, 12, 39, 10, 40, 39, 80, 40, 20, 12, 11],
-    },
-  ],
-};
-
 export const options = {
   responsive: true,
   maintainAspectRatio: false,
+  y: {
+    type: 'linear',
+  },
 };
 
 export default {
@@ -68,9 +51,19 @@ export default {
   components: {
     QLine,
   },
-  data() {
+  props: {
+    data: {
+      type: Object as PropType<ChartData> | null,
+      default: null,
+    },
+  },
+  data(props: any) {
+    props.data.datasets = props.data?.datasets.map((x: ChartDataset) => ({
+      ...x,
+      tension: 0.4,
+    }));
+
     return {
-      data,
       options,
     };
   },

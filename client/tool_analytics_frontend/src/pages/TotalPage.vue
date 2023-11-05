@@ -8,10 +8,12 @@
     </div>
     <SectionSeparator title="Tool usage based on time" />
     <q-card class="q-pb-lg self-center chart-container" style="width: 85%">
-      <BarChart :data="getChartData('Total tools yearly usage')" />
+      <BarChart :data="getChartData(TotalChartIds.TOTAL_YEARLY)" />
     </q-card>
     <div class="row justify-evenly q-py-lg chart-container">
-      <q-card class="col-8"> <LineChart /></q-card>
+      <q-card class="col-8">
+        <LineChart :data="getChartData(TotalChartIds.TOTAL_THROUGHOUT_YEAR)" />
+      </q-card>
       <q-card class="col-3"> <PieChart /></q-card>
     </div>
     <SectionSeparator title="Tool usage based on OS" />
@@ -36,6 +38,7 @@ import InfoCard from 'src/components/InfoCard.vue';
 import DoughnutChart from 'src/components/charts/DoughnutChart.vue';
 import SectionSeparator from 'src/components/SectionSeparator.vue';
 import { useAppStore } from 'src/stores/appStore';
+import { TotalChartIds } from 'src/stores/chartIds';
 
 export default defineComponent({
   name: 'TotalPage',
@@ -51,6 +54,7 @@ export default defineComponent({
   setup() {
     const appStore = useAppStore();
     return {
+      TotalChartIds,
       getChartData(id: string) {
         return appStore.getChartData(id);
       },

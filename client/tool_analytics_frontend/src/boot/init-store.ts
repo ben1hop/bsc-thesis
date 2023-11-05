@@ -2,6 +2,7 @@ import { Notify } from 'quasar';
 import { boot } from 'quasar/wrappers';
 import { request } from 'src/modules/api';
 import { useAppStore } from 'src/stores/appStore';
+import { TotalChartIds } from 'src/stores/chartIds';
 
 export default boot(async () => {
   try {
@@ -17,9 +18,14 @@ export default boot(async () => {
 async function initTotalPageCharts() {
   const appStore = useAppStore();
 
-  const resp = await request('totalUsageByYear');
+  let resp = await request('totalUsageByYear');
   if (resp) {
-    appStore.registerChart('Total tools yearly usage', resp.data);
+    appStore.registerChart(TotalChartIds.TOTAL_YEARLY, resp.data);
+  }
+
+  resp = await request('totalUsageThroughYear');
+  if (resp) {
+    appStore.registerChart(TotalChartIds.TOTAL_THROUGHOUT_YEAR, resp.data);
   }
 
   //   appStore.registerChart(

@@ -52,8 +52,7 @@ export default {
       default: null,
     },
   },
-  data(props: any) {
-    console.log(props.data);
+  data() {
     return {
       options,
     };
