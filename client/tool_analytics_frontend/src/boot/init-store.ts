@@ -28,6 +28,11 @@ async function initTotalPageCharts() {
     appStore.registerChart(TotalChartIds.TOTAL_THROUGHOUT_YEAR, resp.data);
   }
 
+  resp = await request('totalUsageByOS');
+  if (resp) {
+    appStore.registerChart(TotalChartIds.TOTAL_OS, resp.data);
+  }
+
   //   appStore.registerChart(
   //     'Total tool usage throughout a year',
   //     new ChartData(

@@ -8,7 +8,7 @@
         <q-icon name="sym_r_help"></q-icon>
       </div>
     </div>
-    <div class="col-10"><Doughnut :data="data" :options="options" /></div>
+    <div class="col-10"><Doughnut :data="data1" :options="options" /></div>
   </div>
 </template>
 
@@ -26,20 +26,20 @@ import { PropType } from 'vue';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-// export const data = {
-//   labels: ['VueJs', 'EmberJs', 'ReactJs', 'AngularJs'],
-//   datasets: [
-//     {
-//       backgroundColor: [
-//         getCssVar('primary'),
-//         getCssVar('secondary'),
-//         getCssVar('accent'),
-//         getCssVar('snow'),
-//       ],
-//       data: [40, 20, 80, 10],
-//     },
-//   ],
-// };
+export const data1 = {
+  labels: ['VueJs', 'EmberJs', 'ReactJs', 'AngularJs'],
+  datasets: [
+    {
+      backgroundColor: [
+        getCssVar('primary'),
+        getCssVar('secondary'),
+        getCssVar('accent'),
+        getCssVar('snow'),
+      ],
+      data: [40, 20, 80, 10],
+    },
+  ],
+};
 
 export const options = {
   responsive: true,
@@ -62,7 +62,7 @@ export default {
     },
   },
   data() {
-    return { options };
+    return { data1, options };
   },
 };
 </script>

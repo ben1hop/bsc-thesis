@@ -24,7 +24,7 @@ import {
 } from 'chart.js';
 import { Bar } from 'vue-chartjs';
 import { getCssVar } from 'quasar';
-import { PropType, ref } from 'vue';
+import { PropType } from 'vue';
 import { ChartData } from 'chart.js';
 
 ChartJS.register(

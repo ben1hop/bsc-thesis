@@ -108,7 +108,19 @@ export function loadTotalUsageByCountries(table: any): MapData {
 export function loadTotalThroughYear(table: any, years: number[]): DataSet[] {
   const datasets: DataSet[] = [];
   // The data should be ordered by year , month
-  console.log(table);
+  for (let i = 0; i < years.length; i++) {
+    const yearlyData = table
+      .slice(i * 12, i * 12 + 12)
+      .map((x: any) => x.total);
+    datasets.push(new DataSet(String(years[i]), '#55b3fc', yearlyData));
+  }
+
+  return datasets;
+}
+
+export function loadTotalQuarterly(table: any, years: number[]): DataSet[] {
+  const datasets: DataSet[] = [];
+  // The data should be ordered by year , month
   for (let i = 0; i < years.length; i++) {
     const yearlyData = table
       .slice(i * 12, i * 12 + 12)
@@ -131,6 +143,7 @@ export function realMonths() {
     'August',
     'September',
     'October',
+    'November',
     'December',
   ];
 }

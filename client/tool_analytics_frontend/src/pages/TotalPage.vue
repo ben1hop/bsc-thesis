@@ -24,7 +24,12 @@
     </div>
     <SectionSeparator title="Tool usage based on OS" />
     <div class="row justify-evenly q-py-lg chart-container">
-      <q-card class="col-7"> <BarChart /></q-card>
+      <q-card class="col-7">
+        <BarChart
+          :data="getChartData(TotalChartIds.TOTAL_OS)"
+          :title="TotalChartIds.TOTAL_OS"
+        />
+      </q-card>
       <q-card class="col-3"> <DoughnutChart /> </q-card>
     </div>
     <SectionSeparator title="Tool usage based on location" />

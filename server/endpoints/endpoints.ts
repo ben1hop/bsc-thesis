@@ -1,7 +1,13 @@
 import { RequestHandler } from 'express';
 import pool from '../connection';
 import { baseTables } from '../main';
-import { loadTotalThroughYear, loadTotalUsageByYear, realMonths } from '../dataparser';
+import {
+  loadTotalThroughYear,
+  loadTotalThroughYearPerTool,
+  loadTotalUsageByOs,
+  loadTotalUsageByYear,
+  realMonths,
+} from '../dataparser';
 import { ChartData } from '../types/types';
 
 export const analyticsApi: Map<string, RequestHandler> = new Map();
@@ -104,21 +110,66 @@ analyticsApi.set('totalUsageThroughYear', async (req, res) => {
   );
 });
 
-analyticsApi.set('totalUsageThroughYearPerTool', async (req, res) => {
+// analyticsApi.set('totalUsageQuarterly', async (req, res) => {
+//   pool.query(
+//     SELECT + 'TotalUsageThroughYear',
+//     (err: any, rows: any[], fields: { name: string | number }[]) => {
+//       if (err) {
+//         throw err;
+//       } else {
+//         const datasets = loadTotalThroughYear(
+//           rows.map((value) => ({
+//             year: value[fields[0].name],
+//             month: value[fields[1].name],
+//             total: value[fields[2].name],
+//           })),
+//           baseTables.get('years').map((x: string) => Number(x))
+//         );
+//         res.send(new ChartData(realMonths(), datasets));
+//       }
+//     }
+//   );
+// });
+
+// analyticsApi.set('totalUsageThroughYearPerTool', async (req, res) => {
+//   pool.query(
+//     SELECT + 'TotalUsageThroughYearPerTool;',
+//     (err: any, rows: any[], fields: { name: string | number }[]) => {
+//       if (err) {
+//         throw err;
+//       } else {
+//         const datasets = loadTotalThroughYearPerTool(
+//           rows.map((value) => ({
+//             tool: value[fields[0].name],
+//             year: value[fields[1].name],
+//             month: value[fields[2].name],
+//             total: value[fields[3].name],
+//           }),
+//           baseTables.get()
+//         )
+//         res.send(
+
+//         );
+//       }
+//     }
+//   );
+// });
+
+analyticsApi.set('totalUsageByOS', async (req, res) => {
   pool.query(
-    SELECT + 'TotalUsageThroughYearPerTool;',
+    SELECT + 'TotalUsageByOS;',
     (err: any, rows: any[], fields: { name: string | number }[]) => {
       if (err) {
         throw err;
       } else {
-        res.send(
+        const datasets = loadTotalUsageByOs(
           rows.map((value) => ({
-            tool: value[fields[0].name],
-            year: value[fields[1].name],
-            month: value[fields[2].name],
-            total: value[fields[3].name],
-          }))
+            OS: value[fields[0].name],
+            total: value[fields[1].name],
+          })),
+          baseTables.get('osTypes')
         );
+        res.send(new ChartData(baseTables.get('osTypes'), datasets));
       }
     }
   );
@@ -154,24 +205,6 @@ analyticsApi.set('totalUsageByCountries', async (req, res) => {
         res.send(
           rows.map((value) => ({
             country: value[fields[0].name],
-            total: value[fields[1].name],
-          }))
-        );
-      }
-    }
-  );
-});
-
-analyticsApi.set('totalUsageByOS', async (req, res) => {
-  pool.query(
-    SELECT + 'TotalUsageByOS;',
-    (err: any, rows: any[], fields: { name: string | number }[]) => {
-      if (err) {
-        throw err;
-      } else {
-        res.send(
-          rows.map((value) => ({
-            OS: value[fields[0].name],
             total: value[fields[1].name],
           }))
         );
