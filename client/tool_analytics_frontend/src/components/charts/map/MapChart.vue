@@ -125,7 +125,7 @@ export default defineComponent({
 
 .vue-map-legend {
   width: 185px;
-  background: #fff;
+  background: #03312e;
   border: 1px solid;
   border-color: #acacad;
   position: absolute;
