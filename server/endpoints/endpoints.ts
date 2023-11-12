@@ -8,6 +8,7 @@ import {
   loadTotalUsageByCountries,
   loadTotalUsageByOs,
   loadTotalUsageByYear,
+  loadWeightedTotalUsageByOs,
   realMonths,
 } from '../dataparser';
 import { ChartData, MapData } from '../types/types';
@@ -138,8 +139,46 @@ analyticsApi.set('totalUsageByAction', async (req, res) => {
             total: value[fields[1].name],
           }))
         );
-        console.log(datasets);
         res.send(new ChartData(baseTables.get('actions'), datasets));
+      }
+    }
+  );
+});
+
+analyticsApi.set('totalUsageByOS', async (req, res) => {
+  pool.query(
+    SELECT + 'TotalUsageByOS;',
+    (err: any, rows: any[], fields: { name: string | number }[]) => {
+      if (err) {
+        throw err;
+      } else {
+        const datasets = loadTotalUsageByOs(
+          rows.map((value) => ({
+            OS: value[fields[0].name],
+            total: value[fields[1].name],
+          })),
+          baseTables.get('osTypes')
+        );
+        res.send(new ChartData(baseTables.get('osTypes'), datasets));
+      }
+    }
+  );
+});
+
+analyticsApi.set('weightedUsageByOS', async (req, res) => {
+  pool.query(
+    SELECT + 'TotalUsageByOS;',
+    (err: any, rows: any[], fields: { name: string | number }[]) => {
+      if (err) {
+        throw err;
+      } else {
+        const datasets = loadWeightedTotalUsageByOs(
+          rows.map((value) => ({
+            OS: value[fields[0].name],
+            total: value[fields[1].name],
+          }))
+        );
+        res.send(new ChartData(['Windows', 'Mac', 'Linux'], datasets));
       }
     }
   );
@@ -208,26 +247,6 @@ analyticsApi.set('totalUsageByCountries', async (req, res) => {
 //     }
 //   );
 // });
-
-analyticsApi.set('totalUsageByOS', async (req, res) => {
-  pool.query(
-    SELECT + 'TotalUsageByOS;',
-    (err: any, rows: any[], fields: { name: string | number }[]) => {
-      if (err) {
-        throw err;
-      } else {
-        const datasets = loadTotalUsageByOs(
-          rows.map((value) => ({
-            OS: value[fields[0].name],
-            total: value[fields[1].name],
-          })),
-          baseTables.get('osTypes')
-        );
-        res.send(new ChartData(baseTables.get('osTypes'), datasets));
-      }
-    }
-  );
-});
 
 analyticsApi.set('uniqueUsers', async (req, res) => {
   pool.query(

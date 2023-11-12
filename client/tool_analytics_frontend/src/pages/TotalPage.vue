@@ -21,7 +21,7 @@
         />
       </q-card>
       <q-card class="col-3">
-        <PieChart
+        <DoughnutChart
           :data="getChartData(TotalChartIds.TOTAL_ACTION)"
           :title="TotalChartIds.TOTAL_ACTION"
       /></q-card>
@@ -35,9 +35,9 @@
         />
       </q-card>
       <q-card class="col-3">
-        <DoughnutChart
-          :data="getChartData(TotalChartIds.TOTAL_ACTION)"
-          :title="TotalChartIds.TOTAL_ACTION"
+        <PieChart
+          :data="getChartData(TotalChartIds.WEIGHTED_OS)"
+          :title="TotalChartIds.WEIGHTED_OS"
         />
       </q-card>
     </div>

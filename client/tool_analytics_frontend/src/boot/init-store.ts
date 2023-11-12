@@ -1,3 +1,5 @@
+import { AxiosResponse } from 'axios';
+import { ChartData } from 'chart.js';
 import { Notify } from 'quasar';
 import { boot } from 'quasar/wrappers';
 import { request } from 'src/modules/api';
@@ -29,19 +31,24 @@ async function initTotalPageCharts() {
     appStore.registerChart(TotalChartIds.TOTAL_THROUGHOUT_YEAR, resp.data);
   }
 
+  resp = await request('totalUsageByAction');
+  if (resp) {
+    appStore.registerChart(TotalChartIds.TOTAL_ACTION, resp.data);
+  }
+
   resp = await request('totalUsageByOS');
   if (resp) {
     appStore.registerChart(TotalChartIds.TOTAL_OS, resp.data);
   }
 
+  resp = await request('weightedUsageByOS');
+  if (resp) {
+    appStore.registerChart(TotalChartIds.WEIGHTED_OS, resp.data);
+  }
+
   resp = await request('totalUsageByCountries');
   if (resp) {
     appStore.registerChart(TotalChartIds.TOTAL_REGION, resp.data as MapData);
-  }
-
-  resp = await request('totalUsageByAction');
-  if (resp) {
-    appStore.registerChart(TotalChartIds.TOTAL_ACTION, resp.data);
   }
 
   //   appStore.registerChart(
