@@ -8,7 +8,7 @@
         <q-icon name="sym_r_help"></q-icon>
       </div>
     </div>
-    <div class="col-10"><Pie :data="data1" :options="options" /></div>
+    <div class="col-10"><Pie :data="data" :options="options" /></div>
   </div>
 </template>
 
@@ -26,21 +26,6 @@ import { PropType } from 'vue';
 import getDataSetColor from 'src/css/utils';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
-
-export const data1 = {
-  labels: ['VueJs', 'EmberJs', 'ReactJs', 'AngularJs'],
-  datasets: [
-    {
-      backgroundColor: [
-        getCssVar('primary'),
-        getCssVar('secondary'),
-        getCssVar('accent'),
-        getCssVar('snow'),
-      ],
-      data: [40, 20, 80, 10],
-    },
-  ],
-};
 
 export const options = {
   responsive: true,
@@ -63,13 +48,20 @@ export default {
     },
   },
   data(props: any) {
+    /**
+     * Since rounded charts are using datasets differently , we have to allocate the colors like this.
+     * Check each datasets data array , generate an same length number array incremented by one , this will mimic the array indexing.
+     * Then convert each of these "indecies" into a color code.
+     */
     for (let i = 0; i < props.data.datasets.length; i++) {
       props.data.datasets[i] = {
         ...props.data.datasets[i],
-        backgroundColor: getCssVar(getDataSetColor(i)),
+        backgroundColor: Array.from(
+          Array(props.data.datasets[i].data.length).keys()
+        ).map((x: number) => getCssVar(getDataSetColor(x))),
       };
     }
-    return { data1, options };
+    return { options };
   },
 };
 </script>
