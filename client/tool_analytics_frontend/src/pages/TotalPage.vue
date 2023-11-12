@@ -20,7 +20,11 @@
           :title="TotalChartIds.TOTAL_THROUGHOUT_YEAR"
         />
       </q-card>
-      <q-card class="col-3"> <PieChart /></q-card>
+      <q-card class="col-3">
+        <PieChart
+          :data="getChartData(TotalChartIds.TOTAL_ACTION)"
+          :title="TotalChartIds.TOTAL_ACTION"
+      /></q-card>
     </div>
     <SectionSeparator title="Tool usage based on OS" />
     <div class="row justify-evenly q-py-lg chart-container">
@@ -30,7 +34,12 @@
           :title="TotalChartIds.TOTAL_OS"
         />
       </q-card>
-      <q-card class="col-3"> <DoughnutChart /> </q-card>
+      <q-card class="col-3">
+        <DoughnutChart
+          :data="getChartData(TotalChartIds.TOTAL_ACTION)"
+          :title="TotalChartIds.TOTAL_ACTION"
+        />
+      </q-card>
     </div>
     <SectionSeparator title="Tool usage based on location" />
     <q-card class="q-pt-lg chart-container">

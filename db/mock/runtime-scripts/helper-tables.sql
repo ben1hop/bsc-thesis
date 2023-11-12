@@ -25,6 +25,9 @@ create table Years as SELECT distinct Year(actionTime) as year FROM `bsc-dev-db`
 DROP TABLE IF EXISTS `Months`;
 create table Months as SELECT distinct Month(actionTime) as month FROM `bsc-dev-db`.EventLog;
 
+DROP TABLE IF EXISTS `Actions`;
+create table Actions as SELECT distinct action FROM `bsc-dev-db`.EventLog;
+
 
 
 
@@ -82,9 +85,16 @@ create table TotalUsageByCountries as
 
 
 
--- 7) querry - weighted countries and states and cities by region
+-- 5) querry - weighted countries and states and cities by region
 DROP TABLE IF EXISTS `TotalUsageByRegions`;
 create table TotalUsageByRegions as 
     select y.region , y.country , y.state , y.city , count(x.id) 
     from EventLog x , LocationsWithLocationIds as y 
     where y.LocationId = x.idStudioLocationRef group by y.region , y.country, y.state , y.city;
+
+
+
+-- 6) count the number of actions
+DROP TABLE IF EXISTS `TotalUsageByAction`;
+create table TotalUsageByAction as 
+    SELECT action, count(id) as total FROM `bsc-dev-db`.EventLog group by action;

@@ -10,7 +10,7 @@ import { countryToAlpha2 } from 'country-to-iso';
 export function loadTotalUsageByYear(table: any, years: number[]): DataSet[] {
   const datasets: DataSet[] = [];
   for (let i = 0; i < years.length; i++) {
-    datasets.push(new DataSet(String(years[i]), '#55b3fc', []));
+    datasets.push(new DataSet([], String(years[i])));
     for (let j = 0; j < table.length; j++) {
       if (table[j].year == years[i]) {
         datasets[i].data.push(table[j].total);
@@ -36,11 +36,10 @@ export function loadTotalThroughYearPerTool(
   for (let i = 0; i < table.length; i++) {
     datasets.push(
       new DataSet(
-        table[i].tool,
-        '#55b3fc',
         Array.apply(null, Array(years.length)).map(function () {
           return 0;
-        }) as number[]
+        }) as number[],
+        table[i].tool
       )
     );
     let j = i + 1;
@@ -62,9 +61,8 @@ export function loadTotalThroughYearPerTool(
  */
 export function loadTotalUsageByOs(table: any, osTypes: string[]): DataSet[] {
   const dataset: DataSet = new DataSet(
-    'Number of actions',
-    '#55b3fc',
-    Array.apply(null, Array(osTypes.length)).map(() => 0) as number[]
+    Array.apply(null, Array(osTypes.length)).map(() => 0) as number[],
+    'Number of actions'
   );
   for (let i = 0; i < table.length; i++) {
     const index = osTypes.findIndex((x: string) => x === table[i].OS);
@@ -78,9 +76,8 @@ export function loadTotalUsageByOs(table: any, osTypes: string[]): DataSet[] {
 
 export function loadWeightedTotalUsageByOs(table: any): DataSet[] {
   const dataset: DataSet = new DataSet(
-    'Weighted total tool usage by OS',
-    '#55b3fc',
-    [0, 0, 0]
+    [0, 0, 0],
+    'Weighted total tool usage by OS'
   );
   for (let i = 0; i < table.length; i++) {
     const system = String(table[i].OS);
@@ -93,6 +90,12 @@ export function loadWeightedTotalUsageByOs(table: any): DataSet[] {
     }
   }
   return [dataset];
+}
+
+export function loadTotalUsageByAction(table: any) {
+  const datasets: DataSet[] = [];
+  datasets.push(new DataSet(table.map((x: any) => x.total)));
+  return datasets;
 }
 
 export function loadTotalUsageByCountries(table: any): Record<string, number> {
@@ -110,7 +113,7 @@ export function loadTotalThroughYear(table: any, years: number[]): DataSet[] {
     const yearlyData = table
       .slice(i * 12, i * 12 + 12)
       .map((x: any) => x.total);
-    datasets.push(new DataSet(String(years[i]), '#55b3fc', yearlyData));
+    datasets.push(new DataSet(yearlyData, String(years[i])));
   }
 
   return datasets;
@@ -123,7 +126,7 @@ export function loadTotalQuarterly(table: any, years: number[]): DataSet[] {
     const yearlyData = table
       .slice(i * 12, i * 12 + 12)
       .map((x: any) => x.total);
-    datasets.push(new DataSet(String(years[i]), '#55b3fc', yearlyData));
+    datasets.push(new DataSet(yearlyData, String(years[i])));
   }
 
   return datasets;

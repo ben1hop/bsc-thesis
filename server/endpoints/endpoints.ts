@@ -4,6 +4,7 @@ import { baseTables } from '../main';
 import {
   loadTotalThroughYear,
   loadTotalThroughYearPerTool,
+  loadTotalUsageByAction,
   loadTotalUsageByCountries,
   loadTotalUsageByOs,
   loadTotalUsageByYear,
@@ -67,6 +68,19 @@ analyticsApi.set('getCountries', async (req, res) => {
   );
 });
 
+analyticsApi.set('getActions', async (req, res) => {
+  pool.query(
+    SELECT + 'Actions;',
+    (err: any, rows: any[], fields: { name: string | number }[]) => {
+      if (err) {
+        throw err;
+      } else {
+        res.send(rows.map((value) => value[fields[0].name]));
+      }
+    }
+  );
+});
+
 // ---------------------- end of base tables ----------------------------------
 
 analyticsApi.set('totalUsageByYear', async (req, res) => {
@@ -106,6 +120,45 @@ analyticsApi.set('totalUsageThroughYear', async (req, res) => {
           baseTables.get('years').map((x: string) => Number(x))
         );
         res.send(new ChartData(realMonths(), datasets));
+      }
+    }
+  );
+});
+
+analyticsApi.set('totalUsageByAction', async (req, res) => {
+  pool.query(
+    SELECT + 'TotalUsageByAction;',
+    (err: any, rows: any[], fields: { name: string | number }[]) => {
+      if (err) {
+        throw err;
+      } else {
+        const datasets = loadTotalUsageByAction(
+          rows.map((value) => ({
+            action: value[fields[0].name],
+            total: value[fields[1].name],
+          }))
+        );
+        console.log(datasets);
+        res.send(new ChartData(baseTables.get('actions'), datasets));
+      }
+    }
+  );
+});
+
+analyticsApi.set('totalUsageByCountries', async (req, res) => {
+  pool.query(
+    SELECT + 'TotalUsageByCountries;',
+    (err: any, rows: any[], fields: { name: string | number }[]) => {
+      if (err) {
+        throw err;
+      } else {
+        const datasets = loadTotalUsageByCountries(
+          rows.map((value) => ({
+            country: value[fields[0].name],
+            total: value[fields[1].name],
+          }))
+        );
+        res.send(new MapData(datasets));
       }
     }
   );
@@ -191,25 +244,6 @@ analyticsApi.set('uniqueUsers', async (req, res) => {
             user: value[fields[3].name],
           }))
         );
-      }
-    }
-  );
-});
-
-analyticsApi.set('totalUsageByCountries', async (req, res) => {
-  pool.query(
-    SELECT + 'TotalUsageByCountries;',
-    (err: any, rows: any[], fields: { name: string | number }[]) => {
-      if (err) {
-        throw err;
-      } else {
-        const datasets = loadTotalUsageByCountries(
-          rows.map((value) => ({
-            country: value[fields[0].name],
-            total: value[fields[1].name],
-          }))
-        );
-        res.send(new MapData(datasets));
       }
     }
   );

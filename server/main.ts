@@ -43,6 +43,7 @@ async function fetchAndPopulateBaseTables() {
       '12',
     ]);
     baseTables.set('tools', await fetch('getTools'));
+    baseTables.set('actions', await fetch('getActions'));
     baseTables.set('osTypes', await fetch('getOsTypes'));
     baseTables.set('countries', await fetch('getCountries'));
   } catch (error) {

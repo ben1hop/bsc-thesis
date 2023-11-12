@@ -1,11 +1,11 @@
 export class DataSet {
-  constructor(label: string, bgcolor: string[] | string, data: number[]) {
-    this.label = label;
-    this.backgroundColor = bgcolor;
+  constructor(data: number[], label?: string) {
+    if (label) {
+      this.label = label;
+    }
     this.data = data;
   }
-  label: string;
-  backgroundColor: string[] | string;
+  label?: string;
   data: number[];
 }
 

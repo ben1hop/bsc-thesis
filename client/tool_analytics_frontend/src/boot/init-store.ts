@@ -39,6 +39,11 @@ async function initTotalPageCharts() {
     appStore.registerChart(TotalChartIds.TOTAL_REGION, resp.data as MapData);
   }
 
+  resp = await request('totalUsageByAction');
+  if (resp) {
+    appStore.registerChart(TotalChartIds.TOTAL_ACTION, resp.data);
+  }
+
   //   appStore.registerChart(
   //     'Total tool usage throughout a year',
   //     new ChartData(
