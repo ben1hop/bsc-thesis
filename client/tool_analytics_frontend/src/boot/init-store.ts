@@ -3,6 +3,7 @@ import { boot } from 'quasar/wrappers';
 import { request } from 'src/modules/api';
 import { useAppStore } from 'src/stores/appStore';
 import { TotalChartIds } from 'src/stores/chartIds';
+import { MapData } from 'src/stores/types';
 
 export default boot(async () => {
   try {
@@ -31,6 +32,11 @@ async function initTotalPageCharts() {
   resp = await request('totalUsageByOS');
   if (resp) {
     appStore.registerChart(TotalChartIds.TOTAL_OS, resp.data);
+  }
+
+  resp = await request('totalUsageByCountries');
+  if (resp) {
+    appStore.registerChart(TotalChartIds.TOTAL_REGION, resp.data as MapData);
   }
 
   //   appStore.registerChart(

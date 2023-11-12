@@ -29,7 +29,7 @@ export class BarData {
 
 export class MapData {
   constructor(dataset: Record<string, any>) {
-    this.dataset = dataset;
+    this.datasets = dataset;
   }
-  dataset: Record<string, any>;
+  datasets: Record<string, any>;
 }

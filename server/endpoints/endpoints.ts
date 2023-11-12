@@ -4,11 +4,12 @@ import { baseTables } from '../main';
 import {
   loadTotalThroughYear,
   loadTotalThroughYearPerTool,
+  loadTotalUsageByCountries,
   loadTotalUsageByOs,
   loadTotalUsageByYear,
   realMonths,
 } from '../dataparser';
-import { ChartData } from '../types/types';
+import { ChartData, MapData } from '../types/types';
 
 export const analyticsApi: Map<string, RequestHandler> = new Map();
 
@@ -202,12 +203,13 @@ analyticsApi.set('totalUsageByCountries', async (req, res) => {
       if (err) {
         throw err;
       } else {
-        res.send(
+        const datasets = loadTotalUsageByCountries(
           rows.map((value) => ({
             country: value[fields[0].name],
             total: value[fields[1].name],
           }))
         );
+        res.send(new MapData(datasets));
       }
     }
   );

@@ -95,14 +95,12 @@ export function loadWeightedTotalUsageByOs(table: any): DataSet[] {
   return [dataset];
 }
 
-export function loadTotalUsageByCountries(table: any): MapData {
-  const mapdata: MapData = new MapData({});
-  const rec_: Record<string, any> = {};
+export function loadTotalUsageByCountries(table: any): Record<string, number> {
+  const rec_: Record<string, number> = {};
   for (let i = 0; i < table.length; i++) {
     rec_[String(countryToAlpha2(table[i].country))] = table[i].total;
   }
-  mapdata.dataset = rec_;
-  return mapdata;
+  return rec_;
 }
 
 export function loadTotalThroughYear(table: any, years: number[]): DataSet[] {

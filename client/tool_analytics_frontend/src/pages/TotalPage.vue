@@ -34,7 +34,9 @@
     </div>
     <SectionSeparator title="Tool usage based on location" />
     <q-card class="q-pt-lg chart-container">
-      <MapChart :countryData="{ US: 4, CA: 7, GB: 8, IE: 14, ES: 21 }" />
+      <MapChart
+        :countryData="getChartData(TotalChartIds.TOTAL_REGION)?.datasets"
+      />
     </q-card>
   </q-page>
 </template>
