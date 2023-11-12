@@ -23,9 +23,10 @@ import {
   LinearScale,
 } from 'chart.js';
 import { Bar } from 'vue-chartjs';
-import { getCssVar } from 'quasar';
 import { PropType } from 'vue';
 import { ChartData } from 'chart.js';
+import getDataSetColor from 'src/css/utils';
+import { getCssVar } from 'quasar';
 
 ChartJS.register(
   CategoryScale,
@@ -56,7 +57,14 @@ export default {
       default: 'Chart',
     },
   },
-  data() {
+  data(props: any) {
+    for (let i = 0; i < props.data.datasets.length; i++) {
+      props.data.datasets[i] = {
+        ...props.data.datasets[i],
+        backgroundColor: getCssVar(getDataSetColor(i)),
+      };
+    }
+
     return {
       options,
     };

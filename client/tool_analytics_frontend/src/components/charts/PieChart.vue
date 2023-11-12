@@ -23,6 +23,7 @@ import {
 import { Pie } from 'vue-chartjs';
 import { getCssVar } from 'quasar';
 import { PropType } from 'vue';
+import getDataSetColor from 'src/css/utils';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -61,7 +62,13 @@ export default {
       default: 'Chart',
     },
   },
-  data() {
+  data(props: any) {
+    for (let i = 0; i < props.data.datasets.length; i++) {
+      props.data.datasets[i] = {
+        ...props.data.datasets[i],
+        backgroundColor: getCssVar(getDataSetColor(i)),
+      };
+    }
     return { data1, options };
   },
 };

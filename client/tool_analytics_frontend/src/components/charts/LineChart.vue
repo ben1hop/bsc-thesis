@@ -27,6 +27,8 @@ import {
 } from 'chart.js';
 import { Line as QLine } from 'vue-chartjs';
 import { PropType } from 'vue';
+import getDataSetColor from 'src/css/utils';
+import { getCssVar } from 'quasar';
 
 ChartJS.register(
   CategoryScale,
@@ -62,10 +64,13 @@ export default {
     },
   },
   data(props: any) {
-    props.data.datasets = props.data?.datasets.map((x: ChartDataset) => ({
-      ...x,
-      tension: 0.4,
-    }));
+    for (let i = 0; i < props.data.datasets.length; i++) {
+      props.data.datasets[i] = {
+        ...props.data.datasets[i],
+        backgroundColor: getCssVar(getDataSetColor(i)),
+        tension: 0.4,
+      };
+    }
 
     return {
       options,
