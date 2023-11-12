@@ -54,11 +54,11 @@ export default defineComponent({
   props: {
     lowColor: {
       type: String,
-      default: '#fde2e2',
+      default: getCssVar('primary'),
     },
     highColor: {
       type: String,
-      default: getCssVar('secondary'),
+      default: getCssVar('accent'),
     },
     countryData: {
       type: Object,
