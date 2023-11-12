@@ -1,10 +1,10 @@
-import { AxiosResponse } from 'axios';
 import { ChartData } from 'chart.js';
 import { Notify } from 'quasar';
 import { boot } from 'quasar/wrappers';
 import { request } from 'src/modules/api';
 import { useAppStore } from 'src/stores/appStore';
 import { TotalChartIds } from 'src/stores/chartIds';
+import { useInfoStore } from 'src/stores/infoStore';
 import { MapData } from 'src/stores/types';
 
 export default boot(async () => {
@@ -20,10 +20,12 @@ export default boot(async () => {
 
 async function initTotalPageCharts() {
   const appStore = useAppStore();
+  const infoStore = useInfoStore();
 
   let resp = await request('totalUsageByYear');
   if (resp) {
     appStore.registerChart(TotalChartIds.TOTAL_YEARLY, resp.data);
+    infoStore.calculateMostPopularTool(resp.data);
   }
 
   resp = await request('totalUsageThroughYear');

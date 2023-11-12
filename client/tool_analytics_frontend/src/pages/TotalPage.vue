@@ -1,7 +1,11 @@
 <template>
   <q-page class="column justify-evenly">
     <div class="row justify-around">
-      <InfoCard class="col-1" title="Most popular tool:" />
+      <InfoCard
+        class="col-1"
+        title="Most popular tool:"
+        :value="mostPopularTool"
+      />
       <InfoCard class="col-1" title="Bigest yearly traffic:" />
       <InfoCard class="col-1" title="Most frequent location:" />
       <InfoCard class="col-1" title="Most popular OS:" />
@@ -51,7 +55,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
 import LineChart from 'src/components/charts/LineChart.vue';
 import MapChart from 'src/components/charts/map/MapChart.vue';
 import BarChart from 'src/components/charts/BarChart.vue';
@@ -61,6 +65,7 @@ import DoughnutChart from 'src/components/charts/DoughnutChart.vue';
 import SectionSeparator from 'src/components/SectionSeparator.vue';
 import { useAppStore } from 'src/stores/appStore';
 import { TotalChartIds } from 'src/stores/chartIds';
+import { useInfoStore } from 'src/stores/infoStore';
 
 export default defineComponent({
   name: 'TotalPage',
@@ -75,8 +80,10 @@ export default defineComponent({
   },
   setup() {
     const appStore = useAppStore();
+    const infoStore = useInfoStore();
     return {
       TotalChartIds,
+      mostPopularTool: computed(() => infoStore.getMostPopularTool),
       getChartData(id: string) {
         return appStore.getChartData(id);
       },
