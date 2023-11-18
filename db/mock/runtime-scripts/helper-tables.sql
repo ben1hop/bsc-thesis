@@ -87,7 +87,7 @@ create table TotalUsageByRegion as
     from EventLog as x , LocationsWithLocationIds as y 
     where y.LocationId = x.idStudioLocationRef group by y.country;
 
--- count by countries
+-- count by countries --- for weighted: SELECT country , sum(total) as total FROM `bsc-dev-db`.TotalUsageByCountries group by country;
 DROP TABLE IF EXISTS `TotalUsageByCountries`;
 create table TotalUsageByCountries as
     select  y.country ,year(x.actionTime) as year , count(x.id) as total
@@ -95,16 +95,6 @@ create table TotalUsageByCountries as
     where y.LocationId = x.idStudioLocationRef 
     group by y.country ,year(x.actionTime) 
     order by country, year;
-
-
-
--- 5) querry - weighted countries and states and cities by region
-DROP TABLE IF EXISTS `TotalUsageByRegions`;
-create table TotalUsageByRegions as 
-    select y.region , y.country , y.state , y.city , count(x.id) as total
-    from EventLog x , LocationsWithLocationIds as y 
-    where y.LocationId = x.idStudioLocationRef group by y.region , y.country, y.state , y.city;
-
 
 
 -- 6) count the number of actions
