@@ -10,3 +10,9 @@ export class MapData {
   }
   datasets: Record<string, any>;
 }
+
+export interface InfoStoreEntry {
+  name: string;
+  value: number;
+  trend: number;
+}

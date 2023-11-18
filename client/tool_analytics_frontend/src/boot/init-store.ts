@@ -22,10 +22,28 @@ async function initTotalPageCharts() {
   const appStore = useAppStore();
   const infoStore = useInfoStore();
 
-  let resp = await request('totalUsageByYear');
+  let resp;
+
+  resp = await request('currentTool');
+  if (resp) {
+    infoStore.setCurrentTool(resp.data);
+  }
+  resp = await request('currentTraffic');
+  if (resp) {
+    infoStore.setCurrentTraffic(resp.data);
+  }
+  resp = await request('currentOs');
+  if (resp) {
+    infoStore.setCurrentOs(resp.data);
+  }
+  resp = await request('currentRegion');
+  if (resp) {
+    infoStore.setCurrentRegion(resp.data);
+  }
+
+  resp = await request('totalUsageByYear');
   if (resp) {
     appStore.registerChart(TotalChartIds.TOTAL_YEARLY, resp.data);
-    infoStore.calculateMostPopularTool(resp.data);
   }
 
   resp = await request('totalUsageThroughYear');

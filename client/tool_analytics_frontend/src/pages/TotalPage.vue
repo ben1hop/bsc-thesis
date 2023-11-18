@@ -1,14 +1,19 @@
 <template>
   <q-page class="column justify-evenly">
+    <SectionSeparator title="Current years data" />
     <div class="row justify-around">
+      <InfoCard class="col-1" title="Most used tool:" :value="currentTool" />
       <InfoCard
         class="col-1"
-        title="Most popular tool:"
-        :value="mostPopularTool"
+        title="Current yearly traffic:"
+        :value="currentTraffic"
       />
-      <InfoCard class="col-1" title="Bigest yearly traffic:" />
-      <InfoCard class="col-1" title="Most frequent location:" />
-      <InfoCard class="col-1" title="Most popular OS:" />
+      <InfoCard
+        class="col-1"
+        title="Current most popular region:"
+        :value="currentLocation"
+      />
+      <InfoCard class="col-1" title="Current OS" :value="currentOS" />
     </div>
     <SectionSeparator title="Tool usage based on time" />
     <q-card class="q-pb-lg self-center chart-container" style="width: 85%">
@@ -83,7 +88,10 @@ export default defineComponent({
     const infoStore = useInfoStore();
     return {
       TotalChartIds,
-      mostPopularTool: computed(() => infoStore.getMostPopularTool),
+      currentTool: computed(() => infoStore.getCurrentTool),
+      currentOS: computed(() => infoStore.getCurrentOs),
+      currentLocation: computed(() => infoStore.getCurrentLocation),
+      currentTraffic: computed(() => infoStore.getCurrentTraffic),
       getChartData(id: string) {
         return appStore.getChartData(id);
       },
