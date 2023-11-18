@@ -39,10 +39,14 @@ create table Actions as SELECT distinct action FROM `bsc-dev-db`.EventLog;
 -- 1) querry - total usage by year
 DROP TABLE IF EXISTS `TotalUsageByYear`;
 create table TotalUsageByYear as
-    (select tool , year ,( select count(*) from EventLog y 
-    where y.result like CONCAT( '%' , x.tool , '%' ) and year(y.actionTime) = z.year) as total 
+    select tool , year ,
+    ( 
+    select count(*) from EventLog y 
+    where y.result 
+    like CONCAT( '%' , x.tool , '%' ) and year(y.actionTime) = z.year
+    ) as total 
     from Tools x , Years z 
-    group by tool , year , total )
+    group by tool , year , total 
     order by tool, year;
 
 
@@ -76,19 +80,28 @@ create view LocationsWithLocationIds as
     from Location as y,  StudioLocation as x 
     where y.id = x.idLocationRef;
 
--- count by countries
-DROP TABLE IF EXISTS `TotalUsageByCountries`;
-create table TotalUsageByCountries as 
+-- count by regions
+DROP TABLE IF EXISTS `TotalUsageByRegion`;
+create table TotalUsageByRegion as 
     select y.country as country, count(x.id) as total
     from EventLog as x , LocationsWithLocationIds as y 
     where y.LocationId = x.idStudioLocationRef group by y.country;
+
+-- count by countries
+DROP TABLE IF EXISTS `TotalUsageByCountries`;
+create table TotalUsageByCountries as
+    select  y.country ,year(x.actionTime) as year , count(x.id) as total
+    from EventLog x , LocationsWithLocationIds as y 
+    where y.LocationId = x.idStudioLocationRef 
+    group by y.country ,year(x.actionTime) 
+    order by country, year;
 
 
 
 -- 5) querry - weighted countries and states and cities by region
 DROP TABLE IF EXISTS `TotalUsageByRegions`;
 create table TotalUsageByRegions as 
-    select y.region , y.country , y.state , y.city , count(x.id) 
+    select y.region , y.country , y.state , y.city , count(x.id) as total
     from EventLog x , LocationsWithLocationIds as y 
     where y.LocationId = x.idStudioLocationRef group by y.region , y.country, y.state , y.city;
 
