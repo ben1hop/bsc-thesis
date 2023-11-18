@@ -36,7 +36,7 @@ async function initTotalPageCharts() {
   if (resp) {
     infoStore.setCurrentOs(resp.data);
   }
-  resp = await request('currentRegion');
+  resp = await request('currentLocation');
   if (resp) {
     infoStore.setCurrentRegion(resp.data);
   }
@@ -66,7 +66,7 @@ async function initTotalPageCharts() {
     appStore.registerChart(TotalChartIds.WEIGHTED_OS, resp.data);
   }
 
-  resp = await request('totalUsageByCountries');
+  resp = await request('totalUsageByRegion');
   if (resp) {
     appStore.registerChart(TotalChartIds.TOTAL_REGION, resp.data as MapData);
   }

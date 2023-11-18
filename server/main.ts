@@ -55,4 +55,6 @@ async function fetchAndPopulateBaseTables() {
 // Call the function to populate baseTables when the application starts
 fetchAndPopulateBaseTables();
 
-export { baseTables };
+const currentYear = 2023;
+
+export { baseTables, currentYear };

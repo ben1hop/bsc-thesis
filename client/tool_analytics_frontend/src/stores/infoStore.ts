@@ -1,4 +1,3 @@
-import { ChartData } from 'chart.js';
 import { defineStore } from 'pinia';
 import { InfoStoreEntry } from './types';
 
@@ -37,7 +36,7 @@ export const useInfoStore = defineStore('infoStore', {
       this.currentTraffic = data;
     },
     setCurrentRegion(data: InfoStoreEntry) {
-      this.currentTraffic = data;
+      this.currentRegion = data;
     },
     setCurrentOs(data: InfoStoreEntry) {
       this.currentOs = data;
