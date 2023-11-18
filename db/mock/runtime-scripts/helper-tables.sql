@@ -17,7 +17,7 @@ DROP TABLE IF EXISTS `Regions`;
 create table Regions as select distinct region from Location;
 
 DROP TABLE IF EXISTS `Tools`;
-create table Tools as select distinct result as tool from EventLog;
+create table Tools as select distinct result as tool from EventLog order by result;
 
 DROP TABLE IF EXISTS `Years`;
 create table Years as SELECT distinct Year(actionTime) as year FROM `bsc-dev-db`.EventLog;
