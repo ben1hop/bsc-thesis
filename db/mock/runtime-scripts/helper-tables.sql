@@ -73,7 +73,7 @@ create table TotalUsageByOS as
     where y.SoftwareId = x.idStudioSoftwareRef group by y.computerOS;
 
 DROP TABLE IF EXISTS `TotalUsageByOS_Year`;
-create table TotalUsageByOS as 
+create table TotalUsageByOS_Year as 
     select y.computerOS , year(x.actionTime) as year, count(x.id) as total
     from EventLog as x , StudiosWithSoftwareIds as y 
     where y.SoftwareId = x.idStudioSoftwareRef group by y.computerOS, year(x.actionTime)
