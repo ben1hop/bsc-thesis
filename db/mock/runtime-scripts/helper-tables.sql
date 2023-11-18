@@ -72,6 +72,13 @@ create table TotalUsageByOS as
     select y.computerOS , count(x.id) from EventLog as x , StudiosWithSoftwareIds as y 
     where y.SoftwareId = x.idStudioSoftwareRef group by y.computerOS;
 
+DROP TABLE IF EXISTS `TotalUsageByOS_Year`;
+create table TotalUsageByOS as 
+    select y.computerOS , year(x.actionTime) as year, count(x.id) as total
+    from EventLog as x , StudiosWithSoftwareIds as y 
+    where y.SoftwareId = x.idStudioSoftwareRef group by y.computerOS, year(x.actionTime)
+    order by computerOS, year;
+
 
 -- 4) querry - total / region
 DROP VIEW IF EXISTS `LocationsWithLocationIds`; -- get locationRefIds to every country
