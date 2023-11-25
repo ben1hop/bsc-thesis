@@ -5,7 +5,13 @@ import { ChartData } from 'chart.js';
 export const useAppStore = defineStore('appStore', {
   state: (): AppState => ({
     registeredCharts: new Map(),
+    availableTools: [],
   }),
+  getters: {
+    getTools(state): string[] {
+      return state.availableTools;
+    },
+  },
   actions: {
     registerChart(
       label: string,
@@ -35,6 +41,9 @@ export const useAppStore = defineStore('appStore', {
         }
       }
       return null;
+    },
+    setAvailableTools(tools: string[]) {
+      this.availableTools = tools;
     },
   },
 });

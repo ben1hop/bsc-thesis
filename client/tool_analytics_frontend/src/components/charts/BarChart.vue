@@ -8,7 +8,7 @@
         <q-icon name="sym_r_help"></q-icon>
       </div>
     </div>
-    <div class="col-10"><Bar :data="data" :options="options" /></div>
+    <div class="col-10"><Bar :data="chartData" :options="options" /></div>
   </div>
 </template>
 
@@ -23,7 +23,7 @@ import {
   LinearScale,
 } from 'chart.js';
 import { Bar } from 'vue-chartjs';
-import { PropType } from 'vue';
+import { PropType, ref, watch } from 'vue';
 import { ChartData } from 'chart.js';
 import getDataSetColor from 'src/css/utils';
 import { getCssVar } from 'quasar';
@@ -58,14 +58,38 @@ export default {
     },
   },
   data(props: any) {
-    for (let i = 0; i < props.data.datasets.length; i++) {
-      props.data.datasets[i] = {
-        ...props.data.datasets[i],
-        backgroundColor: getCssVar(getDataSetColor(i)),
+    let chartData = ref(props.data);
+    if (chartData.value) {
+      for (let i = 0; i < chartData.value.datasets.length; i++) {
+        chartData.value.datasets[i] = {
+          ...props.data.datasets[i],
+          backgroundColor: getCssVar(getDataSetColor(i)),
+        };
+      }
+    } else {
+      chartData.value = {
+        labels: ['-', '-', '-'],
+        datasets: [
+          {
+            label: 'No Data',
+            backgroundColor: '#fff',
+            data: [0, 0, 0],
+          },
+        ],
       };
     }
 
+    watch(chartData, () => {
+      for (let i = 0; i < chartData.value.datasets.length; i++) {
+        chartData.value.datasets[i] = {
+          ...chartData.value.datasets[i],
+          backgroundColor: getCssVar(getDataSetColor(i)),
+        };
+      }
+    });
+
     return {
+      chartData,
       options,
     };
   },

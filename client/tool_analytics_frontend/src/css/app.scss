@@ -1,10 +1,10 @@
-@import url('https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css');
-@import url('hover-min.css');
+// @import url('https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css');
+// @import url('hover-min.css');
 
 // app global css in SCSS form
 body {
   background-color: $snow;
-  color: $text-primary-light;
+  color: $text-primary-dark;
 }
 
 .text-text-primary-light {
@@ -13,6 +13,10 @@ body {
 
 .text-text-primary-dark {
   color: $text-primary-dark !important;
+}
+
+.text-selected-class {
+  color: $primary;
 }
 
 .q-page {

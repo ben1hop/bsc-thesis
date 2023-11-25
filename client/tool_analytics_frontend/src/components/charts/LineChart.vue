@@ -7,7 +7,7 @@
       <div><q-icon name="sym_r_help"></q-icon></div>
     </div>
     <div class="col-10">
-      <QLine :data="data" :options="options" />
+      <QLine :data="chartData" :options="options" />
     </div>
   </div>
 </template>
@@ -64,16 +64,32 @@ export default {
     },
   },
   data(props: any) {
-    for (let i = 0; i < props.data.datasets.length; i++) {
-      props.data.datasets[i] = {
-        ...props.data.datasets[i],
-        backgroundColor: getCssVar(getDataSetColor(i)),
-        tension: 0.4,
+    let chartData: ChartData;
+    if (props.data) {
+      for (let i = 0; i < props.data.datasets.length; i++) {
+        props.data.datasets[i] = {
+          ...props.data.datasets[i],
+          backgroundColor: getCssVar(getDataSetColor(i)),
+          tension: 0.4,
+        };
+      }
+      chartData = props.data;
+    } else {
+      chartData = {
+        labels: ['January', 'February', 'March'],
+        datasets: [
+          {
+            label: 'Data One',
+            backgroundColor: '#f87979',
+            data: [40, 20, 12],
+          },
+        ],
       };
     }
 
     return {
       options,
+      chartData,
     };
   },
 };

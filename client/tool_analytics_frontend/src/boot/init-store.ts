@@ -1,4 +1,3 @@
-import { ChartData } from 'chart.js';
 import { Notify } from 'quasar';
 import { boot } from 'quasar/wrappers';
 import { request } from 'src/modules/api';
@@ -23,6 +22,11 @@ async function initTotalPageCharts() {
   const infoStore = useInfoStore();
 
   let resp;
+
+  resp = await request('getTools');
+  if (resp) {
+    appStore.setAvailableTools(resp.data);
+  }
 
   resp = await request('currentTool');
   if (resp) {

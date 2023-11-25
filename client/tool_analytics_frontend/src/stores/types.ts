@@ -2,6 +2,12 @@ import { ChartData } from 'chart.js';
 
 export interface AppState {
   registeredCharts: Map<string, ChartData | MapData>;
+  availableTools: string[];
+}
+
+export interface PerToolStoreState {
+  yearlyChartData: Map<Tools, ChartData>;
+  selectedTool: string;
 }
 
 export class MapData {
@@ -15,4 +21,16 @@ export interface InfoStoreEntry {
   name: string;
   value: number;
   trend: number;
+}
+
+export enum Tools {
+  'Bitwolf',
+  'Cookley',
+  'Fixflex',
+  'Job',
+  'Konklux',
+  'Lotstring',
+  'Otcom',
+  'Tres-Zap',
+  'Zaam-Dox',
 }

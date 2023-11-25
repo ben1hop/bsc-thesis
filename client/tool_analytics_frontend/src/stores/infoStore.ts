@@ -13,6 +13,7 @@ export const useInfoStore = defineStore('infoStore', {
     currentTraffic: EMPTY_ENTRY,
     currentRegion: EMPTY_ENTRY,
     currentOs: EMPTY_ENTRY,
+
   }),
   getters: {
     getCurrentTool(state) {
@@ -27,6 +28,7 @@ export const useInfoStore = defineStore('infoStore', {
     getCurrentOs(state) {
       return state.currentOs;
     },
+
   },
   actions: {
     setCurrentTool(data: InfoStoreEntry) {
@@ -41,5 +43,6 @@ export const useInfoStore = defineStore('infoStore', {
     setCurrentOs(data: InfoStoreEntry) {
       this.currentOs = data;
     },
+
   },
 });
