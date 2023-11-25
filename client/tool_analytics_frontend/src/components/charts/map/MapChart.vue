@@ -14,7 +14,7 @@
         <span>{{ legend.name }}</span>
       </div>
       <div class="vue-map-legend-content">
-        <span>{{ countryData[legend.code] || 0 }}</span>
+        <span>{{ chartData[legend.code] || 0 }}</span>
       </div>
     </div>
   </div>
@@ -22,9 +22,9 @@
 
 <script lang="ts">
 import chroma from 'chroma-js';
-import Map_ from './MapChartMap.vue';
-import { defineComponent } from 'vue';
+import { defineComponent, ref, onMounted, watch } from 'vue';
 import { getCssVar } from 'quasar';
+import Map_ from 'src/components/charts/map/MapChartMap.vue';
 
 import {
   getDynamicMapCss,
@@ -46,11 +46,6 @@ let position = {
 export default defineComponent({
   name: 'MapChart',
   components: { Map_ },
-  watch: {
-    countryData() {
-      this.renderMapCSS();
-    },
-  },
   props: {
     lowColor: {
       type: String,
@@ -73,42 +68,67 @@ export default defineComponent({
       default: '#909090',
     },
   },
-  data() {
-    return {
-      legend: legend,
-      position: position,
-      node: document.createElement('style'),
-      chromaScale: chroma.scale([this.$props.lowColor, this.$props.highColor]),
+  setup(props, { emit }) {
+    const chartData = ref(props.countryData);
+    if (!chartData.value) {
+      chartData.value = {};
+    }
+
+    const legend = ref({
+      data: null,
+      code: null,
+      name: null,
+    });
+
+    const position = ref({
+      left: 0,
+      top: 0,
+    });
+
+    const node = document.createElement('style');
+    const chromaScale = chroma.scale([props.lowColor, props.highColor]);
+
+    watch(
+      () => props.countryData,
+      (newCountryData) => {
+        chartData.value = newCountryData;
+        renderMapCSS(); // Call the rendering function whenever the data changes
+      }
+    );
+
+    const renderMapCSS = () => {
+      const baseCss = getBaseCss(props);
+      const dynamicMapCss = getDynamicMapCss(chartData.value, chromaScale);
+      node.innerHTML = getCombinedCssString(baseCss, dynamicMapCss);
     };
-  },
-  methods: {
-    /* eslint-disable  @typescript-eslint/no-explicit-any */
-    onHoverCountry(country: any) {
-      this.legend = country;
-      this.position = country.position;
-      this.$emit('hoverCountry', country);
-    },
-    /* eslint-disable  @typescript-eslint/no-explicit-any */
-    onHoverLeaveCountry(country: any) {
-      this.legend = {
+
+    onMounted(() => {
+      document.body.appendChild(node);
+      renderMapCSS();
+    });
+
+    const onHoverCountry = (country: any) => {
+      legend.value = country;
+      position.value = country.position;
+      emit('hoverCountry', country);
+    };
+
+    const onHoverLeaveCountry = (country: any) => {
+      legend.value = {
         data: null,
         code: null,
         name: null,
       };
-      this.$emit('hoverLeaveCountry', country);
-    },
-    renderMapCSS() {
-      const baseCss = getBaseCss(this.$props);
-      const dynamicMapCss = getDynamicMapCss(
-        this.$props.countryData,
-        this.chromaScale
-      );
-      this.$data.node.innerHTML = getCombinedCssString(baseCss, dynamicMapCss);
-    },
-  },
-  mounted() {
-    document.body.appendChild(this.$data.node);
-    this.renderMapCSS();
+      emit('hoverLeaveCountry', country);
+    };
+
+    return {
+      chartData,
+      legend,
+      position,
+      onHoverCountry,
+      onHoverLeaveCountry,
+    };
   },
 });
 </script>
