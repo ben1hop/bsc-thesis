@@ -482,4 +482,26 @@ analyticsApi.set('perToolActions', async (req, res) => {
   );
 });
 
+analyticsApi.set('perToolCountries', async (req, res) => {
+  pool.query(
+    ((SELECT + 'PerToolRegion where tool = "' + req.query.tool) as string) +
+      '";',
+    (err: any, rows: any[], fields: { name: string | number }[]) => {
+      if (err) {
+        throw err;
+      } else {
+        // Params are under req.query not req.params!!
+        const datasets = loadTotalUsageByCountries(
+          rows.map((value) => ({
+            tool: value[fields[0].name],
+            country: value[fields[1].name],
+            total: value[fields[2].name],
+          }))
+        );
+        res.send(new MapData(datasets));
+      }
+    }
+  );
+});
+
 export default analyticsApi;

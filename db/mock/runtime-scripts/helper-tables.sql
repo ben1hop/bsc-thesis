@@ -132,6 +132,14 @@ create table PerToolYearlyWithQuarter as
         year,
         quarter;
 
+-- 2) Tool usage by countries
+DROP TABLE IF EXISTS `PerToolRegion`;
+create table PerToolRegion as 
+    select x.result as tool, y.country as country, count(x.id) as total 
+    from EventLog as x , LocationsWithLocationIds as y 
+    where y.LocationId = x.idStudioLocationRef
+    group by x.result , y.country
+    order by tool, country;
 
 
 

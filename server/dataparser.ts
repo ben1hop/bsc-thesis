@@ -170,3 +170,11 @@ export function loadPerToolAction(table: any) {
   datasets.push(new DataSet(table.map((x: any) => x.total)));
   return datasets;
 }
+
+export function loadPerToolCountry(table: any): Record<string, number> {
+  const rec_: Record<string, number> = {};
+  for (let i = 0; i < table.length; i++) {
+    rec_[String(countryToAlpha2(table[i].country))] = table[i].total;
+  }
+  return rec_;
+}
