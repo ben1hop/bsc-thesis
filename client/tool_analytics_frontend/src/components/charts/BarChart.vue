@@ -21,6 +21,7 @@ import {
   BarElement,
   CategoryScale,
   LinearScale,
+  ChartOptions,
 } from 'chart.js';
 import { Bar } from 'vue-chartjs';
 import { PropType, ref, watch } from 'vue';
@@ -37,11 +38,6 @@ ChartJS.register(
   Legend
 );
 
-export const options = {
-  responsive: true,
-  maintainAspectRatio: false,
-};
-
 export default {
   name: 'App',
   components: {
@@ -55,6 +51,10 @@ export default {
     title: {
       type: String,
       default: 'Chart',
+    },
+    stacked: {
+      type: Boolean,
+      default: false,
     },
   },
   data(props: any) {
@@ -76,6 +76,25 @@ export default {
             data: [0, 0, 0],
           },
         ],
+      };
+    }
+
+    let options: ChartOptions = {
+      responsive: true,
+      maintainAspectRatio: false,
+    };
+
+    if (props.stacked) {
+      options = {
+        ...options,
+        scales: {
+          x: {
+            stacked: true,
+          },
+          y: {
+            stacked: true,
+          },
+        },
       };
     }
 

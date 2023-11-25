@@ -17,7 +17,7 @@
     <SectionSeparator title="Current years data" />
     <div class="row">
       <q-card>
-        <BarChart ref="refBar" :data="yearlyChartData" />
+        <BarChart ref="refBar" :data="yearlyChartData" stacked="true" />
       </q-card>
       <q-card>
         <PieChart />
