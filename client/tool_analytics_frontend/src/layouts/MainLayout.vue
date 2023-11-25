@@ -7,8 +7,8 @@
           @click="toggleTopDrawer"
         >
           Wireless Tools Analytics
-          <q-icon v-if="!topDrawer" name="sym_r_south" />
-          <q-icon v-else name="sym_r_north" />
+          <q-icon v-if="!topDrawer" name="sym_r_arrow_drop_down" />
+          <q-icon v-else name="sym_r_arrow_drop_up" />
         </q-toolbar-title>
       </q-toolbar>
       <transition
