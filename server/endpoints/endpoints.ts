@@ -2,6 +2,7 @@ import { RequestHandler } from 'express';
 import pool from '../connection';
 import { baseTables, currentYear } from '../main';
 import {
+  loadPerToolYearlyByQuarter,
   loadTotalThroughYear,
   loadTotalThroughYearPerTool,
   loadTotalUsageByAction,
@@ -268,6 +269,25 @@ analyticsApi.set('uniqueUsers', async (req, res) => {
   );
 });
 
+// -------------------------- total charts
+
+analyticsApi.set('currentTool', async (req, res) => {
+  pool.query(
+    'SELECT * FROM `bsc-dev-db`.TotalUsageByYear where year = ' +
+      currentYear +
+      ' or year = ' +
+      (currentYear - 1) +
+      ';',
+    (err: any, rows: any[], fields: { name: string | number }[]) => {
+      if (err) {
+        throw err;
+      } else {
+        res.send();
+      }
+    }
+  );
+});
+
 // ----- info apis
 analyticsApi.set('currentTool', async (req, res) => {
   pool.query(
@@ -409,6 +429,32 @@ analyticsApi.set('currentLocation', async (req, res) => {
             }
           }
         );
+      }
+    }
+  );
+});
+
+// -------------------------- per tool  charts
+analyticsApi.set('perToolYearly', async (req, res) => {
+  pool.query(
+    ((SELECT +
+      'PerToolYearlyWithQuarter where tool = "' +
+      req.query.tool) as string) + '";',
+    (err: any, rows: any[], fields: { name: string | number }[]) => {
+      if (err) {
+        throw err;
+      } else {
+        // Params are under req.query not req.params!!
+        const datasets = loadPerToolYearlyByQuarter(
+          rows.map((value) => ({
+            tool: value[fields[0].name],
+            year: value[fields[1].name],
+            quarter: value[fields[2].name],
+            total: value[fields[3].name],
+          })),
+          baseTables.get('years').map((x: string) => Number(x))
+        );
+        res.send(new ChartData(baseTables.get('years'), datasets));
       }
     }
   );

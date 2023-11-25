@@ -148,3 +148,20 @@ export function realMonths() {
     'December',
   ];
 }
+
+export function loadPerToolYearlyByQuarter(table: any, years: number[]) {
+  const quarters: string[] = ['Q1', 'Q2', 'Q3', 'Q4'];
+  const datasets: DataSet[] = quarters.map((quarter) => ({
+    label: quarter,
+    backgroundColor: '#f87979',
+    data: years.map((year) => {
+      const result = table.find(
+        (row) => row.year === year && row.quarter === quarter
+      );
+      console.log(result);
+      return result ? result.total : 0;
+    }),
+  }));
+
+  return datasets;
+}
