@@ -31,7 +31,7 @@ export const options = {
   responsive: true,
   maintainAspectRatio: false,
 };
-
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 export default {
   name: 'App',
   components: {

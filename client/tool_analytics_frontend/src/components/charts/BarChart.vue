@@ -57,6 +57,7 @@ export default {
       default: false,
     },
   },
+  /* eslint-disable  @typescript-eslint/no-explicit-any */
   data(props: any) {
     let chartData = ref(props.data);
     if (chartData.value) {

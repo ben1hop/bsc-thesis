@@ -28,7 +28,7 @@ export default boot(({ app }) => {
 });
 
 function getApiBaseUrl() {
-  return `http://localhost:9000/`;
+  return 'http://localhost:9000/';
 }
 
 export { api, getApiBaseUrl };

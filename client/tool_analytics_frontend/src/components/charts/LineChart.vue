@@ -23,7 +23,6 @@ import {
   Tooltip,
   Legend,
   ChartData,
-  ChartDataset,
 } from 'chart.js';
 import { Line as QLine } from 'vue-chartjs';
 import { PropType } from 'vue';
@@ -63,6 +62,7 @@ export default {
       default: 'Chart',
     },
   },
+  /* eslint-disable  @typescript-eslint/no-explicit-any */
   data(props: any) {
     let chartData: ChartData;
     if (props.data) {

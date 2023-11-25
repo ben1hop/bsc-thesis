@@ -6,14 +6,16 @@ export interface AppState {
 }
 
 export interface PerToolStoreState {
-  toolChartDatas: Map<Tools, ChartData[]>;
+  toolChartDatas: Map<Tools, (ChartData | MapData)[]>;
   selectedTool: string;
 }
 
 export class MapData {
+  /* eslint-disable  @typescript-eslint/no-explicit-any */
   constructor(dataset: Record<string, any>) {
     this.datasets = dataset;
   }
+  /* eslint-disable  @typescript-eslint/no-explicit-any */
   datasets: Record<string, any>;
 }
 
