@@ -39,14 +39,9 @@ create table Actions as SELECT distinct action FROM `bsc-dev-db`.EventLog;
 -- 1) querry - total usage by year
 DROP TABLE IF EXISTS `TotalUsageByYear`;
 create table TotalUsageByYear as
-    select tool , year ,
-    ( 
-    select count(*) from EventLog y 
-    where y.result 
-    like CONCAT( '%' , x.tool , '%' ) and year(y.actionTime) = z.year
-    ) as total 
-    from Tools x , Years z 
-    group by tool , year , total 
+    select result as tool , year(actionTime) as year , count(*) as total 
+    from EventLog 
+    group by result, year(actionTime) 
     order by tool, year;
 
 
@@ -69,7 +64,7 @@ create view StudiosWithSoftwareIds as
 
 DROP TABLE IF EXISTS `TotalUsageByOS`;
 create table TotalUsageByOS as 
-    select y.computerOS , count(x.id) from EventLog as x , StudiosWithSoftwareIds as y 
+    select y.computerOS , count(x.id) as total from EventLog as x , StudiosWithSoftwareIds as y 
     where y.SoftwareId = x.idStudioSoftwareRef group by y.computerOS;
 
 DROP TABLE IF EXISTS `TotalUsageByOS_Year`;
@@ -108,3 +103,38 @@ create table TotalUsageByCountries as
 DROP TABLE IF EXISTS `TotalUsageByAction`;
 create table TotalUsageByAction as 
     SELECT action, count(id) as total FROM `bsc-dev-db`.EventLog group by action;
+
+
+
+
+
+/*
+# ##################################################
+# ## HELPER TABLES PER TOOL PAGE
+# ################################################## 
+*/
+-- 1) Stacked quarterly data through years
+DROP TABLE IF EXISTS `PerToolYearlyWithQuarter`;
+create table PerToolYearlyWithQuarter as 
+    SELECT 
+        result AS tool,
+        year(actionTime) AS year,
+        CONCAT('Q', ((month(actionTime) - 1) DIV 3) + 1) AS quarter,
+        COUNT(*) AS total
+    FROM 
+        EventLog
+    GROUP BY 
+        result,
+        year(actionTime),
+        quarter
+    ORDER BY 
+        tool,
+        year,
+        quarter;
+
+
+
+
+
+
+
