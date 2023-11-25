@@ -46,7 +46,7 @@ import { usePerToolStore } from 'src/stores/perToolStore';
 import BarChart from 'src/components/charts/BarChart.vue';
 //import LineChart from 'src/components/charts/LineChart.vue';
 import PieChart from 'src/components/charts/PieChart.vue';
-import { MapData, Tools } from 'src/stores/types';
+import { Tools } from 'src/stores/types';
 import { request } from 'src/modules/api';
 import MapChart from 'src/components/charts/map/MapChart.vue';
 import { ChartData } from 'chart.js';

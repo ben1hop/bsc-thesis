@@ -32,17 +32,6 @@ import {
   getCombinedCssString,
 } from './dynamic-map-css';
 
-let legend = {
-  data: null,
-  code: null,
-  name: null,
-};
-
-let position = {
-  left: 0,
-  top: 0,
-};
-
 export default defineComponent({
   name: 'MapChart',
   components: { Map_ },
@@ -106,13 +95,13 @@ export default defineComponent({
       document.body.appendChild(node);
       renderMapCSS();
     });
-
+    /* eslint-disable  @typescript-eslint/no-explicit-any */
     const onHoverCountry = (country: any) => {
       legend.value = country;
       position.value = country.position;
       emit('hoverCountry', country);
     };
-
+    /* eslint-disable  @typescript-eslint/no-explicit-any */
     const onHoverLeaveCountry = (country: any) => {
       legend.value = {
         data: null,
