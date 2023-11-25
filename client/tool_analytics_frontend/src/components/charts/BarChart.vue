@@ -62,7 +62,7 @@ export default {
     if (chartData.value) {
       for (let i = 0; i < chartData.value.datasets.length; i++) {
         chartData.value.datasets[i] = {
-          ...props.data.datasets[i],
+          ...chartData.value.datasets[i],
           backgroundColor: getCssVar(getDataSetColor(i)),
         };
       }

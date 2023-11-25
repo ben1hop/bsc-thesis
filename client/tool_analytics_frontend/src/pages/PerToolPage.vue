@@ -20,7 +20,7 @@
         <BarChart ref="refBar" :data="yearlyChartData" stacked="true" />
       </q-card>
       <q-card>
-        <PieChart />
+        <PieChart :data="actionChartData" />
       </q-card>
     </div>
     <div class="row">
@@ -53,37 +53,44 @@ export default defineComponent({
       )
     );
 
+    let actionChartData = ref(
+      perToolStore.getActionChart(
+        perToolStore.getSelectedTools as unknown as Tools
+      )
+    );
+
     async function handleToolSelectionChange() {
       const currentTool = perToolStore.getSelectedTools as unknown as Tools;
-      let data = perToolStore.getYearlyChart(currentTool);
+      let data = perToolStore.getEveryChart(currentTool);
 
       if (!data) {
         try {
-          let param = {
+          const requestedYearly = await request('perToolYearly', {
             tool: currentTool as unknown as string,
-          };
-          const requestedData = await request('perToolYearly', {
+          });
+          const requestedActions = await request('perToolActions', {
             tool: currentTool as unknown as string,
           });
 
-          if (requestedData) {
-            data = perToolStore.registerYearlyChart(
-              currentTool,
-              requestedData.data
-            );
-            if (data) {
-              perToolStore.registerYearlyChart(currentTool, data);
-            }
+          if (requestedYearly && requestedActions) {
+            data = perToolStore.registerCharts(currentTool, [
+              requestedYearly.data,
+              requestedActions.data,
+            ]);
           }
         } catch (error) {
           console.error('Error fetching data:', error);
         }
       }
-      yearlyChartData.value = data;
+      if (data) {
+        yearlyChartData.value = data[0];
+        actionChartData.value = data[1];
+      }
     }
     return {
       handleToolSelectionChange,
       yearlyChartData: computed(() => yearlyChartData),
+      actionChartData: computed(() => actionChartData),
       selectableTools: computed(() => appStore.getTools),
       selectedTool: computed({
         get() {

@@ -2,6 +2,7 @@ import { RequestHandler } from 'express';
 import pool from '../connection';
 import { baseTables, currentYear } from '../main';
 import {
+  loadPerToolAction,
   loadPerToolYearlyByQuarter,
   loadTotalThroughYear,
   loadTotalThroughYearPerTool,
@@ -455,6 +456,27 @@ analyticsApi.set('perToolYearly', async (req, res) => {
           baseTables.get('years').map((x: string) => Number(x))
         );
         res.send(new ChartData(baseTables.get('years'), datasets));
+      }
+    }
+  );
+});
+
+analyticsApi.set('perToolActions', async (req, res) => {
+  pool.query(
+    (('SELECT action, count(id) as total FROM `bsc-dev-db`.EventLog where result = "' +
+      req.query.tool) as string) + '" group by action;',
+    (err: any, rows: any[], fields: { name: string | number }[]) => {
+      if (err) {
+        throw err;
+      } else {
+        // Params are under req.query not req.params!!
+        const datasets = loadPerToolAction(
+          rows.map((value) => ({
+            action: value[fields[0].name],
+            total: value[fields[1].name],
+          }))
+        );
+        res.send(new ChartData(baseTables.get('actions'), datasets));
       }
     }
   );

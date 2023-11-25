@@ -6,7 +6,7 @@ export interface AppState {
 }
 
 export interface PerToolStoreState {
-  yearlyChartData: Map<Tools, ChartData>;
+  toolChartDatas: Map<Tools, ChartData[]>;
   selectedTool: string;
 }
 

@@ -22,7 +22,7 @@ import {
 } from 'chart.js';
 import { Pie } from 'vue-chartjs';
 import { getCssVar } from 'quasar';
-import { PropType } from 'vue';
+import { PropType, ref, watch } from 'vue';
 import getDataSetColor from 'src/css/utils';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -48,33 +48,42 @@ export default {
     },
   },
   data(props: any) {
-    let chartData: ChartData;
-    if (props.data) {
+    let chartData = ref(props.data);
+    if (chartData.value) {
       /**
        * Since rounded charts are using datasets differently , we have to allocate the colors like this.
        * Check each datasets data array , generate an same length number array incremented by one , this will mimic the array indexing.
        * Then convert each of these "indecies" into a color code.
        */
-      for (let i = 0; i < props.data.datasets.length; i++) {
-        props.data.datasets[i] = {
-          ...props.data.datasets[i],
+      for (let i = 0; i < chartData.value.datasets.length; i++) {
+        chartData.value.datasets[i] = {
+          ...chartData.value.datasets[i],
           backgroundColor: Array.from(
-            Array(props.data.datasets[i].data.length).keys()
+            Array(chartData.value.datasets[i].data.length).keys()
           ).map((x: number) => getCssVar(getDataSetColor(x))),
         };
       }
-      chartData = props.data;
     } else {
-      chartData = {
-        labels: ['VueJs', 'EmberJs', 'ReactJs', 'AngularJs'],
+      chartData.value = {
+        labels: ['-', '-', '-', '-'],
         datasets: [
           {
-            backgroundColor: ['#41B883', '#E46651', '#00D8FF', '#DD1B16'],
-            data: [40, 20, 80, 10],
+            backgroundColor: ['#fff', '#fff', '#fff', '#fff'],
+            data: [0, 0, 0, 0],
           },
         ],
       };
     }
+    watch(chartData, () => {
+      for (let i = 0; i < chartData.value.datasets.length; i++) {
+        chartData.value.datasets[i] = {
+          ...chartData.value.datasets[i],
+          backgroundColor: Array.from(
+            Array(chartData.value.datasets[i].data.length).keys()
+          ).map((x: number) => getCssVar(getDataSetColor(x))),
+        };
+      }
+    });
     return { options, chartData };
   },
 };

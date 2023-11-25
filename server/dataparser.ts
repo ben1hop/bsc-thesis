@@ -158,10 +158,15 @@ export function loadPerToolYearlyByQuarter(table: any, years: number[]) {
       const result = table.find(
         (row) => row.year === year && row.quarter === quarter
       );
-      console.log(result);
       return result ? result.total : 0;
     }),
   }));
 
+  return datasets;
+}
+
+export function loadPerToolAction(table: any) {
+  const datasets: DataSet[] = [];
+  datasets.push(new DataSet(table.map((x: any) => x.total)));
   return datasets;
 }

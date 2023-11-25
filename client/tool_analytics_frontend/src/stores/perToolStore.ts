@@ -4,7 +4,7 @@ import { ChartData } from 'chart.js';
 
 export const usePerToolStore = defineStore('perToolStore', {
   state: (): PerToolStoreState => ({
-    yearlyChartData: new Map(),
+    toolChartDatas: new Map(),
     selectedTool: '',
   }),
   getters: {
@@ -13,13 +13,21 @@ export const usePerToolStore = defineStore('perToolStore', {
     },
   },
   actions: {
-    registerYearlyChart(tool: Tools, data: ChartData): ChartData | null {
-      this.yearlyChartData.set(tool, data);
-      return this.getYearlyChart(tool);
+    registerCharts(tool: Tools, data: ChartData[]): ChartData[] | null {
+      this.toolChartDatas.set(tool, data);
+      return this.getEveryChart(tool);
+    },
+    getEveryChart(tool: Tools): ChartData[] | null {
+      const chartData = this.toolChartDatas.get(tool);
+      return chartData ? chartData : null;
     },
     getYearlyChart(tool: Tools): ChartData | null {
-      const chartData = this.yearlyChartData.get(tool);
-      return chartData ? chartData : null;
+      const chartData = this.toolChartDatas.get(tool);
+      return chartData ? chartData[0] : null;
+    },
+    getActionChart(tool: Tools): ChartData | null {
+      const chartData = this.toolChartDatas.get(tool);
+      return chartData ? chartData[1] : null;
     },
     setSelectedTools(tool: string) {
       this.selectedTool = tool;
