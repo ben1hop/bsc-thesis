@@ -1,48 +1,59 @@
 <template>
   <q-page class="column justify-start">
-    <div class="row justify-center">
-      <q-select
-        outlined
-        v-model="selectedTool"
-        :options="selectableTools"
-        dropdown-icon="sym_r_arrow_drop_down"
-        label-color="primary"
-        options-selected-class="text-primary text-weight-bold"
-        label="Selected tools"
-        style="width: 350px"
-        @update:model-value="handleToolSelectionChange"
-      />
+    <div class="row q-mb-lg">
+      <div class="q-pa-lg col">
+        <q-select
+          outlined
+          v-model="selectedTool"
+          :options="selectableTools"
+          dropdown-icon="sym_r_arrow_drop_down"
+          label-color="primary"
+          options-selected-class="text-primary text-weight-bold"
+          label="Selected tools"
+          :error="selectedTool"
+          :no-error-icon="true"
+          @update:model-value="handleToolSelectionChange"
+        />
+      </div>
+      <div class="q-pt-lg col-9">
+        <SectionSeparator title="General usage data for a single tool" />
+      </div>
     </div>
 
-    <SectionSeparator title="Current years data" />
-    <div class="row">
-      <q-card>
-        <BarChart ref="refBar" :data="yearlyChartData" stacked="true" />
-      </q-card>
-      <q-card>
-        <PieChart :data="actionChartData" />
-      </q-card>
-    </div>
-    <div class="row">
-      <q-card> <LineChart /></q-card>
+    <div>
+      <div class="row justify-evenly q-mb-lg">
+        <q-card class="col-7">
+          <BarChart ref="refBar" :data="yearlyChartData" stacked="true" />
+        </q-card>
+        <q-card class="col-3">
+          <PieChart :data="actionChartData" />
+        </q-card>
+      </div>
+      <div class="row justfy-evenly q-my-lg">
+        <q-card class="col">
+          <MapChart :countryData="countryChartData"
+        /></q-card>
+      </div>
     </div>
   </q-page>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from 'vue';
+import { computed, defineComponent, ref, watch } from 'vue';
 import SectionSeparator from 'src/components/SectionSeparator.vue';
 import { useAppStore } from 'src/stores/appStore';
 import { usePerToolStore } from 'src/stores/perToolStore';
 import BarChart from 'src/components/charts/BarChart.vue';
-import LineChart from 'src/components/charts/LineChart.vue';
+//import LineChart from 'src/components/charts/LineChart.vue';
 import PieChart from 'src/components/charts/PieChart.vue';
-import { Tools } from 'src/stores/types';
+import { MapData, Tools } from 'src/stores/types';
 import { request } from 'src/modules/api';
+import MapChart from 'src/components/charts/map/MapChart.vue';
+import { ChartData } from 'chart.js';
 
 export default defineComponent({
   name: 'PerToolPage',
-  components: { SectionSeparator, BarChart, PieChart, LineChart },
+  components: { SectionSeparator, BarChart, PieChart, MapChart },
   setup() {
     const appStore = useAppStore();
     const perToolStore = usePerToolStore();
@@ -55,6 +66,12 @@ export default defineComponent({
 
     let actionChartData = ref(
       perToolStore.getActionChart(
+        perToolStore.getSelectedTools as unknown as Tools
+      )
+    );
+    /* eslint-disable  @typescript-eslint/no-explicit-any */
+    let countryChartData = ref<Record<string, any> | null>(
+      perToolStore.getCountryChart(
         perToolStore.getSelectedTools as unknown as Tools
       )
     );
@@ -71,26 +88,46 @@ export default defineComponent({
           const requestedActions = await request('perToolActions', {
             tool: currentTool as unknown as string,
           });
+          const requestedCountries = await request('perToolCountries', {
+            tool: currentTool as unknown as string,
+          });
 
-          if (requestedYearly && requestedActions) {
+          if (requestedYearly && requestedActions && requestedCountries) {
             data = perToolStore.registerCharts(currentTool, [
               requestedYearly.data,
               requestedActions.data,
+              requestedCountries.data,
             ]);
+            if (data) {
+              console.log('REGISTERED CHARTS= ' + data[2].datasets);
+            }
           }
         } catch (error) {
           console.error('Error fetching data:', error);
         }
       }
       if (data) {
-        yearlyChartData.value = data[0];
-        actionChartData.value = data[1];
+        yearlyChartData.value = JSON.parse(
+          JSON.stringify(data[0] as ChartData)
+        );
+        actionChartData.value = data[1] as ChartData;
+        countryChartData.value = data[2].datasets;
       }
     }
+
+    watch(countryChartData, () => {
+      console.log('bigga changed');
+    });
+
     return {
       handleToolSelectionChange,
       yearlyChartData: computed(() => yearlyChartData),
       actionChartData: computed(() => actionChartData),
+      countryChartData: computed(() => {
+        console.log('GETTER');
+        console.log(countryChartData.value); // Access the value property of the ref
+        return countryChartData.value;
+      }),
       selectableTools: computed(() => appStore.getTools),
       selectedTool: computed({
         get() {
