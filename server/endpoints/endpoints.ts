@@ -330,8 +330,15 @@ analyticsApi.set('currentTool', async (req, res) => {
 });
 
 analyticsApi.set('currentTraffic', async (req, res) => {
+  const currentYear =
+    baseTables.get('years')[baseTables.get('years').length - 1];
   pool.query(
-    'SELECT year, SUM(total) as total FROM `bsc-dev-db`.TotalUsageThroughYear group by year;',
+    'SELECT year, SUM(total) as total FROM `bsc-dev-db`.TotalUsageThroughYear \
+    where year = ' +
+      Number(currentYear) +
+      ' or year = ' +
+      (Number(currentYear) - 1) +
+      ' group by year order by year;',
     (err: any, rows: any[], fields: { name: string | number }[]) => {
       if (err) {
         throw err;
@@ -340,12 +347,10 @@ analyticsApi.set('currentTraffic', async (req, res) => {
           year: value[fields[0].name],
           total: value[fields[1].name],
         }));
-        const currYearData = response.find((x) => x.year === currentYear);
-        const lastYearData = response.find((x) => x.year === currentYear - 1);
         res.send({
-          name: currYearData.year,
-          value: currYearData.total,
-          trend: currYearData.total > lastYearData.total ? 1 : -1,
+          name: response[1].year,
+          value: response[1].total,
+          trend: response[1].total > response[0].total ? 1 : -1,
         });
       }
     }

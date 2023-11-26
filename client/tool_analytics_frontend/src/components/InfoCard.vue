@@ -6,7 +6,9 @@
       </div>
     </q-card-section>
     <q-card-section class="row justify-center">
-      <div class="text-primary text-weight-bold text-h6">{{ value.name }}</div>
+      <div class="text-primary text-weight-bold text-h6">
+        {{ text_label === 0 ? value.name : value.value }}
+      </div>
       <div>
         <q-icon
           v-if="value.trend === -1"
@@ -35,7 +37,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+export enum TextLabel {
+  'name' = 0,
+  'value' = 1,
+}
+
+import { PropType, defineComponent, ref } from 'vue';
 export default defineComponent({
   name: 'InfoCard',
   components: {},
@@ -44,10 +51,14 @@ export default defineComponent({
       type: String,
       default: 'Default',
     },
+    text_label: {
+      type: Number as PropType<TextLabel>,
+      default: 0,
+    },
     value: {
       type: Object,
       default: () => {
-        return { name: 'N/A', trend: 0 };
+        return { name: 'N/A', value: 0, trend: 0 };
       },
     },
   },

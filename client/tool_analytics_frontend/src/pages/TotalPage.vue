@@ -1,19 +1,20 @@
 <template>
   <q-page class="column justify-evenly">
     <SectionSeparator title="Current years data" />
-    <div class="row justify-around">
+    <div class="row justify-around text-center">
       <InfoCard class="col-1" title="Most used tool:" :value="currentTool" />
       <InfoCard
         class="col-1"
         title="Current yearly traffic:"
         :value="currentTraffic"
+        text_label="1"
       />
       <InfoCard
         class="col-1"
-        title="Current most popular region:"
+        title="Highest region:"
         :value="currentLocation"
       />
-      <InfoCard class="col-1" title="Current OS" :value="currentOS" />
+      <InfoCard class="col-1" title="Current OS:" :value="currentOS" />
     </div>
     <SectionSeparator title="Tool usage based on time" />
     <q-card class="q-pb-lg self-center chart-container" style="width: 85%">
@@ -51,11 +52,13 @@
       </q-card>
     </div>
     <SectionSeparator title="Tool usage based on location" />
-    <q-card class="q-pt-lg chart-container">
-      <MapChart
-        :countryData="getChartData(TotalChartIds.TOTAL_REGION)?.datasets"
-      />
-    </q-card>
+    <div class="row justify-center">
+      <q-card class="col-9 q-pt-lg">
+        <MapChart
+          :countryData="getChartData(TotalChartIds.TOTAL_REGION)?.datasets"
+        />
+      </q-card>
+    </div>
   </q-page>
 </template>
 

@@ -20,20 +20,23 @@
       </div>
     </div>
 
-    <div>
-      <div class="row justify-evenly q-mb-lg">
-        <q-card class="col-7">
-          <BarChart ref="refBar" :data="yearlyChartData" stacked="true" />
-        </q-card>
-        <q-card class="col-3">
-          <PieChart :data="actionChartData" />
-        </q-card>
-      </div>
-      <div class="row justfy-evenly q-my-lg">
-        <q-card class="col">
-          <MapChart :countryData="countryChartData"
-        /></q-card>
-      </div>
+    <div class="row justify-evenly q-mb-lg">
+      <q-card class="col-7">
+        <BarChart
+          ref="refBar"
+          :data="yearlyChartData"
+          stacked="true"
+          title="Selected tools total usage"
+        />
+      </q-card>
+      <q-card class="col-3">
+        <PieChart :data="actionChartData" title="Weighted command usage" />
+      </q-card>
+    </div>
+    <div class="row justify-center q-my-lg">
+      <q-card class="col-9 justify-center">
+        <MapChart :countryData="countryChartData" />
+      </q-card>
     </div>
   </q-page>
 </template>
