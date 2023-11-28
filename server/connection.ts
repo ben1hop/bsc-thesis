@@ -1,13 +1,13 @@
 import mysql from 'mysql';
 
+//   host: 'host.docker.internal', on windows! TODO
 const pool = mysql.createPool({
   connectionLimit: 10,
-  host: 'host.docker.internal',
+  host: '127.0.0.1',
   user: 'root',
   password: 'pwd',
   database: 'bsc-dev-db',
 });
-
 
 pool.getConnection((err, connection) => {
   if (err) {
@@ -24,8 +24,10 @@ pool.getConnection((err, connection) => {
       return;
     }
   }
-  console.log("Successfull db connection.")
-  if (connection) {connection.release()};
+  console.log('Successfull db connection.');
+  if (connection) {
+    connection.release();
+  }
   return;
 });
 
