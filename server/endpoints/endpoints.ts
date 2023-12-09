@@ -19,6 +19,10 @@ export const analyticsApi: Map<string, RequestHandler> = new Map();
 
 const SELECT = 'SELECT * FROM ';
 
+analyticsApi.set('/', async (req, res) => {
+  res.send('Server is up and running.');
+});
+
 analyticsApi.set('getYears', async (req, res) => {
   pool.query(
     SELECT + 'Years;',
