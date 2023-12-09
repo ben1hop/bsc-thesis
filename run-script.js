@@ -7,13 +7,12 @@ const osCommand = (cmd) => (process.platform === "win32" ? cmd + ".cmd" : cmd);
 const npm = osCommand("npm");
 
 async function setupDocker() {
-  const service = "db";
   const dbDir = path.join(process.cwd(), "db");
   try {
-    console.log(`Current directory: ${dbDir}`);
-
-    // Start the specified service
     const container = await compose.upAll({ cwd: dbDir, log: true });
+    console.log(
+      chalk.green(" - Docker container is up with base tables. \u221A")
+    );
     if (container.exitCode === 0) {
       const command = `docker exec -i bsc-dev-db-1 sh -c 'mysql -u root -ppwd bsc-dev-db < runtime-scripts/helper-tables.sql'`;
 
@@ -26,10 +25,10 @@ async function setupDocker() {
           console.error(`stderr: ${stderr}`);
           return;
         }
-        console.log(`stdout: ${stdout}`);
       });
+      console.log(chalk.green(" - Helper table script is completed. \u221A"));
     }
-    console.log("Docker setup done");
+    console.log(chalk.green("   Docker database is up and running. \u221A"));
   } catch (error) {
     console.error("Error setting up Docker:", error);
   }
@@ -38,20 +37,23 @@ async function setupDocker() {
 async function buildAndRunBackend() {
   try {
     process.chdir("server");
-    console.log("start build");
     const buildCommand = spawnSync(npm, ["run", "build"], {
-      stdio: "inherit",
+      stdio: "ignore",
     });
+    console.log(chalk.green(" - Building server files are completed. \u221A"));
 
     if (buildCommand.error) {
       throw new Error(`Error running npm build: ${buildCommand.error}`);
     }
 
+    // if running?
+
     const runCommand = spawn("node", ["./dist/main.js"], {
-      stdio: "inherit",
+      stdio: "ignore",
     });
     await waitOn({ resources: ["http://127.0.0.1:9000"], timeout: 20000 });
     process.chdir("..");
+    console.log(chalk.green("   Server is up and running. \u221A"));
   } catch (err) {
     throw Error("Error running backend build:", err);
   }
@@ -60,12 +62,14 @@ async function buildAndRunBackend() {
 async function buildAndRunClient() {
   try {
     process.chdir("client/tool_analytics_frontend");
-    console.log("start build");
+
+    // if open?
 
     const runCommand = spawn(npm, ["run", "dev"], {
-      stdio: "inherit",
+      stdio: "ignore",
     });
     await waitOn({ resources: ["http://127.0.0.1:8080"], timeout: 20000 });
+    console.log(chalk.green("   Client is up and running. \u221A"));
   } catch (err) {
     throw Error("Error running frontend build:", err);
   }
@@ -73,8 +77,11 @@ async function buildAndRunClient() {
 
 async function main() {
   try {
+    console.log(chalk.blue("1. Starting docker setup..."));
     await setupDocker();
+    console.log(chalk.blue("\n2. Starting backend build and setup..."));
     await buildAndRunBackend();
+    console.log(chalk.blue("\n3. Starting frontend setup..."));
     await buildAndRunClient();
   } catch (err) {
     //console.clear();
