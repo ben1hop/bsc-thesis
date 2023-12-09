@@ -29,7 +29,7 @@ Usefull docker cli commands:
 
 `docker volume ls` - lisitng active volumes
 
-`docker inspect bsc-dev-db-1` - inspecting the bsc-dev-db-1 named container ( this container )
+`docker {inspect/rm/stop} bsc-dev-db-1` - inspecting/removing/stopping the bsc-dev-db-1 named container ( this container )
 
 `docker ps -a` - list active containers
 
