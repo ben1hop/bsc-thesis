@@ -34,10 +34,13 @@
       </q-card>
     </div>
     <div class="row justify-evenly q-mb-lg">
-      <RadarChart
-        :data="timeSpanChartData"
-        title="Selected tools total usage"
-      />
+      <q-card class="col-4" style="max-height: 400px">
+        <RadarChart
+          :data="timeSpanChartData"
+          title="Selected tools total usage"
+        />
+      </q-card>
+      <div class="col-7"></div>
     </div>
     <div class="row justify-center q-my-lg">
       <q-card class="col-9 justify-center">
@@ -130,6 +133,7 @@ export default defineComponent({
         actionChartData.value = data[1] as ChartData;
         timeSpanChartData.value = data[2] as ChartData;
         countryChartData.value = data[3].datasets;
+        console.log(timeSpanChartData.value);
       }
     }
 

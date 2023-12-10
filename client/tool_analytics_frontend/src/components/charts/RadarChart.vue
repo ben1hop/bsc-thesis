@@ -70,6 +70,16 @@ export default {
         : null;
     }
 
+    function getBgColorInRgb(x: number) {
+      const colorHex = getCssVar(getDataSetColor(x));
+      if (colorHex) {
+        const rgb = hexToRgb(colorHex);
+        if (rgb !== null) {
+          return 'rgba(' + rgb.r + ',' + rgb.b + ',' + rgb.b + ',0.6)';
+        }
+      }
+    }
+
     let chartData = ref(props.data);
     if (chartData.value) {
       /**
@@ -80,17 +90,7 @@ export default {
       for (let i = 0; i < chartData.value.datasets.length; i++) {
         chartData.value.datasets[i] = {
           ...chartData.value.datasets[i],
-          backgroundColor: Array.from(
-            Array(chartData.value.datasets[i].data.length).keys()
-          ).map((x: number) => {
-            const colorHex = getCssVar(getDataSetColor(x));
-            if (colorHex) {
-              const rgb = hexToRgb(colorHex);
-              if (rgb?.r && rgb.b && rgb.g) {
-                return 'rgba(' + rgb.r + ',' + rgb.b + ',' + rgb.b + ',0.6)';
-              }
-            }
-          }),
+          backgroundColor: getBgColorInRgb(i),
         };
       }
     } else {
@@ -108,17 +108,7 @@ export default {
       for (let i = 0; i < chartData.value.datasets.length; i++) {
         chartData.value.datasets[i] = {
           ...chartData.value.datasets[i],
-          backgroundColor: Array.from(
-            Array(chartData.value.datasets[i].data.length).keys()
-          ).map((x: number) => {
-            const colorHex = getCssVar(getDataSetColor(x));
-            if (colorHex) {
-              const rgb = hexToRgb(colorHex);
-              if (rgb?.r && rgb.b && rgb.g) {
-                return 'rgba(' + rgb.r + ',' + rgb.b + ',' + rgb.b + ',0.6)';
-              }
-            }
-          }),
+          backgroundColor: getBgColorInRgb(i),
         };
       }
     });
