@@ -26,31 +26,27 @@ function incrementValuesInStatement(statement, incrementFactor) {
   return `INSERT INTO ${tableName} (${columns}) VALUES (${values.join(",")})`;
 }
 
-function generateWeightedValues(amount, mean, deviation) {
-  const values = [];
+function gaussianRandom(mean = 0, stdev = 1) {
+  const u = 1 - Math.random(); // Converting [0,1) to (0,1]
+  const v = Math.random();
+  const z = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+  // Transform to the desired mean and standard deviation:
+  return z * stdev + mean;
+}
 
-  // Generate values using Box-Muller transform
-  for (let i = 0; i < amount; i++) {
-    let u = 0,
-      v = 0;
-    let s = 0;
+function generateGaussianInRange(min, max, mean, stdDev) {
+  let value;
+  const range = max - min;
 
-    while (s >= 1 || s === 0) {
-      u = Math.random() * 2 - 1;
-      v = Math.random() * 2 - 1;
-      s = u * u + v * v;
-    }
-
-    const temp = Math.sqrt((-2 * Math.log(s)) / s);
-    const z0 = u * temp;
-    const generatedValue = z0 * deviation + mean; // Adjust mean and deviation
-
-    // Ensure the value is within the range of 0-24
-    const boundedValue = Math.min(Math.max(generatedValue, 0), 23);
-    values.push(Math.round(boundedValue, 0));
+  value = gaussianRandom(mean, stdDev);
+  // Scale and shift the value to fit within the desired range
+  if (value < min) {
+    return min;
+  } else if (value >= max) {
+    return max;
+  } else {
+    return Math.round(value, 0);
   }
-
-  return values;
 }
 
 function modifyLineWithNewHour(line, newValue) {
@@ -85,7 +81,12 @@ const inputDirectory = process.cwd();
 // Increment factor
 const incrementFactor = 1000;
 
-const generatedDistribution = generateWeightedValues(6000, 13, 8);
+//const generatedDistribution = generateGaussian(6000, 13, 8);
+const generatedDistribution = [];
+for (let i = 0; i < 6000; i++) {
+  const gaussianNumberInRange = generateGaussianInRange(0, 23, 13, 4.5);
+  generatedDistribution.push(gaussianNumberInRange);
+}
 
 // Read the files in the input directory
 fs.readdir(inputDirectory, (err, files) => {
