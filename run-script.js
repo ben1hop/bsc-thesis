@@ -7,25 +7,30 @@ const osCommand = (cmd) => (process.platform === "win32" ? cmd + ".cmd" : cmd);
 const npm = osCommand("npm");
 
 async function setupDocker() {
+  // step into the db folder
   const dbDir = path.join(process.cwd(), "db");
   try {
+    // call the docker compose up
     const container = await compose.upAll({ cwd: dbDir, log: true });
     console.log(
       chalk.green(" - Docker container is up with base tables. \u221A")
     );
+    // when it finished we call the helper table generator script
     if (container.exitCode === 0) {
-      const command = `docker exec -i bsc-dev-db-1 sh -c 'mysql -u root -ppwd bsc-dev-db < runtime-scripts/helper-tables.sql'`;
-
-      execSync(command, (error, stdout, stderr) => {
-        if (error) {
-          console.error(`Error: ${error.message}`);
-          return;
+      spawnSync(
+        "docker",
+        [
+          "exec",
+          "-i",
+          "bsc-dev-db-1",
+          "sh",
+          "-c",
+          "mysql -u root -ppwd bsc-dev-db < runtime-scripts/helper-tables.sql",
+        ],
+        {
+          stdio: "inherit",
         }
-        if (stderr) {
-          console.error(`stderr: ${stderr}`);
-          return;
-        }
-      });
+      );
       console.log(chalk.green(" - Helper table script is completed. \u221A"));
     }
     console.log(chalk.green("   Docker database is up and running. \u221A"));
@@ -48,7 +53,7 @@ async function buildAndRunBackend() {
 
     // if running?
 
-    const runCommand = spawn("node", ["./dist/main.js"], {
+    spawn("node", ["./dist/main.js"], {
       stdio: "ignore",
     });
     await waitOn({ resources: ["http://127.0.0.1:9000"], timeout: 20000 });
@@ -65,7 +70,7 @@ async function buildAndRunClient() {
 
     // if open?
 
-    const runCommand = spawn(npm, ["run", "dev"], {
+    spawn(npm, ["run", "dev"], {
       stdio: "ignore",
     });
     await waitOn({ resources: ["http://127.0.0.1:8080"], timeout: 20000 });
