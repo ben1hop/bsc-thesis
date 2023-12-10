@@ -12,9 +12,7 @@ async function setupDocker() {
   try {
     // call the docker compose up
     const container = await compose.upAll({ cwd: dbDir, log: true });
-    console.log(
-      chalk.green(" - Docker container is up with base tables. \u221A")
-    );
+    console.log(chalk.green("Docker container is up with base tables. \u221A"));
     // when it finished we call the helper table generator script
     if (container.exitCode === 0) {
       spawnSync(
@@ -31,9 +29,11 @@ async function setupDocker() {
           stdio: "inherit",
         }
       );
-      console.log(chalk.green(" - Helper table script is completed. \u221A"));
+      console.log(chalk.green("Helper table script is completed. \u221A"));
     }
-    console.log(chalk.green("   Docker database is up and running. \u221A"));
+    console.log(
+      chalk.green("\n     Docker database is up and running. \u221A")
+    );
   } catch (error) {
     console.error("Error setting up Docker:", error);
   }
@@ -45,22 +45,37 @@ async function buildAndRunBackend() {
     const buildCommand = spawnSync(npm, ["run", "build"], {
       stdio: "ignore",
     });
-    console.log(chalk.green(" - Building server files are completed. \u221A"));
+    console.log(chalk.green("Building server files are completed. \u221A"));
 
     if (buildCommand.error) {
       throw new Error(`Error running npm build: ${buildCommand.error}`);
     }
 
     // if running?
+    try {
+      await waitOn({
+        resources: ["http://127.0.0.1:9000"],
+        timeout: 7500,
+        reverse: true,
+      });
+    } catch (err) {
+      throw Error("Server port 9000 is already in use.");
+    }
 
-    spawn("node", ["./dist/main.js"], {
-      stdio: "ignore",
-    });
-    await waitOn({ resources: ["http://127.0.0.1:9000"], timeout: 20000 });
+    spawn("node", ["./dist/main.js"], { stdio: "pipe" });
+
+    try {
+      await waitOn({
+        resources: ["http://127.0.0.1:9000"],
+        timeout: 10000,
+      });
+    } catch (err) {
+      throw Error("Couldn't access server at port 9000.");
+    }
     process.chdir("..");
-    console.log(chalk.green("   Server is up and running. \u221A"));
+    console.log(chalk.green("\n     Server is up and running. \u221A"));
   } catch (err) {
-    throw Error("Error running backend build:", err);
+    throw Error("\nRunning backend build: \n   - " + err.message);
   }
 }
 
@@ -69,14 +84,30 @@ async function buildAndRunClient() {
     process.chdir("client/tool_analytics_frontend");
 
     // if open?
+    try {
+      await waitOn({
+        resources: ["http://127.0.0.1:8080"],
+        timeout: 5000,
+        reverse: true,
+      });
+    } catch (err) {
+      throw Error("Client port 8080 is already in use.");
+    }
 
     spawn(npm, ["run", "dev"], {
       stdio: "ignore",
     });
-    await waitOn({ resources: ["http://127.0.0.1:8080"], timeout: 20000 });
-    console.log(chalk.green("   Client is up and running. \u221A"));
+    try {
+      await waitOn({
+        resources: ["http://127.0.0.1:8080"],
+        timeout: 15000,
+      });
+    } catch (err) {
+      throw Error("Couldn't access client at port 8080.");
+    }
+    console.log(chalk.green("\n     Client is up and running. \u221A"));
   } catch (err) {
-    throw Error("Error running frontend build:", err);
+    throw Error("\nRunning frontend build: \n   - " + err.message);
   }
 }
 
