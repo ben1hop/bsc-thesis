@@ -23,7 +23,7 @@
         >
           <q-tabs
             no-caps
-            active-color="primary"
+            active-color="yellow"
             indicator-color="transparent"
             class="text-grey-8"
             align="justify"
@@ -50,6 +50,7 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { getCssVar } from 'quasar';
 
 export default defineComponent({
   name: 'MainLayout',
