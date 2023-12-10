@@ -171,6 +171,15 @@ export function loadPerToolAction(table: any) {
   return datasets;
 }
 
+export function loadPerToolTimeSpan(table: any) {
+  const datasets: DataSet[] = [];
+  const am = table.filter((x: any) => x.hour < 13).map((x: any) => x.total);
+  const pm = table.filter((x: any) => x.hour >= 13).map((x: any) => x.total);
+  datasets.push(new DataSet(am, 'AM'));
+  datasets.push(new DataSet(pm, 'PM'));
+  return datasets;
+}
+
 export function loadPerToolCountry(table: any): Record<string, number> {
   const rec_: Record<string, number> = {};
   for (let i = 0; i < table.length; i++) {

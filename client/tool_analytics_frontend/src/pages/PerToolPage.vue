@@ -33,6 +33,12 @@
         <PieChart :data="actionChartData" title="Weighted command usage" />
       </q-card>
     </div>
+    <div class="row justify-evenly q-mb-lg">
+      <RadarChart
+        :data="timeSpanChartData"
+        title="Selected tools total usage"
+      />
+    </div>
     <div class="row justify-center q-my-lg">
       <q-card class="col-9 justify-center">
         <MapChart :countryData="countryChartData" />
@@ -53,10 +59,11 @@ import { Tools } from 'src/stores/types';
 import { request } from 'src/modules/api';
 import MapChart from 'src/components/charts/map/MapChart.vue';
 import { ChartData } from 'chart.js';
+import RadarChart from 'src/components/charts/RadarChart.vue';
 
 export default defineComponent({
   name: 'PerToolPage',
-  components: { SectionSeparator, BarChart, PieChart, MapChart },
+  components: { SectionSeparator, BarChart, PieChart, MapChart, RadarChart },
   setup() {
     const appStore = useAppStore();
     const perToolStore = usePerToolStore();
@@ -69,6 +76,12 @@ export default defineComponent({
 
     let actionChartData = ref(
       perToolStore.getActionChart(
+        perToolStore.getSelectedTools as unknown as Tools
+      )
+    );
+
+    let timeSpanChartData = ref(
+      perToolStore.getTimeSpanChart(
         perToolStore.getSelectedTools as unknown as Tools
       )
     );
@@ -91,6 +104,9 @@ export default defineComponent({
           const requestedActions = await request('perToolActions', {
             tool: currentTool as unknown as string,
           });
+          const requestedTimeSpan = await request('perToolTimeSpan', {
+            tool: currentTool as unknown as string,
+          });
           const requestedCountries = await request('perToolCountries', {
             tool: currentTool as unknown as string,
           });
@@ -99,11 +115,9 @@ export default defineComponent({
             data = perToolStore.registerCharts(currentTool, [
               requestedYearly.data,
               requestedActions.data,
+              requestedTimeSpan.data,
               requestedCountries.data,
             ]);
-            if (data) {
-              console.log('REGISTERED CHARTS= ' + data[2].datasets);
-            }
           }
         } catch (error) {
           console.error('Error fetching data:', error);
@@ -114,21 +128,17 @@ export default defineComponent({
           JSON.stringify(data[0] as ChartData)
         );
         actionChartData.value = data[1] as ChartData;
-        countryChartData.value = data[2].datasets;
+        timeSpanChartData.value = data[2] as ChartData;
+        countryChartData.value = data[3].datasets;
       }
     }
-
-    watch(countryChartData, () => {
-      console.log('bigga changed');
-    });
 
     return {
       handleToolSelectionChange,
       yearlyChartData: computed(() => yearlyChartData),
       actionChartData: computed(() => actionChartData),
+      timeSpanChartData: computed(() => timeSpanChartData),
       countryChartData: computed(() => {
-        console.log('GETTER');
-        console.log(countryChartData.value); // Access the value property of the ref
         return countryChartData.value;
       }),
       selectableTools: computed(() => appStore.getTools),

@@ -32,9 +32,13 @@ export const usePerToolStore = defineStore('perToolStore', {
       const chartData = this.toolChartDatas.get(tool);
       return chartData ? (chartData[1] as ChartData) : null;
     } /* eslint-disable  @typescript-eslint/no-explicit-any */,
+    getTimeSpanChart(tool: Tools): ChartData | null {
+      const chartData = this.toolChartDatas.get(tool);
+      return chartData ? (chartData[2] as ChartData) : null;
+    },
     getCountryChart(tool: Tools): Record<string, any> | null {
       const chartData = this.toolChartDatas.get(tool);
-      return chartData ? chartData[2].datasets : null;
+      return chartData ? chartData[3].datasets : null;
     },
     setSelectedTools(tool: string) {
       this.selectedTool = tool;

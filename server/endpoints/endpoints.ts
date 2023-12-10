@@ -3,6 +3,7 @@ import pool from '../connection';
 import { baseTables, currentYear } from '../main';
 import {
   loadPerToolAction,
+  loadPerToolTimeSpan,
   loadPerToolYearlyByQuarter,
   loadTotalThroughYear,
   loadTotalThroughYearPerTool,
@@ -486,6 +487,45 @@ analyticsApi.set('perToolActions', async (req, res) => {
           }))
         );
         res.send(new ChartData(baseTables.get('actions'), datasets));
+      }
+    }
+  );
+});
+
+analyticsApi.set('perToolTimeSpan', async (req, res) => {
+  pool.query(
+    (('SELECT hour(actionTime) as hour, count(id) as total FROM `bsc-dev-db`.EventLog where result = "' +
+      req.query.tool) as string) + '" group by hour(actionTime) order by hour',
+    (err: any, rows: any[], fields: { name: string | number }[]) => {
+      if (err) {
+        throw err;
+      } else {
+        // Params are under req.query not req.params!!
+        const datasets = loadPerToolTimeSpan(
+          rows.map((value) => ({
+            hour: value[fields[0].name],
+            total: value[fields[1].name],
+          }))
+        );
+        res.send(
+          new ChartData(
+            [
+              '0:00',
+              '1:00',
+              '2:00',
+              '3:00',
+              '4:00',
+              '5:00',
+              '6:00',
+              '7:00',
+              '8:00',
+              '9:00',
+              '10:00',
+              '11:00',
+            ],
+            datasets
+          )
+        );
       }
     }
   );
