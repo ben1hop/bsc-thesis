@@ -70,9 +70,10 @@ async function buildAndRunBackend() {
     const buildCommand = spawnSync(npm, ["run", "build"], {
       stdio: silentMode,
     });
-    console.log(chalk.green("Building server files are completed. \u221A"));
-
-    if (buildCommand.error) {
+    // check if proccess closed without issues
+    if (buildCommand.status === 0) {
+      console.log(chalk.green("Building server files are completed. \u221A"));
+    } else {
       throw new Error(`Error running npm build: ${buildCommand.error}`);
     }
 
@@ -88,7 +89,7 @@ async function buildAndRunBackend() {
     }
 
     spawn("node", ["./dist/main.js"], { stdio: silentMode });
-
+    // we cant check process close at this one , looking for its port to be unavailable
     try {
       await waitOn({
         resources: ["http://127.0.0.1:9000"],
