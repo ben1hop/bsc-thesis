@@ -6,15 +6,37 @@ import { v2 as compose } from "docker-compose";
 const osCommand = (cmd) => (process.platform === "win32" ? cmd + ".cmd" : cmd);
 const npm = osCommand("npm");
 
+// should add npm ci-s on first run!
+// compose and init script run needs to refined a bit
+// option to kill ports if occupied
+// separate general run error from occupied port error
+
+var args = process.argv.slice(2).filter((x) => x.startsWith("-"));
+
+const silentMode = "inherit";
+
+if (!!args.includes("-silent")) {
+  silentMode = "ignore";
+}
+
 async function setupDocker() {
   // step into the db folder
   const dbDir = path.join(process.cwd(), "db");
   try {
     // call the docker compose up
-    const container = await compose.upAll({ cwd: dbDir, log: true });
-    console.log(chalk.green("Docker container is up with base tables. \u221A"));
-    // when it finished we call the helper table generator script
+    const container = await compose.upAll({
+      cwd: dbDir,
+      log: true,
+      callback: (chunk, sourceStream) => {
+        // Handle process information here
+        console.log(`Received ${sourceStream}: ${chunk.toString()}`);
+      },
+    });
     if (container.exitCode === 0) {
+      console.log(
+        chalk.green("Docker container is up with base tables. \u221A")
+      );
+      // when it finished we call the helper table generator script
       spawnSync(
         "docker",
         [
@@ -26,14 +48,17 @@ async function setupDocker() {
           "mysql -u root -ppwd bsc-dev-db < runtime-scripts/helper-tables.sql",
         ],
         {
-          stdio: "inherit",
+          stdio: silentMode,
         }
       );
       console.log(chalk.green("Helper table script is completed. \u221A"));
+
+      console.log(
+        chalk.green("\n     Docker database is up and running. \u221A")
+      );
+    } else {
+      throw Error(container.err);
     }
-    console.log(
-      chalk.green("\n     Docker database is up and running. \u221A")
-    );
   } catch (error) {
     console.error("Error setting up Docker:", error);
   }
@@ -43,7 +68,7 @@ async function buildAndRunBackend() {
   try {
     process.chdir("server");
     const buildCommand = spawnSync(npm, ["run", "build"], {
-      stdio: "ignore",
+      stdio: silentMode,
     });
     console.log(chalk.green("Building server files are completed. \u221A"));
 
@@ -62,7 +87,7 @@ async function buildAndRunBackend() {
       throw Error("Server port 9000 is already in use.");
     }
 
-    spawn("node", ["./dist/main.js"], { stdio: "pipe" });
+    spawn("node", ["./dist/main.js"], { stdio: silentMode });
 
     try {
       await waitOn({
@@ -95,7 +120,7 @@ async function buildAndRunClient() {
     }
 
     spawn(npm, ["run", "dev"], {
-      stdio: "ignore",
+      stdio: silentMode,
     });
     try {
       await waitOn({
