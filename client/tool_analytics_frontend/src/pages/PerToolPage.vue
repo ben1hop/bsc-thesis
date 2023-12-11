@@ -20,8 +20,8 @@
       </div>
     </div>
 
-    <div class="row justify-evenly q-mb-lg">
-      <q-card class="col-7">
+    <div class="row justify-evenly q-mb-lg" style="height: 400px">
+      <q-card class="col-8">
         <BarChart
           ref="refBar"
           :data="yearlyChartData"
@@ -29,18 +29,17 @@
           title="Selected tools total usage"
         />
       </q-card>
-      <q-card class="col-3">
-        <PieChart :data="actionChartData" title="Weighted command usage" />
-      </q-card>
     </div>
-    <div class="row justify-evenly q-mb-lg">
-      <q-card class="col-4" style="max-height: 400px">
+    <div class="row justify-center q-mb-lg" style="max-height: 425px">
+      <q-card class="col-4 q-ma-md q-pb-sm">
         <RadarChart
           :data="timeSpanChartData"
-          title="Selected tools total usage"
+          title="Selected tools time span usage"
         />
       </q-card>
-      <div class="col-7"></div>
+      <q-card class="col-4 q-ma-md q-pb-sm">
+        <PieChart :data="actionChartData" title="Weighted command usage" />
+      </q-card>
     </div>
     <div class="row justify-center q-my-lg">
       <q-card class="col-9 justify-center">
