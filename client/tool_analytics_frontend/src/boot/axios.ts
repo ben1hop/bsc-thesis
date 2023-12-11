@@ -27,4 +27,8 @@ export default boot(({ app }) => {
   //       so you can easily perform requests against your app's API
 });
 
-export { api };
+function getApiBaseUrl() {
+  return 'http://localhost:9000/';
+}
+
+export { api, getApiBaseUrl };

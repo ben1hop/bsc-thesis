@@ -1,5 +1,5 @@
-version: '3.8'
-
+version: "3.8"
+name: "bsc-dev"
 services:
   db:
     image: mysql:8.0
@@ -10,8 +10,9 @@ services:
       MYSQL_PASSWORD: pwd
       MYSQL_ROOT_PASSWORD: pwd
     ports:
-      - '8082:3306'
+      - "3306:3306"
     expose:
-      - '8082'
+      - "8082"
     volumes:
       - ./mock/data:/docker-entrypoint-initdb.d
+      - ./mock/runtime-scripts:/runtime-scripts
