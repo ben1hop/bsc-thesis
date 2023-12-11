@@ -98,6 +98,17 @@ export function loadTotalUsageByAction(table: any) {
   return datasets;
 }
 
+export function loadTotalUsageTimeSpan(table: any) {
+  const datasets: DataSet[] = [];
+  datasets.push(
+    new DataSet(
+      table.map((x: any) => x.total),
+      'Number of actions'
+    )
+  );
+  return datasets;
+}
+
 export function loadTotalUsageByCountries(table: any): Record<string, number> {
   const rec_: Record<string, number> = {};
   for (let i = 0; i < table.length; i++) {

@@ -53,6 +53,10 @@ create table TotalUsageThroughYear as
     group by year , month ,total)
     order by year, month;
 
+DROP TABLE IF EXISTS `TotalUsageTimeSpan`;
+create table TotalUsageTimeSpan as
+    SELECT hour(actionTime) as hour, count(id) as total FROM `bsc-dev-db`.EventLog group by hour(actionTime) order by hour;
+
 
 -- 3) querry - total usage by OS -- itt számolhatjuk tetszőleges kapcsoló táblából ugyanis az összes event-hez tartozó software-user-location ugyanazt a studioref-et kapja soronként
 DROP VIEW IF EXISTS `StudiosWithSoftwareIds`;

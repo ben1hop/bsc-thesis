@@ -17,17 +17,11 @@
       <InfoCard class="col-1" title="Current OS:" :value="currentOS" />
     </div>
     <SectionSeparator title="Tool usage based on time" />
-    <q-card class="q-pb-lg self-center chart-container" style="width: 85%">
-      <BarChart
-        :data="getChartData(TotalChartIds.TOTAL_YEARLY)"
-        :title="TotalChartIds.TOTAL_YEARLY"
-      />
-    </q-card>
     <div class="row justify-evenly q-py-lg chart-container">
-      <q-card class="col-8">
-        <LineChart
-          :data="getChartData(TotalChartIds.TOTAL_THROUGHOUT_YEAR)"
-          :title="TotalChartIds.TOTAL_THROUGHOUT_YEAR"
+      <q-card class="col-8 q-pb-lg">
+        <BarChart
+          :data="getChartData(TotalChartIds.TOTAL_YEARLY)"
+          :title="TotalChartIds.TOTAL_YEARLY"
         />
       </q-card>
       <q-card class="col-3">
@@ -35,6 +29,21 @@
           :data="getChartData(TotalChartIds.TOTAL_ACTION)"
           :title="TotalChartIds.TOTAL_ACTION"
       /></q-card>
+    </div>
+
+    <div class="row justify-evenly q-py-lg chart-container">
+      <q-card class="col-5">
+        <LineChart
+          :data="getChartData(TotalChartIds.TOTAL_THROUGHOUT_YEAR)"
+          :title="TotalChartIds.TOTAL_THROUGHOUT_YEAR"
+        />
+      </q-card>
+      <q-card class="col-5">
+        <LineChart
+          :data="getChartData(TotalChartIds.TOTAL_TIME_SPAN)"
+          :title="TotalChartIds.TOTAL_TIME_SPAN"
+        />
+      </q-card>
     </div>
     <SectionSeparator title="Tool usage based on OS" />
     <div class="row justify-evenly q-py-lg chart-container">
