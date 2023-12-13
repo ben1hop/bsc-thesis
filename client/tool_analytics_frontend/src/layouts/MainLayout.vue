@@ -10,6 +10,35 @@
           <q-icon v-if="!topDrawer" name="sym_r_arrow_drop_down" />
           <q-icon v-else name="sym_r_arrow_drop_up" />
         </q-toolbar-title>
+        <q-btn-dropdown
+          flat
+          dropdown-icon="sym_r_settings"
+          class="text-text-primary"
+        >
+          <q-list style="min-width: 275px">
+            <q-item>
+              <q-item-section>
+                <q-item-label>Dark mode</q-item-label>
+              </q-item-section>
+              <q-item-section>
+                <q-toggle v-model="dark" />
+              </q-item-section>
+            </q-item>
+
+            <q-item>
+              <q-item-section>
+                <q-item-label>Language</q-item-label>
+              </q-item-section>
+              <q-item-section>
+                <q-select
+                  v-model="language"
+                  :options="['Hungarian', 'English']"
+                  dropdown-icon="sym_r_arrow_drop_down"
+                  borderless
+                />
+              </q-item-section>
+            </q-item> </q-list
+        ></q-btn-dropdown>
       </q-toolbar>
       <transition
         appear
@@ -26,7 +55,6 @@
             active-color="yellow"
             indicator-color="transparent"
             class="text-grey-8"
-            align="justify"
             v-model="routerRef"
           >
             <q-tab name="total" label="Total page" @click="navigate('total')" />
@@ -48,9 +76,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { useQuasar } from 'quasar';
+import { defineComponent, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
-import { getCssVar } from 'quasar';
+import { Dark } from 'quasar';
 
 export default defineComponent({
   name: 'MainLayout',
@@ -58,14 +87,24 @@ export default defineComponent({
   components: {},
 
   setup() {
+    const $q = useQuasar();
+    const dark = ref(Dark.isActive);
     const topDrawer = ref(false);
     const routerRef = ref('images');
 
     const router = useRouter();
 
+    const language = ref('English');
+
+    watch(dark, () => {
+      $q.dark.toggle();
+    });
+
     return {
       topDrawer,
       routerRef,
+      dark,
+      language,
       toggleTopDrawer() {
         topDrawer.value = !topDrawer.value;
       },

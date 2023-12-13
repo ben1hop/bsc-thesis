@@ -50,7 +50,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref, watch } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 import SectionSeparator from 'src/components/SectionSeparator.vue';
 import { useAppStore } from 'src/stores/appStore';
 import { usePerToolStore } from 'src/stores/perToolStore';

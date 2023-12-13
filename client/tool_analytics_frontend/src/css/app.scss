@@ -2,9 +2,14 @@
 @import url('hover-min.css');
 
 // app global css in SCSS form
-body {
+body.body--light {
   background-color: $snow;
   color: $text-primary-dark;
+}
+
+body.body--dark {
+  background-color: $secondary;
+  color: $text-primary-light;
 }
 
 .text-text-primary-light {
@@ -28,6 +33,10 @@ body {
 
 .q-card {
   background-color: $text-primary-light;
+}
+
+.q-card.q-card--dark {
+  background-color: $q-card-dark;
 }
 
 .q-icon {

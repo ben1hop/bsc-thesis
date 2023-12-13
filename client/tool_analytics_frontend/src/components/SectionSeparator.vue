@@ -1,6 +1,6 @@
 <template>
   <div class="q-pb-lg">
-    <div class="text-primary text-weight-bold text-h6 no-wrap">{{ Title }}</div>
+    <div class="text-weight-bold text-h6 no-wrap">{{ Title }}</div>
     <q-separator class="shadow-1" size="2px" />
   </div>
 </template>
