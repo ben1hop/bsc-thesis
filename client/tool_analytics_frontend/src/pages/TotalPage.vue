@@ -47,13 +47,13 @@
     </div>
     <SectionSeparator :titleIndex="2" />
     <div class="row justify-evenly q-py-lg chart-container">
-      <q-card class="col-7">
+      <q-card class="col-6">
         <BarChart
           :data="getChartData(TotalChartIds.TOTAL_OS)"
           :title="getCurrentTitle(TotalChartIds.TOTAL_OS)"
         />
       </q-card>
-      <q-card class="col-3">
+      <q-card class="col-4">
         <PieChart
           :data="getChartData(TotalChartIds.WEIGHTED_OS)"
           :title="getCurrentTitle(TotalChartIds.WEIGHTED_OS)"
