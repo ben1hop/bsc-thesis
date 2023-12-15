@@ -47,23 +47,60 @@
       >
         <div
           v-if="topDrawer"
-          class="row text-text-primary justify-center top-drawer"
+          class="row justify-center top-drawer"
           style="width: 100%; background-color: $snow !important"
         >
           <q-tabs
             no-caps
-            active-color="yellow"
+            active-color="orange"
             indicator-color="transparent"
-            class="text-grey-8"
             v-model="routerRef"
+            v-if="isDarkTheme"
           >
-            <q-tab name="total" label="Total page" @click="navigate('total')" />
+            <q-tab
+              class="q-tab--dark"
+              name="total"
+              label="Total page"
+              @click="navigate('total')"
+            />
             <q-tab
               name="pertool"
               label="Per tool"
+              class="q-tab--dark"
               @click="navigate('perTool')"
             />
-            <q-tab name="utils" label="Utils" @click="navigate('utils')" />
+            <q-tab
+              name="utils"
+              class="q-tab--dark"
+              label="Utils"
+              @click="navigate('utils')"
+            />
+          </q-tabs>
+          <q-tabs
+            no-caps
+            active-color="yellow"
+            indicator-color="transparent"
+            v-model="routerRef"
+            v-if="!isDarkTheme"
+          >
+            <q-tab
+              name="total"
+              class="q-tab--light"
+              label="Total page"
+              @click="navigate('total')"
+            />
+            <q-tab
+              name="pertool"
+              class="q-tab--light"
+              label="Per tool"
+              @click="navigate('perTool')"
+            />
+            <q-tab
+              name="utils"
+              class="q-tab--light"
+              label="Utils"
+              @click="navigate('utils')"
+            />
           </q-tabs>
         </div>
       </transition>
@@ -77,7 +114,7 @@
 
 <script lang="ts">
 import { useQuasar } from 'quasar';
-import { defineComponent, ref, watch } from 'vue';
+import { computed, defineComponent, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { Dark } from 'quasar';
 
@@ -96,6 +133,10 @@ export default defineComponent({
 
     const language = ref('English');
 
+    const isDarkTheme = computed(() => {
+      return Dark.isActive;
+    });
+
     watch(dark, () => {
       $q.dark.toggle();
     });
@@ -105,6 +146,7 @@ export default defineComponent({
       routerRef,
       dark,
       language,
+      isDarkTheme,
       toggleTopDrawer() {
         topDrawer.value = !topDrawer.value;
       },
@@ -121,10 +163,19 @@ export default defineComponent({
   margin-right: 2%; /* Add margin to create space between tabs */
   margin-left: 2%; /* Add margin to create space between tabs */
   margin-top: 2%;
-  background-color: $secondary !important;
-  color: $text-primary-light;
+
   width: 10px !important;
   border-radius: 0.5em !important;
+}
+
+.q-tab--dark {
+  background-color: $snow !important;
+  color: $text-primary-dark;
+}
+
+.q-tab--light {
+  background-color: $secondary !important;
+  color: $text-primary-light;
 }
 
 .top-drawer {
