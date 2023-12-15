@@ -16,7 +16,7 @@
         />
       </div>
       <div class="q-pt-lg col-9">
-        <SectionSeparator title="General usage data for a single tool" />
+        <SectionSeparator :titleIndex="0" />
       </div>
     </div>
 

@@ -1,6 +1,6 @@
 <template>
   <q-page class="column justify-evenly">
-    <SectionSeparator title="Current years data" />
+    <SectionSeparator :titleIndex="0" />
     <div class="row justify-around text-center">
       <InfoCard class="col-1" title="Most used tool:" :value="currentTool" />
       <InfoCard
@@ -16,7 +16,7 @@
       />
       <InfoCard class="col-1" title="Current OS:" :value="currentOS" />
     </div>
-    <SectionSeparator title="Tool usage based on time" />
+    <SectionSeparator :titleIndex="1" />
     <div class="row justify-evenly q-py-lg chart-container">
       <q-card class="col-8 q-pb-lg">
         <BarChart
@@ -45,7 +45,7 @@
         />
       </q-card>
     </div>
-    <SectionSeparator title="Tool usage based on OS" />
+    <SectionSeparator :titleIndex="2" />
     <div class="row justify-evenly q-py-lg chart-container">
       <q-card class="col-7">
         <BarChart
@@ -60,7 +60,7 @@
         />
       </q-card>
     </div>
-    <SectionSeparator title="Tool usage based on location" />
+    <SectionSeparator :titleIndex="3" />
     <div class="row justify-center">
       <q-card class="col-9 q-pt-lg">
         <MapChart

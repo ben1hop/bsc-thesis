@@ -1,7 +1,14 @@
 import { defineStore } from 'pinia';
 import { AppState, Languages, MapData } from './types';
 import { ChartData } from 'chart.js';
-import { ChartNamesHun, ChartNamesEng, PerToolChartNamesHun, PerToolChartNamesEng } from './chartIds';
+import {
+  ChartNamesHun,
+  ChartNamesEng,
+  PerToolChartNamesHun,
+  PerToolChartNamesEng,
+  TotalPageSeparators,
+  PerToolPageSeparators,
+} from './languageOptions';
 
 export const useAppStore = defineStore('appStore', {
   state: (): AppState => ({
@@ -69,6 +76,26 @@ export const useAppStore = defineStore('appStore', {
       }
       if (this.currentLang === ('English' as Languages)) {
         return PerToolChartNamesEng[index];
+      } else {
+        return '';
+      }
+    },
+    getTotalPageSeparatorTitle(index: number): string {
+      if (this.currentLang === ('Hungarian' as Languages)) {
+        return TotalPageSeparators[index].hun;
+      }
+      if (this.currentLang === ('English' as Languages)) {
+        return TotalPageSeparators[index].eng;
+      } else {
+        return '';
+      }
+    },
+    getPerToolPageSeparatorTitle(index: number): string {
+      if (this.currentLang === ('Hungarian' as Languages)) {
+        return PerToolPageSeparators[index].hun;
+      }
+      if (this.currentLang === ('English' as Languages)) {
+        return PerToolPageSeparators[index].eng;
       } else {
         return '';
       }
