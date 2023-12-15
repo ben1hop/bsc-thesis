@@ -115,8 +115,10 @@
 <script lang="ts">
 import { useQuasar } from 'quasar';
 import { computed, defineComponent, ref, watch } from 'vue';
+import { Languages } from 'src/stores/types';
 import { useRouter } from 'vue-router';
 import { Dark } from 'quasar';
+import { useAppStore } from 'src/stores/appStore';
 
 export default defineComponent({
   name: 'MainLayout',
@@ -128,10 +130,18 @@ export default defineComponent({
     const dark = ref(Dark.isActive);
     const topDrawer = ref(false);
     const routerRef = ref('images');
+    const appStore = useAppStore();
 
     const router = useRouter();
 
-    const language = ref('English');
+    const language = computed({
+      get() {
+        return appStore.getCurrentLang;
+      },
+      set(lang: Languages) {
+        appStore.setCurrentLang(lang);
+      },
+    });
 
     const isDarkTheme = computed(() => {
       return Dark.isActive;

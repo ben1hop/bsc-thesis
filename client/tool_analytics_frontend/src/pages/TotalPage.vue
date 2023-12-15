@@ -21,13 +21,13 @@
       <q-card class="col-8 q-pb-lg">
         <BarChart
           :data="getChartData(TotalChartIds.TOTAL_YEARLY)"
-          :title="TotalChartIds.TOTAL_YEARLY"
+          :title="getCurrentTitle(TotalChartIds.TOTAL_YEARLY)"
         />
       </q-card>
       <q-card class="col-3">
         <DoughnutChart
           :data="getChartData(TotalChartIds.TOTAL_ACTION)"
-          :title="TotalChartIds.TOTAL_ACTION"
+          :title="getCurrentTitle(TotalChartIds.TOTAL_ACTION)"
       /></q-card>
     </div>
 
@@ -35,13 +35,13 @@
       <q-card class="col-5">
         <LineChart
           :data="getChartData(TotalChartIds.TOTAL_THROUGHOUT_YEAR)"
-          :title="TotalChartIds.TOTAL_THROUGHOUT_YEAR"
+          :title="getCurrentTitle(TotalChartIds.TOTAL_THROUGHOUT_YEAR)"
         />
       </q-card>
       <q-card class="col-5">
         <LineChart
           :data="getChartData(TotalChartIds.TOTAL_TIME_SPAN)"
-          :title="TotalChartIds.TOTAL_TIME_SPAN"
+          :title="getCurrentTitle(TotalChartIds.TOTAL_TIME_SPAN)"
         />
       </q-card>
     </div>
@@ -50,13 +50,13 @@
       <q-card class="col-7">
         <BarChart
           :data="getChartData(TotalChartIds.TOTAL_OS)"
-          :title="TotalChartIds.TOTAL_OS"
+          :title="getCurrentTitle(TotalChartIds.TOTAL_OS)"
         />
       </q-card>
       <q-card class="col-3">
         <PieChart
           :data="getChartData(TotalChartIds.WEIGHTED_OS)"
-          :title="TotalChartIds.WEIGHTED_OS"
+          :title="getCurrentTitle(TotalChartIds.WEIGHTED_OS)"
         />
       </q-card>
     </div>
@@ -104,7 +104,10 @@ export default defineComponent({
       currentOS: computed(() => infoStore.getCurrentOs),
       currentLocation: computed(() => infoStore.getCurrentLocation),
       currentTraffic: computed(() => infoStore.getCurrentTraffic),
-      getChartData(id: string) {
+      getCurrentTitle: (index: number) => {
+        return appStore.getCurrentLangTitle(index);
+      },
+      getChartData(id: number) {
         return appStore.getChartData(id);
       },
     };

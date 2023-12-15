@@ -1,8 +1,9 @@
 import { ChartData } from 'chart.js';
 
 export interface AppState {
-  registeredCharts: Map<string, ChartData | MapData>;
+  registeredCharts: Map<number, ChartData | MapData>;
   availableTools: string[];
+  currentLang: Languages;
 }
 
 export interface PerToolStoreState {
@@ -35,4 +36,9 @@ export enum Tools {
   'Otcom',
   'Tres-Zap',
   'Zaam-Dox',
+}
+
+export enum Languages {
+  ENG = 'English',
+  HUN = 'Magyar',
 }

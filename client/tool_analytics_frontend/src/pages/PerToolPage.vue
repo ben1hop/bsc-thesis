@@ -26,7 +26,7 @@
           ref="refBar"
           :data="yearlyChartData"
           stacked="true"
-          title="Selected tools total usage"
+          :title="getCurrentLangTitlePerTool(0)"
         />
       </q-card>
     </div>
@@ -34,11 +34,14 @@
       <q-card class="col-4 q-ma-md q-pb-sm">
         <RadarChart
           :data="timeSpanChartData"
-          title="Selected tools time span usage"
+          :title="getCurrentLangTitlePerTool(1)"
         />
       </q-card>
       <q-card class="col-4 q-ma-md q-pb-sm">
-        <PieChart :data="actionChartData" title="Weighted command usage" />
+        <PieChart
+          :data="actionChartData"
+          :title="getCurrentLangTitlePerTool(2)"
+        />
       </q-card>
     </div>
     <div class="row justify-center q-my-lg">
@@ -153,6 +156,9 @@ export default defineComponent({
           perToolStore.setSelectedTools(tool);
         },
       }),
+      getCurrentLangTitlePerTool: (index: number) => {
+        return appStore.getCurrentLangTitlePerTool(index);
+      },
     };
   },
 });

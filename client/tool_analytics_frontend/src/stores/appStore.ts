@@ -1,33 +1,38 @@
 import { defineStore } from 'pinia';
-import { AppState, MapData } from './types';
+import { AppState, Languages, MapData } from './types';
 import { ChartData } from 'chart.js';
+import { ChartNamesHun, ChartNamesEng, PerToolChartNamesHun, PerToolChartNamesEng } from './chartIds';
 
 export const useAppStore = defineStore('appStore', {
   state: (): AppState => ({
     registeredCharts: new Map(),
     availableTools: [],
+    currentLang: Languages.ENG,
   }),
   getters: {
     getTools(state): string[] {
       return state.availableTools;
     },
+    getCurrentLang(state): Languages {
+      return state.currentLang;
+    },
   },
   actions: {
     registerChart(
-      label: string,
+      index: number,
       data: ChartData | MapData
     ): ChartData | MapData | null {
       if (!data) {
         return null;
       }
-      this.registeredCharts.set(label, data);
-      return this.getChartData(label);
+      this.registeredCharts.set(index, data);
+      return this.getChartData(index);
     },
-    deleteChart(label: string) {
-      this.registeredCharts.delete(label);
+    deleteChart(index: number) {
+      this.registeredCharts.delete(index);
     },
-    getChartData(label: string): ChartData | MapData | null {
-      const registeredCharts = this.registeredCharts.get(label);
+    getChartData(index: number): ChartData | MapData | null {
+      const registeredCharts = this.registeredCharts.get(index);
       if (registeredCharts) {
         if ('labels' in registeredCharts) {
           return {
@@ -44,6 +49,29 @@ export const useAppStore = defineStore('appStore', {
     },
     setAvailableTools(tools: string[]) {
       this.availableTools = tools;
+    },
+    setCurrentLang(lang: Languages) {
+      this.currentLang = lang;
+    },
+    getCurrentLangTitle(index: number): string {
+      if (this.currentLang === ('Hungarian' as Languages)) {
+        return ChartNamesHun[index];
+      }
+      if (this.currentLang === ('English' as Languages)) {
+        return ChartNamesEng[index];
+      } else {
+        return '';
+      }
+    },
+    getCurrentLangTitlePerTool(index: number): string {
+      if (this.currentLang === ('Hungarian' as Languages)) {
+        return PerToolChartNamesHun[index];
+      }
+      if (this.currentLang === ('English' as Languages)) {
+        return PerToolChartNamesEng[index];
+      } else {
+        return '';
+      }
     },
   },
 });
