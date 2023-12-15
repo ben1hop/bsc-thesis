@@ -70,10 +70,10 @@
               @click="navigate('perTool')"
             />
             <q-tab
-              name="utils"
+              name="compare"
               class="q-tab--dark"
-              label="Utils"
-              @click="navigate('utils')"
+              label="Compare"
+              @click="navigate('compare')"
             />
           </q-tabs>
           <q-tabs
@@ -96,10 +96,10 @@
               @click="navigate('perTool')"
             />
             <q-tab
-              name="utils"
+              name="compare"
               class="q-tab--light"
-              label="Utils"
-              @click="navigate('utils')"
+              label="Compare"
+              @click="navigate('compare')"
             />
           </q-tabs>
         </div>
