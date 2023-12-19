@@ -135,7 +135,6 @@ export default defineComponent({
         actionChartData.value = data[1] as ChartData;
         timeSpanChartData.value = data[2] as ChartData;
         countryChartData.value = data[3].datasets;
-        console.log(timeSpanChartData.value);
       }
     }
 
