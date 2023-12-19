@@ -149,4 +149,13 @@ create table PerToolRegion as
 
 
 
-
+/*
+# ##################################################
+# ## HELPER TABLES COMPARE PAGE
+# ################################################## 
+*/
+DROP TABLE IF EXISTS `CompareTables`;
+create table CompareTables as
+    select result , year(actionTime) as years, count(id) as total, min(actionTime) as first 
+    from EventLog group by result, year(actionTime) 
+    order by result, years;

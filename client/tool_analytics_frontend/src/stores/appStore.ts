@@ -14,11 +14,15 @@ export const useAppStore = defineStore('appStore', {
   state: (): AppState => ({
     registeredCharts: new Map(),
     availableTools: [],
+    availableYears: [],
     currentLang: Languages.ENG,
   }),
   getters: {
     getTools(state): string[] {
       return state.availableTools;
+    },
+    getYears(state): number[] {
+      return state.availableYears;
     },
     getCurrentLang(state): Languages {
       return state.currentLang;
@@ -56,6 +60,9 @@ export const useAppStore = defineStore('appStore', {
     },
     setAvailableTools(tools: string[]) {
       this.availableTools = tools;
+    },
+    setAvailableYears(years: string[]) {
+      this.availableYears = years.map((x: string) => Number(x));
     },
     setCurrentLang(lang: Languages) {
       this.currentLang = lang;

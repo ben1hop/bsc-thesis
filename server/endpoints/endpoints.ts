@@ -2,6 +2,7 @@ import { RequestHandler } from 'express';
 import pool from '../connection';
 import { baseTables, currentYear } from '../main';
 import {
+  loadCompareTableData,
   loadPerToolAction,
   loadPerToolTimeSpan,
   loadPerToolYearlyByQuarter,
@@ -596,6 +597,29 @@ analyticsApi.set('perToolCountries', async (req, res) => {
             country: value[fields[1].name],
             total: value[fields[2].name],
           }))
+        );
+        res.send(new MapData(datasets));
+      }
+    }
+  );
+});
+
+analyticsApi.set('getCompareTables', async (req, res) => {
+  pool.query(
+    SELECT + 'CompareTables',
+    (err: any, rows: any[], fields: { name: string | number }[]) => {
+      if (err) {
+        throw err;
+      } else {
+        // Params are under req.query not req.params!!
+        const datasets = loadCompareTableData(
+          rows.map((value) => ({
+            tool: value[fields[0].name],
+            year: value[fields[1].name],
+            total: value[fields[2].name],
+            first: value[fields[3].name],
+          })),
+          baseTables.get('tools')
         );
         res.send(new MapData(datasets));
       }

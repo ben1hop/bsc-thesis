@@ -3,6 +3,7 @@ import { ChartData } from 'chart.js';
 export interface AppState {
   registeredCharts: Map<number, ChartData | MapData>;
   availableTools: string[];
+  availableYears: number[];
   currentLang: Languages;
 }
 

@@ -198,3 +198,48 @@ export function loadPerToolCountry(table: any): Record<string, number> {
   }
   return rec_;
 }
+
+export function loadCompareTableData(table: any, tools: string[]) {
+  const tableData: {
+    name: string;
+    total: number;
+    first: string;
+    growth: boolean;
+  }[] = [];
+  const splittedData = splitArrayByProperty(table, 'tool'); // we split the mysql array into sub arrays grouped by tools
+  for (const tool of tools) {
+    const firstYear = splittedData[tool][0].year;
+    const total = splittedData[tool].reduce((acc, obj) => acc + obj.total, 0); // summs each tools total entries
+    const length = splittedData[tool].length;
+    let growth = false;
+    if (
+      // atleast 2 years req
+      length > 1 &&
+      splittedData[tool][length - 1].total >
+        splittedData[tool][length - 2].total
+    ) {
+      growth = true;
+    }
+    tableData.push({
+      name: tool,
+      total: total,
+      first: firstYear,
+      growth: growth,
+    });
+  }
+  return tableData;
+}
+
+function splitArrayByProperty(arr, prop) {
+  const result = {};
+
+  arr.forEach((obj) => {
+    const key = obj[prop];
+    if (!result[key]) {
+      result[key] = [];
+    }
+    result[key].push(obj);
+  });
+
+  return result;
+}
