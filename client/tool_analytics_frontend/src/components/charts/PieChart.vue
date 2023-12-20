@@ -5,7 +5,11 @@
         {{ title }}
       </div>
       <div>
-        <q-icon name="sym_r_help"></q-icon>
+        <q-icon name="sym_r_help">
+          <q-tooltip>
+            <slot name="tooltipSlot"></slot>
+          </q-tooltip>
+        </q-icon>
       </div>
     </div>
     <div class="col-10"><Pie :data="chartData" :options="chartOptions" /></div>

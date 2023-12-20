@@ -4,7 +4,13 @@
       <div class="text-bold text-h5">
         {{ title }}
       </div>
-      <div><q-icon name="sym_r_help"></q-icon></div>
+      <div>
+        <q-icon name="sym_r_help">
+          <q-tooltip>
+            <slot name="tooltipSlot"></slot>
+          </q-tooltip>
+        </q-icon>
+      </div>
     </div>
     <div class="col-10">
       <QLine :data="chartData" :options="chartOptions" />
