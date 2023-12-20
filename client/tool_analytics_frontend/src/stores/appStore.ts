@@ -9,6 +9,7 @@ import {
   TotalPageSeparators,
   PerToolPageSeparators,
   ComparePageSeparators,
+  TotalTooltipText,
 } from './languageOptions';
 
 export const useAppStore = defineStore('appStore', {
@@ -114,6 +115,16 @@ export const useAppStore = defineStore('appStore', {
       }
       if (this.currentLang === ('English' as Languages)) {
         return ComparePageSeparators[index].eng;
+      } else {
+        return '';
+      }
+    },
+    getTotalPageToolTipText(index: number): string {
+      if (this.currentLang === ('Hungarian' as Languages)) {
+        return TotalTooltipText[index].hun;
+      }
+      if (this.currentLang === ('English' as Languages)) {
+        return TotalTooltipText[index].eng;
       } else {
         return '';
       }

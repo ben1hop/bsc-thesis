@@ -44,8 +44,13 @@ create table TotalUsageByYear as
     group by result, year(actionTime) 
     order by tool, year;
 
+-- 2) count the number of actions
+DROP TABLE IF EXISTS `TotalUsageByAction`;
+create table TotalUsageByAction as 
+    SELECT action, count(id) as total FROM `bsc-dev-db`.EventLog group by action;
 
--- 2) querry - total usage through a year
+
+-- 3) querry - total usage through a year
 DROP TABLE IF EXISTS `TotalUsageThroughYear`;
 create table TotalUsageThroughYear as
     (select year , month, (select count(*) from EventLog z where year(z.actionTime) = x.year and month(z.actionTime) = y.month ) as total 
@@ -58,7 +63,7 @@ create table TotalUsageTimeSpan as
     SELECT hour(actionTime) as hour, count(id) as total FROM `bsc-dev-db`.EventLog group by hour(actionTime) order by hour;
 
 
--- 3) querry - total usage by OS -- itt számolhatjuk tetszőleges kapcsoló táblából ugyanis az összes event-hez tartozó software-user-location ugyanazt a studioref-et kapja soronként
+-- 4) querry - total usage by OS -- itt számolhatjuk tetszőleges kapcsoló táblából ugyanis az összes event-hez tartozó software-user-location ugyanazt a studioref-et kapja soronként
 DROP VIEW IF EXISTS `StudiosWithSoftwareIds`;
 create view StudiosWithSoftwareIds as 
     select y.id, y.computerOS , x.id as SoftwareId 
@@ -79,7 +84,7 @@ create table TotalUsageByOS_Year as
     order by computerOS, year;
 
 
--- 4) querry - total / region
+-- 5) querry - total / region
 DROP VIEW IF EXISTS `LocationsWithLocationIds`; -- get locationRefIds to every country
 create view LocationsWithLocationIds as 
     select y.id, y.region, y.country ,y.state, y.city, y.isp , x.id as LocationId 
@@ -93,7 +98,7 @@ create table TotalUsageByRegion as
     from EventLog as x , LocationsWithLocationIds as y 
     where y.LocationId = x.idStudioLocationRef group by y.country;
 
--- count by countries --- for weighted: SELECT country , sum(total) as total FROM `bsc-dev-db`.TotalUsageByCountries group by country;
+-- 6) count by countries --- for weighted: SELECT country , sum(total) as total FROM `bsc-dev-db`.TotalUsageByCountries group by country;
 DROP TABLE IF EXISTS `TotalUsageByCountries`;
 create table TotalUsageByCountries as
     select  y.country ,year(x.actionTime) as year , count(x.id) as total
@@ -103,10 +108,6 @@ create table TotalUsageByCountries as
     order by country, year;
 
 
--- 6) count the number of actions
-DROP TABLE IF EXISTS `TotalUsageByAction`;
-create table TotalUsageByAction as 
-    SELECT action, count(id) as total FROM `bsc-dev-db`.EventLog group by action;
 
 
 

@@ -107,14 +107,32 @@
           :data="getChartData(TotalChartIds.TOTAL_YEARLY)"
           :title="getCurrentTitle(TotalChartIds.TOTAL_YEARLY)"
         >
-          <template #tooltipSlot>{{ getTooltipText(0) }}</template>
+          <template #tooltipSlot>
+            {{ getTooltipText(0) }}<br />
+            <br />
+            <p>SQL:</p>
+            select result as tool , year(actionTime) as year , count(*) as total
+            <br />
+            from EventLog group by result, year(actionTime) order by tool,
+            <br />
+            year;
+          </template>
         </BarChart>
       </q-card>
       <q-card class="col-3">
         <DoughnutChart
           :data="getChartData(TotalChartIds.TOTAL_ACTION)"
           :title="getCurrentTitle(TotalChartIds.TOTAL_ACTION)"
-      /></q-card>
+        >
+          <template #tooltipSlot>
+            {{ getTooltipText(1) }}<br />
+            <br />
+            <p>SQL:</p>
+            SELECT action, count(id) as total FROM `bsc-dev-db`.EventLog group
+            by action;
+          </template>
+        </DoughnutChart>
+      </q-card>
     </div>
 
     <div class="row justify-evenly q-py-lg chart-container">
@@ -122,13 +140,36 @@
         <LineChart
           :data="getChartData(TotalChartIds.TOTAL_THROUGHOUT_YEAR)"
           :title="getCurrentTitle(TotalChartIds.TOTAL_THROUGHOUT_YEAR)"
-        />
+        >
+          <template #tooltipSlot>
+            {{ getTooltipText(2) }}<br />
+            <br />
+            <p>SQL:</p>
+            select year , month, (select count(*) from EventLog z where
+            year(z.actionTime) = x.year and month(z.actionTime) = y.month ) as
+            total
+            <br />
+            from Years x , Months y
+            <br />
+            group by year , month ,total
+            <br />
+            order by year, month;
+          </template>
+        </LineChart>
       </q-card>
       <q-card class="col-5">
         <LineChart
           :data="getChartData(TotalChartIds.TOTAL_TIME_SPAN)"
           :title="getCurrentTitle(TotalChartIds.TOTAL_TIME_SPAN)"
-        />
+        >
+          <template #tooltipSlot>
+            {{ getTooltipText(3) }}<br />
+            <br />
+            <p>SQL:</p>
+            SELECT hour(actionTime) as hour, count(id) as total FROM
+            `bsc-dev-db`.EventLog group by hour(actionTime) order by hour;
+          </template>
+        </LineChart>
       </q-card>
     </div>
     <SectionSeparator :title="getCurrentSeparatorTitle(2)" />
@@ -137,13 +178,31 @@
         <BarChart
           :data="getChartData(TotalChartIds.TOTAL_OS)"
           :title="getCurrentTitle(TotalChartIds.TOTAL_OS)"
-        />
+        >
+          <template #tooltipSlot>
+            {{ getTooltipText(4) }}<br />
+            <br />
+            <p>SQL:</p>
+            select y.computerOS , count(x.id) as total from EventLog as x ,
+            StudiosWithSoftwareIds as y <br />
+            where y.SoftwareId = x.idStudioSoftwareRef group by y.computerOS;
+          </template>
+        </BarChart>
       </q-card>
       <q-card class="col-4">
         <PieChart
           :data="getChartData(TotalChartIds.WEIGHTED_OS)"
           :title="getCurrentTitle(TotalChartIds.WEIGHTED_OS)"
-        />
+        >
+          <template #tooltipSlot>
+            {{ getTooltipText(5) }}<br />
+            <br />
+            <p>SQL:</p>
+            select y.computerOS , count(x.id) as total from EventLog as x ,
+            StudiosWithSoftwareIds as y <br />
+            where y.SoftwareId = x.idStudioSoftwareRef group by y.computerOS;
+          </template></PieChart
+        >
       </q-card>
     </div>
     <DropDownSeparator :title="getCurrentSeparatorTitle(3)">
