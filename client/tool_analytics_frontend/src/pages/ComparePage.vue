@@ -1,7 +1,7 @@
 <template>
   <q-page class="column justify-start">
     <q-card class="q-pa-lg q-mb-lg">
-      <SectionSeparator :title-index="1" />
+      <SectionSeparator :title="getCurrentSeparatorTitle(0)" />
       <div class="row">
         <div class="col-1"></div>
         <div class="col row justify-evenly q-my-sm selector bg-snow shadow-6">
@@ -24,18 +24,6 @@
       </div>
     </q-card>
     <q-card v-if="hasSelectedTools" class="q-pa-lg q-mt-lg">
-      <!-- <div class="row">
-        <div class="col-2 text-weight-bold text-h6 no-wrap">
-          Selected time span:
-        </div>
-        <q-range
-          class="col-3"
-          v-model="years"
-          label-always
-          :min="currentYears[0]"
-          :max="currentYears[currentYears.length - 1]"
-        />
-      </div> -->
       <div class="row q-py-lg">
         <q-table
           class="col"
@@ -96,11 +84,21 @@
           </template>
         </q-table>
         <div class="col-6">
-          <SectionSeparator :title-index="1" />
+          <SectionSeparator :title="getCurrentSeparatorTitle(1)" />
           <BarChart :data="totalCompareChartData" title="" />
         </div>
       </div>
-      <SectionSeparator :title-index="1" />
+      <!-- <SectionSeparator class="q-pt-lg" :title="getCurrentSeparatorTitle(2)" />
+      <div class="row justify-evenly">
+        <PieChart
+          v-for="tool in selectedTools"
+          v-bind:key="tool"
+          :title="a"
+          :loaded="false"
+          ref="toolRefs"
+          :data="getWeightedCommandData(tool)"
+        />
+      </div> -->
     </q-card>
   </q-page>
 </template>
@@ -112,10 +110,12 @@ import { useAppStore } from 'src/stores/appStore';
 import { COMPARE_TABLE_ROW, useCompareStore } from 'src/stores/compareStore';
 import { computed, defineComponent, reactive, ref } from 'vue';
 import BarChart from 'src/components/charts/BarChart.vue';
+//import PieChart from 'src/components/charts/PieChart.vue';
 import { TotalChartIds } from 'src/stores/chartIds';
 import { ChartData } from 'chart.js';
 import { getCssVar } from 'quasar';
 import { Dark } from 'quasar';
+import { Tools } from 'src/stores/types';
 
 const columns = [
   {
@@ -151,7 +151,6 @@ export default defineComponent({
       }, {})
     );
     let currentTableRows = ref<COMPARE_TABLE_ROW[]>([]);
-    const years = reactive({ min: 0, max: 0 });
 
     let totalCompareChartData = ref(null);
 
@@ -191,6 +190,9 @@ export default defineComponent({
       hasSelectedTools: computed(
         () => Object.keys(tools).filter((key) => tools[key] === true).length > 0
       ),
+      selectedTools: computed(() =>
+        Object.keys(tools).filter((key) => tools[key] === true)
+      ),
       onClick: (tool: string) => {
         tools[tool] ? false : true;
         currentTableRows.value = compareStore.getCurrentTables(
@@ -205,9 +207,14 @@ export default defineComponent({
           return 'primary';
         }
       },
+      getCurrentSeparatorTitle: (index: number) => {
+        return appStore.getCompareSeparatorTitle(index);
+      },
+      // getWeightedCommandData(tool: string) {
+      //   return compareStore.getActionChart(tool as unknown as Tools);
+      // },
       updateTotalChart,
       tools,
-      years,
       columns,
       getCssVar,
       Dark,
