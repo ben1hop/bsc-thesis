@@ -43,3 +43,18 @@ export const PerToolPageSeparators = [
     hun: 'Kiválaszott eszköz álltalános használati adatai',
   },
 ];
+
+export const ComparePageSeparators = [
+  {
+    eng: 'Available tools for selection',
+    hun: 'Összehasonlításhoz válasszon eszközöket',
+  },
+  {
+    eng: 'Total usage',
+    hun: 'Teljes használat',
+  },
+  {
+    eng: 'More information',
+    hun: 'További információk',
+  },
+];

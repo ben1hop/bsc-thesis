@@ -8,6 +8,7 @@ import {
   PerToolChartNamesEng,
   TotalPageSeparators,
   PerToolPageSeparators,
+  ComparePageSeparators,
 } from './languageOptions';
 
 export const useAppStore = defineStore('appStore', {
@@ -103,6 +104,16 @@ export const useAppStore = defineStore('appStore', {
       }
       if (this.currentLang === ('English' as Languages)) {
         return PerToolPageSeparators[index].eng;
+      } else {
+        return '';
+      }
+    },
+    getCompareSeparatorTitle(index: number): string {
+      if (this.currentLang === ('Hungarian' as Languages)) {
+        return ComparePageSeparators[index].hun;
+      }
+      if (this.currentLang === ('English' as Languages)) {
+        return ComparePageSeparators[index].eng;
       } else {
         return '';
       }

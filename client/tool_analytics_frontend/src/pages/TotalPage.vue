@@ -1,6 +1,6 @@
 <template>
   <q-page class="column justify-evenly">
-    <SectionSeparator :titleIndex="0" />
+    <SectionSeparator :title="getCurrentSeparatorTitle(0)" />
     <div class="row justify-around text-center">
       <InfoCard class="col-1" title="Most used tool:" :value="currentTool" />
       <InfoCard
@@ -16,7 +16,7 @@
       />
       <InfoCard class="col-1" title="Current OS:" :value="currentOS" />
     </div>
-    <SectionSeparator :titleIndex="1" />
+    <SectionSeparator :title="getCurrentSeparatorTitle(1)" />
     <div class="row justify-evenly q-py-lg chart-container">
       <q-card class="col-8 q-pb-lg">
         <BarChart
@@ -45,7 +45,7 @@
         />
       </q-card>
     </div>
-    <SectionSeparator :titleIndex="2" />
+    <SectionSeparator :title="getCurrentSeparatorTitle(2)" />
     <div class="row justify-evenly q-py-lg chart-container">
       <q-card class="col-6">
         <BarChart
@@ -60,7 +60,7 @@
         />
       </q-card>
     </div>
-    <SectionSeparator :titleIndex="3" />
+    <SectionSeparator :title="getCurrentSeparatorTitle(3)" />
     <div class="row justify-center">
       <q-card class="col-9 q-pt-lg">
         <MapChart
@@ -106,6 +106,9 @@ export default defineComponent({
       currentTraffic: computed(() => infoStore.getCurrentTraffic),
       getCurrentTitle: (index: number) => {
         return appStore.getCurrentLangTitle(index);
+      },
+      getCurrentSeparatorTitle: (index: number) => {
+        return appStore.getTotalPageSeparatorTitle(index);
       },
       getChartData(id: number) {
         return appStore.getChartData(id);

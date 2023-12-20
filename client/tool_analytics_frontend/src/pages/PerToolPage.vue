@@ -16,7 +16,7 @@
         />
       </div>
       <div class="q-pt-lg col-9">
-        <SectionSeparator :titleIndex="0" />
+        <SectionSeparator :title="getCurrentSeparatorTitle(0)" />
       </div>
     </div>
 
@@ -157,6 +157,9 @@ export default defineComponent({
       }),
       getCurrentLangTitlePerTool: (index: number) => {
         return appStore.getCurrentLangTitlePerTool(index);
+      },
+      getCurrentSeparatorTitle: (index: number) => {
+        return appStore.getPerToolPageSeparatorTitle(index);
       },
     };
   },
