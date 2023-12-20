@@ -44,17 +44,21 @@
         />
       </q-card>
     </div>
-    <div class="row justify-center q-my-lg">
-      <q-card class="col-9 justify-center">
-        <MapChart :countryData="countryChartData" />
-      </q-card>
-    </div>
+    <DropDownSeparator :title="getCurrentSeparatorTitle(1)">
+      <template #contentSlot>
+        <div class="row justify-center q-my-lg">
+          <q-card class="col-9 justify-center">
+            <MapChart :countryData="countryChartData" />
+          </q-card></div
+      ></template>
+    </DropDownSeparator>
   </q-page>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, ref } from 'vue';
 import SectionSeparator from 'src/components/SectionSeparator.vue';
+import DropDownSeparator from 'src/components/DropDownSeparator.vue';
 import { useAppStore } from 'src/stores/appStore';
 import { usePerToolStore } from 'src/stores/perToolStore';
 import BarChart from 'src/components/charts/BarChart.vue';
@@ -68,7 +72,14 @@ import RadarChart from 'src/components/charts/RadarChart.vue';
 
 export default defineComponent({
   name: 'PerToolPage',
-  components: { SectionSeparator, BarChart, PieChart, MapChart, RadarChart },
+  components: {
+    SectionSeparator,
+    BarChart,
+    PieChart,
+    MapChart,
+    RadarChart,
+    DropDownSeparator,
+  },
   setup() {
     const appStore = useAppStore();
     const perToolStore = usePerToolStore();
