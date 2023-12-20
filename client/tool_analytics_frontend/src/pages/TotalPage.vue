@@ -100,9 +100,11 @@
       </template>
     </DropDownSeparator>
     <div class="row q-my-lg"></div>
+
     <SectionSeparator :title="getCurrentSeparatorTitle(1)" />
-    <div class="row justify-evenly q-py-lg chart-container">
-      <q-card class="col-8 q-pb-lg">
+
+    <div class="row justify-evenly q-py-lg">
+      <q-card class="col-8 chart-container">
         <BarChart
           :data="getChartData(TotalChartIds.TOTAL_YEARLY)"
           :title="getCurrentTitle(TotalChartIds.TOTAL_YEARLY)"
@@ -119,7 +121,7 @@
           </template>
         </BarChart>
       </q-card>
-      <q-card class="col-3">
+      <q-card class="col-3 chart-container">
         <DoughnutChart
           :data="getChartData(TotalChartIds.TOTAL_ACTION)"
           :title="getCurrentTitle(TotalChartIds.TOTAL_ACTION)"
@@ -135,8 +137,8 @@
       </q-card>
     </div>
 
-    <div class="row justify-evenly q-py-lg chart-container">
-      <q-card class="col-5">
+    <div class="row justify-evenly q-py-lg">
+      <q-card class="col-5 chart-container">
         <LineChart
           :data="getChartData(TotalChartIds.TOTAL_THROUGHOUT_YEAR)"
           :title="getCurrentTitle(TotalChartIds.TOTAL_THROUGHOUT_YEAR)"
@@ -157,7 +159,7 @@
           </template>
         </LineChart>
       </q-card>
-      <q-card class="col-5">
+      <q-card class="col-5 chart-container">
         <LineChart
           :data="getChartData(TotalChartIds.TOTAL_TIME_SPAN)"
           :title="getCurrentTitle(TotalChartIds.TOTAL_TIME_SPAN)"
@@ -276,6 +278,8 @@ export default defineComponent({
 <style lang="scss" scoped>
 .chart-container {
   height: 325px;
+  min-height: 300px;
+  max-height: 450px;
 }
 
 .title-class {
