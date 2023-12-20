@@ -1,6 +1,6 @@
 export const ChartNamesHun = [
   'Teljes felhasználás éves bontásban',
-  'Teljes felhasználás parancsok szerint',
+  'Parancsok szerint',
   'Teljes felhasználás havi bontásban',
   'Teljes felhasználás napi bontásban',
   'Teljes felhasználás operációs rendszerek szerint',

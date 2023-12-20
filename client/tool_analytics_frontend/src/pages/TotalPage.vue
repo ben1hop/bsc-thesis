@@ -3,7 +3,12 @@
     <q-card class="q-pa-lg">
       <div class="row justify-evenly">
         <div class="col-7 column">
-          <p class="text-h5 text-weight-bolder title-class shadow-1 bg-snow">
+          <p
+            :class="
+              'text-h5 text-weight-bolder title-class shadow-1 ' +
+              getTitleBgColor()
+            "
+          >
             Total usage page
             <br />
           </p>
@@ -234,6 +239,7 @@ import DropDownSeparator from 'src/components/DropDownSeparator.vue';
 import { useAppStore } from 'src/stores/appStore';
 import { TotalChartIds } from 'src/stores/chartIds';
 import { useInfoStore } from 'src/stores/infoStore';
+import { Dark } from 'quasar';
 
 export default defineComponent({
   name: 'TotalPage',
@@ -269,6 +275,9 @@ export default defineComponent({
       },
       getTooltipText(id: number) {
         return appStore.getTotalPageToolTipText(id);
+      },
+      getTitleBgColor() {
+        return Dark.isActive ? 'bg-secondary' : 'bg-snow';
       },
     };
   },

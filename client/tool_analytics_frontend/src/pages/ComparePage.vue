@@ -4,7 +4,12 @@
       <SectionSeparator :title="getCurrentSeparatorTitle(0)" />
       <div class="row">
         <div class="col-1"></div>
-        <div class="col row justify-evenly q-my-sm selector bg-snow shadow-6">
+        <div
+          :class="
+            'col row justify-evenly q-my-sm selector shadow-6 ' +
+            getTitleBgColor()
+          "
+        >
           <q-chip
             v-for="tool in currentTools"
             v-bind:key="tool"
@@ -31,7 +36,7 @@
           flat
           bordered
           card-container-class="justify-left"
-          card-class="text-accent bg-snow text-h6 shadow-3"
+          card-class="text-accent text-h6 shadow-3"
           :rows="currentTableRows"
           :columns="columns"
           row-key="name"
@@ -42,7 +47,7 @@
             <div
               class="q-pa-xs q-ma-xs col-xs-12 col-sm-5 col-md-3 text-accent"
             >
-              <q-card class="q-pa-md bg-snow shadow-4">
+              <q-card :class="'q-pa-md shadow-4 ' + getTitleBgColor()">
                 <div class="text-h6 text-center text-primary bg-forth">
                   <strong>{{ props.row.name }}</strong>
                 </div>
@@ -206,6 +211,9 @@ export default defineComponent({
         } else {
           return 'primary';
         }
+      },
+      getTitleBgColor() {
+        return Dark.isActive ? 'bg-secondary' : 'bg-snow';
       },
       getCurrentSeparatorTitle: (index: number) => {
         return appStore.getCompareSeparatorTitle(index);

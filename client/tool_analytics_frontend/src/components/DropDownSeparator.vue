@@ -1,17 +1,31 @@
 <template>
-  <div class="row dropdown-bar shadow-3" @click="toggle">
-    <q-btn flat dense round :icon="current_icon" aria-label="Menu"></q-btn>
-    <q-toolbar-title>{{ title }}</q-toolbar-title>
-  </div>
-  <transition name="drop">
-    <div v-if="toggle_" class="dropdown-container" ref="chartParent">
-      <slot name="contentSlot"></slot>
+  <div v-if="isDark">
+    <div class="row dropdown-bar-d shadow-3" @click="toggle">
+      <q-btn flat dense round :icon="current_icon" aria-label="Menu"></q-btn>
+      <q-toolbar-title>{{ title }}</q-toolbar-title>
     </div>
-  </transition>
+    <transition name="drop">
+      <div v-if="toggle_" class="dropdown-container" ref="chartParent">
+        <slot name="contentSlot"></slot>
+      </div>
+    </transition>
+  </div>
+  <div v-else>
+    <div class="row dropdown-bar-l shadow-3" @click="toggle">
+      <q-btn flat dense round :icon="current_icon" aria-label="Menu"></q-btn>
+      <q-toolbar-title>{{ title }}</q-toolbar-title>
+    </div>
+    <transition name="drop">
+      <div v-if="toggle_" class="dropdown-container" ref="chartParent">
+        <slot name="contentSlot"></slot>
+      </div>
+    </transition>
+  </div>
 </template>
 
 <script lang="ts">
-import { ref, defineComponent } from 'vue';
+import { Dark } from 'quasar';
+import { ref, defineComponent, computed } from 'vue';
 export default defineComponent({
   name: 'DropDownSeparator',
   props: {
@@ -41,13 +55,14 @@ export default defineComponent({
           ? 'sym_r_expand_more'
           : 'sym_r_expand_less';
       },
+      isDark: computed(() => Dark.isActive),
     };
   },
 });
 </script>
 
 <style lang="scss" scoped>
-.dropdown-bar {
+.dropdown-bar-l {
   background: $grey-1;
   border-radius: 10px;
   padding: 0.4%;
@@ -57,9 +72,23 @@ export default defineComponent({
   margin-left: 20px;
   margin-right: 20px;
 }
-.dropdown-bar:hover {
-  animation: changeColor 350ms;
+.dropdown-bar-d {
+  background: $grey-1;
+  border-radius: 10px;
+  padding: 0.4%;
+  margin-bottom: 15px;
+  background-color: $fifth;
+  color: white;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+.dropdown-bar-l:hover {
+  animation: changeColor--light 350ms;
   background-color: $secondary;
+}
+.dropdown-bar-d:hover {
+  animation: changeColor--dark 350ms;
+  background-color: $forth;
 }
 .dropdown-container {
   width: 100%;
@@ -77,12 +106,20 @@ export default defineComponent({
   transform-origin: top center;
 }
 
-@keyframes changeColor {
+@keyframes changeColor--light {
   0% {
     background-color: $primary;
   }
   100% {
     background-color: $secondary;
+  }
+}
+@keyframes changeColor--dark {
+  0% {
+    background-color: $fifth;
+  }
+  100% {
+    background-color: $forth;
   }
 }
 
