@@ -4,7 +4,7 @@ export const ChartNamesHun = [
   'Teljes felhasználás havi bontásban',
   'Teljes felhasználás napi bontásban',
   'Teljes felhasználás operációs rendszerek szerint',
-  'Súlyozott fő operációs rendszer használat',
+  'Súlyozott operációs rendszerek',
   'Lokációs térkép',
 ];
 

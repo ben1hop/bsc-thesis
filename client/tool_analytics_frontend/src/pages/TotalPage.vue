@@ -180,8 +180,8 @@
       </q-card>
     </div>
     <SectionSeparator :title="getCurrentSeparatorTitle(2)" />
-    <div class="row justify-evenly q-py-lg chart-container">
-      <q-card class="col-6">
+    <div class="row justify-evenly q-py-lg">
+      <q-card class="col-6 chart-container">
         <BarChart
           :data="getChartData(TotalChartIds.TOTAL_OS)"
           :title="getCurrentTitle(TotalChartIds.TOTAL_OS)"
@@ -196,7 +196,7 @@
           </template>
         </BarChart>
       </q-card>
-      <q-card class="col-4">
+      <q-card class="col-4 chart-container">
         <PieChart
           :data="getChartData(TotalChartIds.WEIGHTED_OS)"
           :title="getCurrentTitle(TotalChartIds.WEIGHTED_OS)"
@@ -286,9 +286,9 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .chart-container {
-  height: 325px;
+  height: 365px;
   min-height: 300px;
-  max-height: 450px;
+  max-height: 495px;
 }
 
 .title-class {
