@@ -151,16 +151,19 @@ export default defineComponent({
       $q.dark.toggle();
     });
 
+    function toggleTopDrawer() {
+      topDrawer.value = !topDrawer.value;
+    }
+
     return {
       topDrawer,
       routerRef,
       dark,
       language,
       isDarkTheme,
-      toggleTopDrawer() {
-        topDrawer.value = !topDrawer.value;
-      },
+      toggleTopDrawer,
       navigate(path: string) {
+        toggleTopDrawer();
         router.push(path);
       },
     };
