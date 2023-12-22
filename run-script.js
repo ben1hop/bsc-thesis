@@ -146,7 +146,6 @@ async function main() {
     console.log(chalk.blue("\n3. Starting frontend setup..."));
     await buildAndRunClient();
   } catch (err) {
-    //console.clear();
     console.error(chalk.red(err));
   }
 }

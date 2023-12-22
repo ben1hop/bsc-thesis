@@ -20,17 +20,16 @@
       </div>
     </div>
 
-    <div class="row justify-evenly q-mb-lg" style="height: 400px">
-      <q-card class="col-8">
+    <div class="row justify-evenly q-mb-lg chart-container">
+      <q-card class="col-5 justify-center">
         <BarChart
-          ref="refBar"
           :data="yearlyChartData"
           stacked="true"
           :title="getCurrentLangTitlePerTool(0)"
         />
       </q-card>
     </div>
-    <div class="row justify-center q-mb-lg" style="max-height: 425px">
+    <div class="row justify-center q-mb-lg chart-container">
       <q-card class="col-4 q-ma-md q-pb-sm">
         <RadarChart
           :data="timeSpanChartData"
@@ -176,3 +175,11 @@ export default defineComponent({
   },
 });
 </script>
+
+<style lang="scss" scoped>
+.chart-container {
+  height: 365px;
+  min-height: 300px;
+  max-height: 495px;
+}
+</style>

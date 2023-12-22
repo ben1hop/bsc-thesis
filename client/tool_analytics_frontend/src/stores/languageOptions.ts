@@ -11,7 +11,7 @@ export const ChartNamesHun = [
 export const ChartNamesEng = [
   'Total tools yearly usage',
   'Total tool usage by action',
-  'Total tool usage throughout a year',
+  'Total tool usage by months',
   'Tool usage by day',
   'Total tool usage by OS',
   'Weighted usage by OS',
