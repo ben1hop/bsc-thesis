@@ -26,6 +26,24 @@ analyticsApi.set('/', async (req, res) => {
   res.send('Server is up and running.');
 });
 
+analyticsApi.set('getUtilsInfo', async (req, res) => {
+  pool.query(
+    'SELECT count(*), min(actionTime) FROM `bsc-dev-db`.EventLog;',
+    (err: any, rows: any[], fields: { name: string | number }[]) => {
+      if (err) {
+        throw err;
+      } else {
+        res.send(
+          rows.map((value) => ({
+            totalEvents: value[fields[0].name],
+            firstEvent: value[fields[1].name],
+          }))
+        );
+      }
+    }
+  );
+});
+
 analyticsApi.set('getYears', async (req, res) => {
   pool.query(
     SELECT + 'Years;',

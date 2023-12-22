@@ -25,6 +25,11 @@ async function initTotalPageCharts() {
 
   let resp;
 
+  resp = await request('getUtilsInfo');
+  if (resp) {
+    infoStore.setUtilsInfo(resp.data);
+  }
+
   resp = await request('getTools');
   if (resp) {
     appStore.setAvailableTools(resp.data);
