@@ -156,9 +156,22 @@
       </div>
 
       <div class="row justify-evenly q-py-lg">
-        <q-card class="col-1 q-gutter-sm" style="height: 100px">
-          <q-radio v-model="monthMode" val="month" label="Months" />
-          <q-radio v-model="monthMode" val="day" label="Days" />
+        <q-card
+          class="row justify-center col-xs-1 col-md-1 col-lg-2 q-gutter-sm"
+          style="height: 100px"
+        >
+          <q-radio
+            style="width: 45%"
+            v-model="monthMode"
+            val="month"
+            label="Months"
+          />
+          <q-radio
+            style="width: 45%"
+            v-model="monthMode"
+            val="day"
+            label="Days"
+          />
         </q-card>
 
         <q-card v-if="monthMode === 'month'" class="col-8 chart-container">
