@@ -184,8 +184,19 @@ export function loadPerToolAction(table: any) {
 
 export function loadPerToolTimeSpan(table: any) {
   const datasets: DataSet[] = [];
-  const am = table.filter((x: any) => x.hour < 13).map((x: any) => x.total);
-  const pm = table.filter((x: any) => x.hour >= 13).map((x: any) => x.total);
+  const amTable = table.filter((x: any) => x.hour < 13);
+  const pmTable = table.filter((x: any) => x.hour >= 13);
+
+  const am = Array.apply(null, Array(12)).map(() => 0) as number[];
+  const pm = Array.apply(null, Array(12)).map(() => 0) as number[];
+
+  for (const entry of amTable) {
+    am[entry.hour - 1] = entry.total;
+  }
+  for (const entry of pmTable) {
+    pm[entry.hour - 1] = entry.total;
+  }
+
   datasets.push(new DataSet(am, 'AM'));
   datasets.push(new DataSet(pm, 'PM'));
   return datasets;
