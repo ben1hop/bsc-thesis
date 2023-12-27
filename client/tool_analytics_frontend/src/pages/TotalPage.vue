@@ -121,13 +121,13 @@
     <q-card class="q-pa-lg q-my-lg">
       <SectionSeparator :title="getCurrentSeparatorTitle(1)" />
       <div class="row justify-evenly q-py-lg">
-        <q-card class="col-8 chart-container">
+        <q-card class="col-10 chart-container">
           <BarChart
             :data="getChartData(TotalChartIds.TOTAL_YEARLY)"
             :title="getCurrentTitle(TotalChartIds.TOTAL_YEARLY)"
           >
             <template #tooltipSlot>
-              {{ getTooltipText(0) }}<br />
+              {{ getTooltipText(TotalChartIds.TOTAL_YEARLY) }}<br />
               <br />
               <p>SQL:</p>
               select result as tool , year(actionTime) as year , count(*) as
@@ -166,7 +166,7 @@
             :title="getCurrentTitle(TotalChartIds.TOTAL_THROUGHOUT_YEAR)"
           >
             <template #tooltipSlot>
-              {{ getTooltipText(2) }}<br />
+              {{ getTooltipText(TotalChartIds.TOTAL_THROUGHOUT_YEAR) }}<br />
               <br />
               <p>SQL:</p>
               select year , month, (select count(*) from EventLog z where
@@ -187,7 +187,7 @@
             :title="getCurrentTitle(TotalChartIds.TOTAL_TIME_SPAN)"
           >
             <template #tooltipSlot>
-              {{ getTooltipText(3) }}<br />
+              {{ getTooltipText(TotalChartIds.TOTAL_TIME_SPAN) }}<br />
               <br />
               <p>SQL:</p>
               SELECT hour(actionTime) as hour, count(id) as total FROM
@@ -207,7 +207,7 @@
             :title="getCurrentTitle(TotalChartIds.TOTAL_SOFTWARE)"
           >
             <template #tooltipSlot>
-              {{ getTooltipText(1) }}<br />
+              {{ getTooltipText(TotalChartIds.TOTAL_SOFTWARE) }}<br />
               <br />
               <p>SQL:</p>
               SELECT action, count(id) as total FROM `bsc-dev-db`.EventLog group
@@ -221,7 +221,7 @@
             :title="getCurrentTitle(TotalChartIds.TOTAL_ACTION)"
           >
             <template #tooltipSlot>
-              {{ getTooltipText(1) }}<br />
+              {{ getTooltipText(TotalChartIds.TOTAL_ACTION) }}<br />
               <br />
               <p>SQL:</p>
               SELECT action, count(id) as total FROM `bsc-dev-db`.EventLog group
@@ -237,12 +237,14 @@
             :title="getCurrentTitle(TotalChartIds.TOTAL_OS)"
           >
             <template #tooltipSlot>
-              {{ getTooltipText(4) }}<br />
+              {{ getTooltipText(TotalChartIds.TOTAL_OS) }}<br />
               <br />
               <p>SQL:</p>
-              select y.computerOS , count(x.id) as total from EventLog as x ,
-              StudiosWithSoftwareIds as y <br />
-              where y.SoftwareId = x.idStudioSoftwareRef group by y.computerOS;
+              select y.name as name, y.version , count(x.id) as total <br />
+              from EventLog as x , SoftwareWithSoftwareIds as y <br />
+              where y.SoftwareId = x.idStudioSoftwareRef<br />
+              group by y.name, y.version <br />
+              order by name, version;
             </template>
           </BarChart>
         </q-card>
@@ -252,7 +254,7 @@
             :title="getCurrentTitle(TotalChartIds.WEIGHTED_OS)"
           >
             <template #tooltipSlot>
-              {{ getTooltipText(5) }}<br />
+              {{ getTooltipText(TotalChartIds.WEIGHTED_OS) }}<br />
               <br />
               <p>SQL:</p>
               select y.computerOS , count(x.id) as total from EventLog as x ,

@@ -86,6 +86,10 @@ export const TotalTooltipText = [
     hun: 'Ez a diagramm mutatja meg napi lebontásban melyik időszak volt a legnépszerűbb.',
   },
   {
+    eng: 'This charts shows which Software type and which version of theirs was used.',
+    hun: 'Ez a diagramm mutatja meg melyik szoftver melyik verziója volt a legtöbbet használva.',
+  },
+  {
     eng: 'This charts shows the which type of operating systems were used.',
     hun: 'Ez a diagramm mutatja meg melyik operációs rendszer volt a legnépszerűbb.',
   },
