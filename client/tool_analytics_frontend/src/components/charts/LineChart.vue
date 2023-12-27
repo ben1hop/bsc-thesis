@@ -1,7 +1,7 @@
 <template>
   <div class="container q-mx-md column justify-around" style="height: 100%">
     <div class="col-1 q-mt-sm row justify-between items-center">
-      <div class="text-bold text-h5">
+      <div class="text-bold text-h5" data-cy="chart-header">
         {{ title }}
       </div>
       <div>

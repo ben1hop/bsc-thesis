@@ -20,6 +20,7 @@
             @click="onClick(tool)"
             :color="selectedColor(tool)"
             size="19px"
+            data-cy="compare-selector"
           >
             {{ tool }}
           </q-chip>
@@ -46,6 +47,7 @@
           <template v-slot:item="props">
             <div
               class="q-pa-xs q-ma-xs col-xs-12 col-sm-5 col-md-3 text-accent"
+              data-cy="compare-selected"
             >
               <q-card :class="'q-pa-md shadow-4 ' + getTitleBgColor()">
                 <div class="text-h6 text-center text-primary bg-forth">

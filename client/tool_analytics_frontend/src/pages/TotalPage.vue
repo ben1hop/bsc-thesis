@@ -1,6 +1,6 @@
 <template>
   <q-page class="column justify-evenly">
-    <q-card class="q-pa-lg">
+    <q-card class="q-pa-lg" data-cy="landing-page-title">
       <div class="row justify-evenly">
         <div class="col-7 column">
           <p
@@ -93,10 +93,15 @@
 
     <div class="row q-my-lg"></div>
 
-    <DropDownSeparator class="q-my-lg" :title="getCurrentSeparatorTitle(0)">
+    <DropDownSeparator
+      class="q-my-lg"
+      :title="getCurrentSeparatorTitle(0)"
+      data-cy="dropdown-test"
+    >
       <template #contentSlot>
         <div class="row justify-around text-center">
           <InfoCard
+            data-cy="test-info-card-1"
             class="col-1"
             title="Most used tool:"
             :value="currentTool"
@@ -151,12 +156,15 @@
             v-model="monthMode"
             val="month"
             label="Months"
+            data-cy="radio-1"
           />
           <q-radio
             style="width: 45%"
             v-model="monthMode"
             val="day"
             label="Days"
+            data-cy="radio-2"
+            
           />
         </q-card>
 
@@ -164,6 +172,7 @@
           <LineChart
             :data="getChartData(TotalChartIds.TOTAL_THROUGHOUT_YEAR)"
             :title="getCurrentTitle(TotalChartIds.TOTAL_THROUGHOUT_YEAR)"
+            data-cy="changeable-time-chart"
           >
             <template #tooltipSlot>
               {{ getTooltipText(TotalChartIds.TOTAL_THROUGHOUT_YEAR) }}<br />

@@ -5,6 +5,7 @@
         <q-toolbar-title
           class="text-center button hvr-grow"
           @click="toggleTopDrawer"
+          data-cy="top-drawer"
         >
           Wireless Tools Analytics
           <q-icon v-if="!topDrawer" name="sym_r_arrow_drop_down" />
@@ -14,6 +15,7 @@
           flat
           dropdown-icon="sym_r_settings"
           class="text-text-primary"
+          data-cy="options-dropdown"
         >
           <q-list style="min-width: 275px">
             <q-item>
@@ -21,7 +23,7 @@
                 <q-item-label>Dark mode</q-item-label>
               </q-item-section>
               <q-item-section>
-                <q-toggle v-model="dark" />
+                <q-toggle v-model="dark" data-cy="dark-mode-selector" />
               </q-item-section>
             </q-item>
 
@@ -35,6 +37,7 @@
                   :options="['Hungarian', 'English']"
                   dropdown-icon="sym_r_arrow_drop_down"
                   borderless
+                  data-cy="language-selector"
                 />
               </q-item-section>
             </q-item> </q-list
@@ -61,18 +64,21 @@
               class="q-tab--dark"
               name="total"
               label="Total page"
+              data-cy="nav-total"
               @click="navigate('total')"
             />
             <q-tab
               name="pertool"
               label="Per tool"
               class="q-tab--dark"
+              data-cy="nav-per-tool"
               @click="navigate('perTool')"
             />
             <q-tab
               name="compare"
               class="q-tab--dark"
               label="Compare"
+              data-cy="nav-compare"
               @click="navigate('compare')"
             />
           </q-tabs>

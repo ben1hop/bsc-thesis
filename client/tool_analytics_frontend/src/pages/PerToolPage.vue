@@ -13,6 +13,7 @@
           :error="selectedTool"
           :no-error-icon="true"
           @update:model-value="handleToolSelectionChange"
+          data-cy="tool-selector"
         />
       </div>
       <div class="q-pt-lg col-9">
@@ -21,7 +22,7 @@
     </div>
 
     <div class="row justify-evenly q-mb-lg chart-container">
-      <q-card class="col-5 justify-center">
+      <q-card class="col-lg-5 col-sm-7 justify-center">
         <BarChart
           :data="yearlyChartData"
           stacked="true"
@@ -29,14 +30,14 @@
         />
       </q-card>
     </div>
-    <div class="row justify-center q-mb-lg chart-container">
-      <q-card class="col-4 q-ma-md q-pb-sm">
+    <div class="row justify-center q-mb-lg">
+      <q-card class="col-4 col-sm-5 q-ma-md q-pb-sm chart-container">
         <RadarChart
           :data="timeSpanChartData"
           :title="getCurrentLangTitlePerTool(1)"
         />
       </q-card>
-      <q-card class="col-4 q-ma-md q-pb-sm">
+      <q-card class="col-4 col-sm-5 q-ma-md q-pb-sm chart-container">
         <PieChart
           :data="actionChartData"
           :title="getCurrentLangTitlePerTool(2)"
