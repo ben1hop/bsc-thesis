@@ -279,51 +279,6 @@ analyticsApi.set('totalUsageByRegion', async (req, res) => {
   );
 });
 
-// analyticsApi.set('totalUsageQuarterly', async (req, res) => {
-//   pool.query(
-//     SELECT + 'TotalUsageThroughYear',
-//     (err: any, rows: any[], fields: { name: string | number }[]) => {
-//       if (err) {
-//         throw err;
-//       } else {
-//         const datasets = loadTotalThroughYear(
-//           rows.map((value) => ({
-//             year: value[fields[0].name],
-//             month: value[fields[1].name],
-//             total: value[fields[2].name],
-//           })),
-//           baseTables.get('years').map((x: string) => Number(x))
-//         );
-//         res.send(new ChartData(realMonths(), datasets));
-//       }
-//     }
-//   );
-// });
-
-// analyticsApi.set('totalUsageThroughYearPerTool', async (req, res) => {
-//   pool.query(
-//     SELECT + 'TotalUsageThroughYearPerTool;',
-//     (err: any, rows: any[], fields: { name: string | number }[]) => {
-//       if (err) {
-//         throw err;
-//       } else {
-//         const datasets = loadTotalThroughYearPerTool(
-//           rows.map((value) => ({
-//             tool: value[fields[0].name],
-//             year: value[fields[1].name],
-//             month: value[fields[2].name],
-//             total: value[fields[3].name],
-//           }),
-//           baseTables.get()
-//         )
-//         res.send(
-
-//         );
-//       }
-//     }
-//   );
-// });
-
 analyticsApi.set('uniqueUsers', async (req, res) => {
   pool.query(
     SELECT + 'UniqueUsers;',

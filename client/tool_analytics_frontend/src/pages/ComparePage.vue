@@ -93,17 +93,6 @@
           <BarChart :data="totalCompareChartData" title="" />
         </div>
       </div>
-      <!-- <SectionSeparator class="q-pt-lg" :title="getCurrentSeparatorTitle(2)" />
-      <div class="row justify-evenly">
-        <PieChart
-          v-for="tool in selectedTools"
-          v-bind:key="tool"
-          :title="a"
-          :loaded="false"
-          ref="toolRefs"
-          :data="getWeightedCommandData(tool)"
-        />
-      </div> -->
     </q-card>
   </q-page>
 </template>
@@ -218,9 +207,6 @@ export default defineComponent({
       getCurrentSeparatorTitle: (index: number) => {
         return appStore.getCompareSeparatorTitle(index);
       },
-      // getWeightedCommandData(tool: string) {
-      //   return compareStore.getActionChart(tool as unknown as Tools);
-      // },
       updateTotalChart,
       tools,
       columns,
