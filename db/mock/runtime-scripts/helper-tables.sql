@@ -63,7 +63,20 @@ create table TotalUsageTimeSpan as
     SELECT hour(actionTime) as hour, count(id) as total FROM `bsc-dev-db`.EventLog group by hour(actionTime) order by hour;
 
 
--- 4) querry - total usage by OS -- itt számolhatjuk tetszőleges kapcsoló táblából ugyanis az összes event-hez tartozó software-user-location ugyanazt a studioref-et kapja soronként
+-- 4) Teljes hasznalat software verziok szerint
+DROP VIEW IF EXISTS `SoftwareWithSoftwareIds`;
+create view SoftwareWithSoftwareIds as 
+    select y.id, y.name, y.version, x.id as SoftwareId 
+    from Software as y,  StudioSoftware as x 
+    where y.id = x.idSoftwareRef;
+
+DROP TABLE IF EXISTS `TotalUsageBySoftware`;
+create table TotalUsageBySoftware as
+    select y.name as name, y.version , count(x.id) as total
+    from EventLog as x , SoftwareWithSoftwareIds as y 
+    where y.SoftwareId = x.idStudioSoftwareRef group by y.name, y.version order by name, version;
+
+-- 5) querry - total usage by OS -- itt számolhatjuk tetszőleges kapcsoló táblából ugyanis az összes event-hez tartozó software-user-location ugyanazt a studioref-et kapja soronként
 DROP VIEW IF EXISTS `StudiosWithSoftwareIds`;
 create view StudiosWithSoftwareIds as 
     select y.id, y.computerOS , x.id as SoftwareId 
