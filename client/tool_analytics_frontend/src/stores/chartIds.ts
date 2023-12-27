@@ -3,7 +3,8 @@ export enum TotalChartIds {
   TOTAL_ACTION = 1,
   TOTAL_THROUGHOUT_YEAR = 2,
   TOTAL_TIME_SPAN = 3,
-  TOTAL_OS = 4,
-  WEIGHTED_OS = 5,
-  TOTAL_REGION = 6,
+  TOTAL_SOFTWARE = 4,
+  TOTAL_OS = 5,
+  WEIGHTED_OS = 6,
+  TOTAL_REGION = 7,
 }

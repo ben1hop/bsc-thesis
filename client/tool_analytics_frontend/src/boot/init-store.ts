@@ -71,6 +71,11 @@ async function initTotalPageCharts() {
     appStore.registerChart(TotalChartIds.TOTAL_TIME_SPAN, resp.data);
   }
 
+  resp = await request('totalUsageBySoftware');
+  if (resp) {
+    appStore.registerChart(TotalChartIds.TOTAL_SOFTWARE, resp.data);
+  }
+
   resp = await request('totalUsageByAction');
   if (resp) {
     appStore.registerChart(TotalChartIds.TOTAL_ACTION, resp.data);

@@ -139,20 +139,6 @@
             </template>
           </BarChart>
         </q-card>
-        <q-card class="col-3 chart-container">
-          <DoughnutChart
-            :data="getChartData(TotalChartIds.TOTAL_ACTION)"
-            :title="getCurrentTitle(TotalChartIds.TOTAL_ACTION)"
-          >
-            <template #tooltipSlot>
-              {{ getTooltipText(1) }}<br />
-              <br />
-              <p>SQL:</p>
-              SELECT action, count(id) as total FROM `bsc-dev-db`.EventLog group
-              by action;
-            </template>
-          </DoughnutChart>
-        </q-card>
       </div>
 
       <div class="row justify-evenly q-py-lg">
@@ -211,8 +197,39 @@
         </q-card>
       </div>
     </q-card>
+
     <q-card class="q-pa-lg q-my-lg">
       <SectionSeparator :title="getCurrentSeparatorTitle(2)" />
+      <div class="row justify-evenly q-py-lg">
+        <q-card class="col-7 chart-container">
+          <BarChart
+            :data="getChartData(TotalChartIds.TOTAL_SOFTWARE)"
+            :title="getCurrentTitle(TotalChartIds.TOTAL_SOFTWARE)"
+          >
+            <template #tooltipSlot>
+              {{ getTooltipText(1) }}<br />
+              <br />
+              <p>SQL:</p>
+              SELECT action, count(id) as total FROM `bsc-dev-db`.EventLog group
+              by action;
+            </template>
+          </BarChart>
+        </q-card>
+        <q-card class="col-3 chart-container">
+          <DoughnutChart
+            :data="getChartData(TotalChartIds.TOTAL_ACTION)"
+            :title="getCurrentTitle(TotalChartIds.TOTAL_ACTION)"
+          >
+            <template #tooltipSlot>
+              {{ getTooltipText(1) }}<br />
+              <br />
+              <p>SQL:</p>
+              SELECT action, count(id) as total FROM `bsc-dev-db`.EventLog group
+              by action;
+            </template>
+          </DoughnutChart>
+        </q-card>
+      </div>
       <div class="row justify-evenly q-py-lg">
         <q-card class="col-6 chart-container">
           <BarChart
@@ -241,8 +258,8 @@
               select y.computerOS , count(x.id) as total from EventLog as x ,
               StudiosWithSoftwareIds as y <br />
               where y.SoftwareId = x.idStudioSoftwareRef group by y.computerOS;
-            </template></PieChart
-          >
+            </template>
+          </PieChart>
         </q-card>
       </div>
     </q-card>

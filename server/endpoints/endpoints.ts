@@ -11,6 +11,7 @@ import {
   loadTotalUsageByAction,
   loadTotalUsageByCountries,
   loadTotalUsageByOs,
+  loadTotalUsageBySoftware,
   loadTotalUsageByYear,
   loadTotalUsageTimeSpan,
   loadWeightedTotalUsageByOs,
@@ -216,6 +217,27 @@ analyticsApi.set('totalUsageTimeSpan', async (req, res) => {
             datasets
           )
         );
+      }
+    }
+  );
+});
+
+analyticsApi.set('totalUsageBySoftware', async (req, res) => {
+  pool.query(
+    SELECT + 'TotalUsageBySoftware;',
+    (err: any, rows: any[], fields: { name: string | number }[]) => {
+      if (err) {
+        throw err;
+      } else {
+        const datasets = loadTotalUsageBySoftware(
+          rows.map((value) => ({
+            name: value[fields[0].name],
+            version: value[fields[1].name],
+            total: value[fields[2].name],
+          })),
+          baseTables.get('versions')
+        );
+        res.send(new ChartData(baseTables.get('versions'), datasets));
       }
     }
   );

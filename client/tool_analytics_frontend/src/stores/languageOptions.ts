@@ -3,6 +3,7 @@ export const ChartNamesHun = [
   'Parancsok szerint',
   'Teljes felhasználás havi bontásban',
   'Teljes felhasználás napi bontásban',
+  'Teljes felhasználás szoftver verzió bontásban',
   'Teljes felhasználás operációs rendszerek szerint',
   'Súlyozott operációs rendszerek',
   'Lokációs térkép',
@@ -13,6 +14,7 @@ export const ChartNamesEng = [
   'Total tool usage by action',
   'Total tool usage by months',
   'Tool usage by day',
+  'Total usage by Software version',
   'Total tool usage by OS',
   'Weighted usage by OS',
   'Total tool usage by countries',
@@ -33,7 +35,10 @@ export const PerToolChartNamesHun = [
 export const TotalPageSeparators = [
   { eng: 'This years statistic', hun: 'Jelen éves statisztikák' },
   { eng: 'Tool usage based on time', hun: 'Időbeli eloszlási adatok' },
-  { eng: 'Tool usage based on OS', hun: 'Szoftver szerinti eloszlási adatok' },
+  {
+    eng: 'Tool usage based on Software',
+    hun: 'Szoftver szerinti eloszlási adatok',
+  },
   { eng: 'Tool usage based on location', hun: 'Helyi eloszlási adatok' },
 ];
 

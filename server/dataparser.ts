@@ -1,4 +1,4 @@
-import { DataSet, MapData } from './types/types';
+import { ChartData, DataSet, MapData } from './types/types';
 import { countryToAlpha2 } from 'country-to-iso';
 
 /**
@@ -50,6 +50,35 @@ export function loadTotalThroughYearPerTool(
     i = j;
     n++;
   }
+  return datasets;
+}
+
+export function loadTotalUsageBySoftware(
+  table: any,
+  versions: string[]
+): DataSet[] {
+  const datasets: DataSet[] = [];
+
+  const zolabVersionCount = Array.apply(null, Array(versions.length)).map(
+    () => 0
+  ) as number[];
+
+  const zapVersionCount = Array.apply(null, Array(versions.length)).map(
+    () => 0
+  ) as number[];
+
+  for (const entry of table) {
+    const versionIndex = versions.findIndex((x: string) => x === entry.version);
+    if (entry.name === 'Zoolab') {
+      zolabVersionCount[versionIndex] = entry.total;
+    } else if (entry.name === 'Zoolab-Zap') {
+      zapVersionCount[versionIndex] = entry.total;
+    }
+  }
+
+  datasets.push(new DataSet(zolabVersionCount, 'Zoolab'));
+  datasets.push(new DataSet(zapVersionCount, 'Zoolab-Zap'));
+
   return datasets;
 }
 
