@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from 'vue';
+import { defineComponent } from 'vue';
 export default defineComponent({
   name: 'SectionSeparator',
   components: {},
@@ -18,7 +18,7 @@ export default defineComponent({
       default: 'Title',
     },
   },
-  setup(props) {
+  setup() {
     return {};
   },
 });

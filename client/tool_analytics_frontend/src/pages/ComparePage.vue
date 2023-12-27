@@ -106,13 +106,12 @@ import { useAppStore } from 'src/stores/appStore';
 import { COMPARE_TABLE_ROW, useCompareStore } from 'src/stores/compareStore';
 import { computed, defineComponent, reactive, ref } from 'vue';
 import BarChart from 'src/components/charts/BarChart.vue';
-//import PieChart from 'src/components/charts/PieChart.vue';
 import { TotalChartIds } from 'src/stores/chartIds';
 import { ChartData } from 'chart.js';
 import { getCssVar } from 'quasar';
 import { Dark } from 'quasar';
-import { Tools } from 'src/stores/types';
 
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 const columns = [
   {
     name: 'desc',
