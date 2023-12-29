@@ -1,6 +1,6 @@
 import mysql from 'mysql';
 
-//   host: 'host.docker.internal', on windows! TODO
+//   host: 'host.docker.internal', on windows!
 const pool = mysql.createPool({
   connectionLimit: 10,
   host: '127.0.0.1',

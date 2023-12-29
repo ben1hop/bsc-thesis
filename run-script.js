@@ -67,6 +67,9 @@ async function setupDocker() {
 async function buildAndRunBackend() {
   try {
     process.chdir("server");
+    spawnSync(npm, ["ci"], {
+      stdio: silentMode,
+    });
     const buildCommand = spawnSync(npm, ["run", "build"], {
       stdio: silentMode,
     });
@@ -108,7 +111,9 @@ async function buildAndRunBackend() {
 async function buildAndRunClient() {
   try {
     process.chdir("client/tool_analytics_frontend");
-
+    spawnSync(npm, ["ci"], {
+      stdio: silentMode,
+    });
     // if open?
     try {
       await waitOn({

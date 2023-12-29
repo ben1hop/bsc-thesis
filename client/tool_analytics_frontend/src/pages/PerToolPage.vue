@@ -62,7 +62,6 @@ import DropDownSeparator from 'src/components/DropDownSeparator.vue';
 import { useAppStore } from 'src/stores/appStore';
 import { usePerToolStore } from 'src/stores/perToolStore';
 import BarChart from 'src/components/charts/BarChart.vue';
-//import LineChart from 'src/components/charts/LineChart.vue';
 import PieChart from 'src/components/charts/PieChart.vue';
 import { Tools } from 'src/stores/types';
 import { request } from 'src/modules/api';

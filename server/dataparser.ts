@@ -246,10 +246,10 @@ export function loadCompareTableData(table: any, tools: string[]) {
     first: string;
     growth: boolean;
   }[] = [];
-  const splittedData = splitArrayByProperty(table, 'tool'); // we split the mysql array into sub arrays grouped by tools
+  const splittedData = splitArrayByProperty(table, 'tool');
   for (const tool of tools) {
     const firstYear = splittedData[tool][0].year;
-    const total = splittedData[tool].reduce((acc, obj) => acc + obj.total, 0); // summs each tools total entries
+    const total = splittedData[tool].reduce((acc, obj) => acc + obj.total, 0);
     const length = splittedData[tool].length;
     let growth = false;
     if (
