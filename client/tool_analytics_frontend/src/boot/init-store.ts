@@ -3,6 +3,7 @@ import { boot } from 'quasar/wrappers';
 import { request } from 'src/modules/api';
 import { useAppStore } from 'src/stores/appStore';
 import { TotalChartIds } from 'src/stores/chartIds';
+import { useCompareStore } from 'src/stores/compareStore';
 import { useInfoStore } from 'src/stores/infoStore';
 import { MapData } from 'src/stores/types';
 
@@ -20,12 +21,22 @@ export default boot(async () => {
 async function initTotalPageCharts() {
   const appStore = useAppStore();
   const infoStore = useInfoStore();
+  const compareStore = useCompareStore();
 
   let resp;
+
+  resp = await request('getUtilsInfo');
+  if (resp) {
+    infoStore.setUtilsInfo(resp.data);
+  }
 
   resp = await request('getTools');
   if (resp) {
     appStore.setAvailableTools(resp.data);
+  }
+  resp = await request('getYears');
+  if (resp) {
+    appStore.setAvailableYears(resp.data);
   }
 
   resp = await request('currentTool');
@@ -60,6 +71,11 @@ async function initTotalPageCharts() {
     appStore.registerChart(TotalChartIds.TOTAL_TIME_SPAN, resp.data);
   }
 
+  resp = await request('totalUsageBySoftware');
+  if (resp) {
+    appStore.registerChart(TotalChartIds.TOTAL_SOFTWARE, resp.data);
+  }
+
   resp = await request('totalUsageByAction');
   if (resp) {
     appStore.registerChart(TotalChartIds.TOTAL_ACTION, resp.data);
@@ -80,40 +96,10 @@ async function initTotalPageCharts() {
     appStore.registerChart(TotalChartIds.TOTAL_REGION, resp.data as MapData);
   }
 
-  //   appStore.registerChart(
-  //     'Total tool usage throughout a year',
-  //     new ChartData(
-  //       appStore.getMonths,
-  //       loadTotalThroughYear(
-  //         totalStore.getTable('totalUsageThroughYear'),
-  //         appStore.getYears
-  //       )
-  //     )
-  //   );
-
-  //   appStore.registerChart(
-  //     'Total tool usage by OS',
-  //     new ChartData(
-  //       appStore.getOsTypes,
-  //       loadTotalUsageByOs(
-  //         totalStore.getTable('totalUsageByOS'),
-  //         appStore.getOsTypes
-  //       )
-  //     )
-  //   );
-
-  //   appStore.registerChart(
-  //     'Weighted total tool usage by OS',
-  //     new ChartData(
-  //       ['Windows', 'Mac', 'Linux'],
-  //       loadWeightedTotalUsageByOs(totalStore.getTable('totalUsageByOS'))
-  //     )
-  //   );
-
-  //   appStore.registerMap(
-  //     'Total usage by countries',
-  //     loadTotalUsageByCountries(totalStore.getTable('totalUsageByCountries'))
-  //   );
+  resp = await request('getCompareTables');
+  if (resp) {
+    compareStore.setTables(resp.data.datasets);
+  }
 
   return;
 }

@@ -1,14 +1,20 @@
 <template>
   <div class="container q-mx-md column justify-around" style="height: 100%">
     <div class="col-1 q-mt-sm row justify-between items-center">
-      <div class="text-bold text-h5 text-text-primary-dark">
+      <div class="text-bold text-h5">
         {{ title }}
       </div>
       <div>
-        <q-icon name="sym_r_help"></q-icon>
+        <q-icon name="sym_r_help">
+          <q-tooltip>
+            <slot name="tooltipSlot"></slot>
+          </q-tooltip>
+        </q-icon>
       </div>
     </div>
-    <div class="col-10"><Radar :data="chartData" :options="options" /></div>
+    <div class="col-10">
+      <Radar :data="chartData" :options="chartOptions" />
+    </div>
   </div>
 </template>
 
@@ -22,10 +28,11 @@ import {
   Tooltip,
   Legend,
   ChartData,
+  ChartOptions,
 } from 'chart.js';
 import { Radar } from 'vue-chartjs';
 import { PropType, ref, watch } from 'vue';
-import { getCssVar } from 'quasar';
+import { Dark, getCssVar, useQuasar } from 'quasar';
 import getDataSetColor from 'src/css/utils';
 
 ChartJS.register(
@@ -37,10 +44,6 @@ ChartJS.register(
   Legend
 );
 
-export const options = {
-  responsive: true,
-  maintainAspectRatio: false,
-};
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 export default {
   name: 'RadarChart',
@@ -80,6 +83,30 @@ export default {
       }
     }
 
+    const chartOptions = ref<ChartOptions>({
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: {
+          ticks: {
+            color: Dark.isActive ? '#fcfcfc' : '#333',
+          },
+        },
+        y: {
+          ticks: {
+            color: Dark.isActive ? '#fcfcfc' : '#333',
+          },
+        },
+      },
+      plugins: {
+        legend: {
+          labels: {
+            color: Dark.isActive ? '#fcfcfc' : '#333',
+          },
+        },
+      },
+    });
+
     let chartData = ref(props.data);
     if (chartData.value) {
       /**
@@ -112,7 +139,38 @@ export default {
         };
       }
     });
-    return { options, chartData };
+    const $q = useQuasar();
+
+    watch(
+      () => $q.dark.isActive,
+      () => {
+        chartOptions.value = {
+          ...chartOptions,
+          scales: {
+            x: {
+              ...chartOptions.value.scales?.x,
+              ticks: {
+                color: Dark.isActive ? '#fcfcfc' : '#333',
+              },
+            },
+            y: {
+              ...chartOptions.value.scales?.y,
+              ticks: {
+                color: Dark.isActive ? '#fcfcfc' : '#333',
+              },
+            },
+          },
+          plugins: {
+            legend: {
+              labels: {
+                color: Dark.isActive ? '#fcfcfc' : '#333',
+              },
+            },
+          },
+        };
+      }
+    );
+    return { chartOptions, chartData };
   },
 };
 </script>

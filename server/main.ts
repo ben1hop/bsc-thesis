@@ -42,6 +42,20 @@ async function fetchAndPopulateBaseTables() {
       '11',
       '12',
     ]);
+    baseTables.set('versions', [
+      '1.0',
+      '1.0`',
+      '2.0',
+      '3.0',
+      '4.0',
+      '5.0',
+      '6.0',
+      '6.5',
+      '7.0',
+      '8.0',
+      '8.5',
+      '9.0',
+    ]);
     baseTables.set('tools', await fetch('getTools'));
     baseTables.set('actions', await fetch('getActions'));
     baseTables.set('osTypes', await fetch('getOsTypes'));

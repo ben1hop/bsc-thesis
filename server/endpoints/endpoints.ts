@@ -2,6 +2,7 @@ import { RequestHandler } from 'express';
 import pool from '../connection';
 import { baseTables, currentYear } from '../main';
 import {
+  loadCompareTableData,
   loadPerToolAction,
   loadPerToolTimeSpan,
   loadPerToolYearlyByQuarter,
@@ -10,6 +11,7 @@ import {
   loadTotalUsageByAction,
   loadTotalUsageByCountries,
   loadTotalUsageByOs,
+  loadTotalUsageBySoftware,
   loadTotalUsageByYear,
   loadTotalUsageTimeSpan,
   loadWeightedTotalUsageByOs,
@@ -23,6 +25,24 @@ const SELECT = 'SELECT * FROM ';
 
 analyticsApi.set('/', async (req, res) => {
   res.send('Server is up and running.');
+});
+
+analyticsApi.set('getUtilsInfo', async (req, res) => {
+  pool.query(
+    'SELECT count(*), min(actionTime) FROM `bsc-dev-db`.EventLog;',
+    (err: any, rows: any[], fields: { name: string | number }[]) => {
+      if (err) {
+        throw err;
+      } else {
+        res.send(
+          rows.map((value) => ({
+            totalEvents: value[fields[0].name],
+            firstEvent: value[fields[1].name],
+          }))
+        );
+      }
+    }
+  );
 });
 
 analyticsApi.set('getYears', async (req, res) => {
@@ -202,6 +222,27 @@ analyticsApi.set('totalUsageTimeSpan', async (req, res) => {
   );
 });
 
+analyticsApi.set('totalUsageBySoftware', async (req, res) => {
+  pool.query(
+    SELECT + 'TotalUsageBySoftware;',
+    (err: any, rows: any[], fields: { name: string | number }[]) => {
+      if (err) {
+        throw err;
+      } else {
+        const datasets = loadTotalUsageBySoftware(
+          rows.map((value) => ({
+            name: value[fields[0].name],
+            version: value[fields[1].name],
+            total: value[fields[2].name],
+          })),
+          baseTables.get('versions')
+        );
+        res.send(new ChartData(baseTables.get('versions'), datasets));
+      }
+    }
+  );
+});
+
 analyticsApi.set('totalUsageByOS', async (req, res) => {
   pool.query(
     SELECT + 'TotalUsageByOS;',
@@ -259,51 +300,6 @@ analyticsApi.set('totalUsageByRegion', async (req, res) => {
     }
   );
 });
-
-// analyticsApi.set('totalUsageQuarterly', async (req, res) => {
-//   pool.query(
-//     SELECT + 'TotalUsageThroughYear',
-//     (err: any, rows: any[], fields: { name: string | number }[]) => {
-//       if (err) {
-//         throw err;
-//       } else {
-//         const datasets = loadTotalThroughYear(
-//           rows.map((value) => ({
-//             year: value[fields[0].name],
-//             month: value[fields[1].name],
-//             total: value[fields[2].name],
-//           })),
-//           baseTables.get('years').map((x: string) => Number(x))
-//         );
-//         res.send(new ChartData(realMonths(), datasets));
-//       }
-//     }
-//   );
-// });
-
-// analyticsApi.set('totalUsageThroughYearPerTool', async (req, res) => {
-//   pool.query(
-//     SELECT + 'TotalUsageThroughYearPerTool;',
-//     (err: any, rows: any[], fields: { name: string | number }[]) => {
-//       if (err) {
-//         throw err;
-//       } else {
-//         const datasets = loadTotalThroughYearPerTool(
-//           rows.map((value) => ({
-//             tool: value[fields[0].name],
-//             year: value[fields[1].name],
-//             month: value[fields[2].name],
-//             total: value[fields[3].name],
-//           }),
-//           baseTables.get()
-//         )
-//         res.send(
-
-//         );
-//       }
-//     }
-//   );
-// });
 
 analyticsApi.set('uniqueUsers', async (req, res) => {
   pool.query(
@@ -596,6 +592,29 @@ analyticsApi.set('perToolCountries', async (req, res) => {
             country: value[fields[1].name],
             total: value[fields[2].name],
           }))
+        );
+        res.send(new MapData(datasets));
+      }
+    }
+  );
+});
+
+analyticsApi.set('getCompareTables', async (req, res) => {
+  pool.query(
+    SELECT + 'CompareTables',
+    (err: any, rows: any[], fields: { name: string | number }[]) => {
+      if (err) {
+        throw err;
+      } else {
+        // Params are under req.query not req.params!!
+        const datasets = loadCompareTableData(
+          rows.map((value) => ({
+            tool: value[fields[0].name],
+            year: value[fields[1].name],
+            total: value[fields[2].name],
+            first: value[fields[3].name],
+          })),
+          baseTables.get('tools')
         );
         res.send(new MapData(datasets));
       }

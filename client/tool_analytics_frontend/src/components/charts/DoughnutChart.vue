@@ -1,14 +1,18 @@
 <template>
   <div class="container q-mx-md column justify-around" style="height: 100%">
     <div class="col-1 q-mt-sm row justify-between items-center">
-      <div class="text-bold text-h5 text-text-primary-dark">
+      <div class="text-bold text-h5">
         {{ title }}
       </div>
       <div>
-        <q-icon name="sym_r_help"></q-icon>
+        <q-icon name="sym_r_help">
+          <q-tooltip>
+            <slot name="tooltipSlot"></slot>
+          </q-tooltip>
+        </q-icon>
       </div>
     </div>
-    <div class="col-10"><Doughnut :data="data" :options="options" /></div>
+    <div class="col-10"><Doughnut :data="data" :options="chartOptions" /></div>
   </div>
 </template>
 
@@ -19,18 +23,15 @@ import {
   Tooltip,
   Legend,
   ChartData,
+  ChartOptions,
 } from 'chart.js';
 import { Doughnut } from 'vue-chartjs';
-import { getCssVar } from 'quasar';
-import { PropType } from 'vue';
+import { Dark, getCssVar, useQuasar } from 'quasar';
+import { PropType, ref, watch } from 'vue';
 import getDataSetColor from 'src/css/utils';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-export const options = {
-  responsive: true,
-  maintainAspectRatio: false,
-};
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 export default {
   name: 'App',
@@ -48,6 +49,17 @@ export default {
     },
   },
   data(props: any) {
+    const chartOptions = ref<ChartOptions>({
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          labels: {
+            color: Dark.isActive ? '#fcfcfc' : '#333',
+          },
+        },
+      },
+    });
     /**
      * Since rounded charts are using datasets differently , we have to allocate the colors like this.
      * Check each datasets data array , generate an same length number array incremented by one , this will mimic the array indexing.
@@ -61,7 +73,26 @@ export default {
         ).map((x: number) => getCssVar(getDataSetColor(x))),
       };
     }
-    return { options };
+
+    const $q = useQuasar();
+
+    watch(
+      () => $q.dark.isActive,
+      () => {
+        chartOptions.value = {
+          ...chartOptions,
+          plugins: {
+            legend: {
+              labels: {
+                color: Dark.isActive ? '#fcfcfc' : '#333',
+              },
+            },
+          },
+        };
+      }
+    );
+
+    return { chartOptions };
   },
 };
 </script>

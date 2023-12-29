@@ -13,45 +13,52 @@
           :error="selectedTool"
           :no-error-icon="true"
           @update:model-value="handleToolSelectionChange"
+          data-cy="tool-selector"
         />
       </div>
       <div class="q-pt-lg col-9">
-        <SectionSeparator title="General usage data for a single tool" />
+        <SectionSeparator :title="getCurrentSeparatorTitle(0)" />
       </div>
     </div>
 
-    <div class="row justify-evenly q-mb-lg" style="height: 400px">
-      <q-card class="col-8">
+    <div class="row justify-evenly q-mb-lg chart-container">
+      <q-card class="col-lg-5 col-sm-7 justify-center">
         <BarChart
-          ref="refBar"
           :data="yearlyChartData"
           stacked="true"
-          title="Selected tools total usage"
+          :title="getCurrentLangTitlePerTool(0)"
         />
       </q-card>
     </div>
-    <div class="row justify-center q-mb-lg" style="max-height: 425px">
-      <q-card class="col-4 q-ma-md q-pb-sm">
+    <div class="row justify-center q-mb-lg">
+      <q-card class="col-4 col-sm-5 q-ma-md q-pb-sm chart-container">
         <RadarChart
           :data="timeSpanChartData"
-          title="Selected tools time span usage"
+          :title="getCurrentLangTitlePerTool(1)"
         />
       </q-card>
-      <q-card class="col-4 q-ma-md q-pb-sm">
-        <PieChart :data="actionChartData" title="Weighted command usage" />
+      <q-card class="col-4 col-sm-5 q-ma-md q-pb-sm chart-container">
+        <PieChart
+          :data="actionChartData"
+          :title="getCurrentLangTitlePerTool(2)"
+        />
       </q-card>
     </div>
-    <div class="row justify-center q-my-lg">
-      <q-card class="col-9 justify-center">
-        <MapChart :countryData="countryChartData" />
-      </q-card>
-    </div>
+    <DropDownSeparator :title="getCurrentSeparatorTitle(1)">
+      <template #contentSlot>
+        <div class="row justify-center q-my-lg">
+          <q-card class="col-9 justify-center">
+            <MapChart :countryData="countryChartData" />
+          </q-card></div
+      ></template>
+    </DropDownSeparator>
   </q-page>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref, watch } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 import SectionSeparator from 'src/components/SectionSeparator.vue';
+import DropDownSeparator from 'src/components/DropDownSeparator.vue';
 import { useAppStore } from 'src/stores/appStore';
 import { usePerToolStore } from 'src/stores/perToolStore';
 import BarChart from 'src/components/charts/BarChart.vue';
@@ -65,7 +72,14 @@ import RadarChart from 'src/components/charts/RadarChart.vue';
 
 export default defineComponent({
   name: 'PerToolPage',
-  components: { SectionSeparator, BarChart, PieChart, MapChart, RadarChart },
+  components: {
+    SectionSeparator,
+    BarChart,
+    PieChart,
+    MapChart,
+    RadarChart,
+    DropDownSeparator,
+  },
   setup() {
     const appStore = useAppStore();
     const perToolStore = usePerToolStore();
@@ -132,7 +146,6 @@ export default defineComponent({
         actionChartData.value = data[1] as ChartData;
         timeSpanChartData.value = data[2] as ChartData;
         countryChartData.value = data[3].datasets;
-        console.log(timeSpanChartData.value);
       }
     }
 
@@ -153,7 +166,21 @@ export default defineComponent({
           perToolStore.setSelectedTools(tool);
         },
       }),
+      getCurrentLangTitlePerTool: (index: number) => {
+        return appStore.getCurrentLangTitlePerTool(index);
+      },
+      getCurrentSeparatorTitle: (index: number) => {
+        return appStore.getPerToolPageSeparatorTitle(index);
+      },
     };
   },
 });
 </script>
+
+<style lang="scss" scoped>
+.chart-container {
+  height: 365px;
+  min-height: 300px;
+  max-height: 495px;
+}
+</style>

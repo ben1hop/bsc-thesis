@@ -1,14 +1,18 @@
 <template>
   <div class="container q-mx-md column justify-around" style="height: 100%">
     <div class="col-1 q-mt-sm row justify-between items-center">
-      <div class="text-bold text-h5 text-text-primary-dark">
+      <div class="text-bold text-h5">
         {{ title }}
       </div>
       <div>
-        <q-icon name="sym_r_help"></q-icon>
+        <q-icon name="sym_r_help">
+          <q-tooltip>
+            <slot name="tooltipSlot"></slot>
+          </q-tooltip>
+        </q-icon>
       </div>
     </div>
-    <div class="col-10"><Bar :data="chartData" :options="options" /></div>
+    <div class="col-10"><Bar :data="chartData" :options="chartOptions" /></div>
   </div>
 </template>
 
@@ -27,7 +31,7 @@ import { Bar } from 'vue-chartjs';
 import { PropType, ref, watch } from 'vue';
 import { ChartData } from 'chart.js';
 import getDataSetColor from 'src/css/utils';
-import { getCssVar } from 'quasar';
+import { Dark, getCssVar, useQuasar } from 'quasar';
 
 ChartJS.register(
   CategoryScale,
@@ -80,20 +84,52 @@ export default {
       };
     }
 
-    let options: ChartOptions = {
+    const chartOptions = ref<ChartOptions>({
       responsive: true,
       maintainAspectRatio: false,
-    };
+      scales: {
+        x: {
+          ticks: {
+            color: Dark.isActive ? '#fcfcfc' : '#333',
+          },
+        },
+        y: {
+          ticks: {
+            color: Dark.isActive ? '#fcfcfc' : '#333',
+          },
+        },
+      },
+      plugins: {
+        legend: {
+          labels: {
+            color: Dark.isActive ? '#fcfcfc' : '#333',
+          },
+        },
+      },
+    });
 
     if (props.stacked) {
-      options = {
-        ...options,
+      chartOptions.value = {
+        ...chartOptions,
         scales: {
           x: {
             stacked: true,
+            ticks: {
+              color: Dark.isActive ? '#fcfcfc' : '#333',
+            },
           },
           y: {
             stacked: true,
+            ticks: {
+              color: Dark.isActive ? '#fcfcfc' : '#333',
+            },
+          },
+        },
+        plugins: {
+          legend: {
+            labels: {
+              color: Dark.isActive ? '#fcfcfc' : '#333',
+            },
           },
         },
       };
@@ -108,9 +144,41 @@ export default {
       }
     });
 
+    const $q = useQuasar();
+
+    watch(
+      () => $q.dark.isActive,
+      () => {
+        chartOptions.value = {
+          ...chartOptions,
+          scales: {
+            x: {
+              ...chartOptions.value.scales?.x,
+              ticks: {
+                color: Dark.isActive ? '#fcfcfc' : '#333',
+              },
+            },
+            y: {
+              ...chartOptions.value.scales?.y,
+              ticks: {
+                color: Dark.isActive ? '#fcfcfc' : '#333',
+              },
+            },
+          },
+          plugins: {
+            legend: {
+              labels: {
+                color: Dark.isActive ? '#fcfcfc' : '#333',
+              },
+            },
+          },
+        };
+      }
+    );
+
     return {
       chartData,
-      options,
+      chartOptions,
     };
   },
 };

@@ -1,4 +1,4 @@
-import { DataSet, MapData } from './types/types';
+import { ChartData, DataSet, MapData } from './types/types';
 import { countryToAlpha2 } from 'country-to-iso';
 
 /**
@@ -50,6 +50,35 @@ export function loadTotalThroughYearPerTool(
     i = j;
     n++;
   }
+  return datasets;
+}
+
+export function loadTotalUsageBySoftware(
+  table: any,
+  versions: string[]
+): DataSet[] {
+  const datasets: DataSet[] = [];
+
+  const zolabVersionCount = Array.apply(null, Array(versions.length)).map(
+    () => 0
+  ) as number[];
+
+  const zapVersionCount = Array.apply(null, Array(versions.length)).map(
+    () => 0
+  ) as number[];
+
+  for (const entry of table) {
+    const versionIndex = versions.findIndex((x: string) => x === entry.version);
+    if (entry.name === 'Zoolab') {
+      zolabVersionCount[versionIndex] = entry.total;
+    } else if (entry.name === 'Zoolab-Zap') {
+      zapVersionCount[versionIndex] = entry.total;
+    }
+  }
+
+  datasets.push(new DataSet(zolabVersionCount, 'Zoolab'));
+  datasets.push(new DataSet(zapVersionCount, 'Zoolab-Zap'));
+
   return datasets;
 }
 
@@ -184,8 +213,19 @@ export function loadPerToolAction(table: any) {
 
 export function loadPerToolTimeSpan(table: any) {
   const datasets: DataSet[] = [];
-  const am = table.filter((x: any) => x.hour < 13).map((x: any) => x.total);
-  const pm = table.filter((x: any) => x.hour >= 13).map((x: any) => x.total);
+  const amTable = table.filter((x: any) => x.hour < 13);
+  const pmTable = table.filter((x: any) => x.hour >= 13);
+
+  const am = Array.apply(null, Array(12)).map(() => 0) as number[];
+  const pm = Array.apply(null, Array(12)).map(() => 0) as number[];
+
+  for (const entry of amTable) {
+    am[entry.hour - 1] = entry.total;
+  }
+  for (const entry of pmTable) {
+    pm[entry.hour - 1] = entry.total;
+  }
+
   datasets.push(new DataSet(am, 'AM'));
   datasets.push(new DataSet(pm, 'PM'));
   return datasets;
@@ -197,4 +237,49 @@ export function loadPerToolCountry(table: any): Record<string, number> {
     rec_[String(countryToAlpha2(table[i].country))] = table[i].total;
   }
   return rec_;
+}
+
+export function loadCompareTableData(table: any, tools: string[]) {
+  const tableData: {
+    name: string;
+    total: number;
+    first: string;
+    growth: boolean;
+  }[] = [];
+  const splittedData = splitArrayByProperty(table, 'tool'); // we split the mysql array into sub arrays grouped by tools
+  for (const tool of tools) {
+    const firstYear = splittedData[tool][0].year;
+    const total = splittedData[tool].reduce((acc, obj) => acc + obj.total, 0); // summs each tools total entries
+    const length = splittedData[tool].length;
+    let growth = false;
+    if (
+      // atleast 2 years req
+      length > 1 &&
+      splittedData[tool][length - 1].total >
+        splittedData[tool][length - 2].total
+    ) {
+      growth = true;
+    }
+    tableData.push({
+      name: tool,
+      total: total,
+      first: firstYear,
+      growth: growth,
+    });
+  }
+  return tableData;
+}
+
+function splitArrayByProperty(arr, prop) {
+  const result = {};
+
+  arr.forEach((obj) => {
+    const key = obj[prop];
+    if (!result[key]) {
+      result[key] = [];
+    }
+    result[key].push(obj);
+  });
+
+  return result;
 }

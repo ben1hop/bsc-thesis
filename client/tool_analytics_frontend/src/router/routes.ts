@@ -17,9 +17,9 @@ const routes: RouteRecordRaw[] = [
     children: [{ path: '', component: () => import('pages/PerToolPage.vue') }],
   },
   {
-    path: '/utils',
+    path: '/compare',
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/UtilsPage.vue') }],
+    children: [{ path: '', component: () => import('pages/ComparePage.vue') }],
   },
 
   // Always leave this as last one,

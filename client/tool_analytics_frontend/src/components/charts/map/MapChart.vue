@@ -7,7 +7,7 @@
 
     <div
       v-if="legend.name"
-      class="vue-map-legend"
+      class="vue-map-legend text-text-primary-light"
       :style="'left:' + position.left + 'px; top: ' + position.top + 'px'"
     >
       <div class="vue-map-legend-header">
@@ -54,7 +54,11 @@ export default defineComponent({
     },
     countryStrokeColor: {
       type: String,
-      default: '#909090',
+      default: '#fcfcfc',
+    },
+    legendFontColorHeader: {
+      type: String,
+      default: '#fcfcfc',
     },
   },
   setup(props, { emit }) {
