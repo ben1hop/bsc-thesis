@@ -2,7 +2,7 @@
   <q-page class="column justify-evenly">
     <q-card class="q-pa-lg" data-cy="landing-page-title">
       <div class="row justify-evenly">
-        <div class="col-7 column">
+        <div v-if="isLangEng" class="col-7 column">
           <p
             :class="
               'text-h5 text-weight-bolder title-class shadow-1 ' +
@@ -25,19 +25,50 @@
             page , also we can compare selected ones on the compare tool page
           </p>
         </div>
+        <div v-else class="col-7 column">
+          <p
+            :class="
+              'text-h5 text-weight-bolder title-class shadow-1 ' +
+              getTitleBgColor()
+            "
+          >
+            Total usage oldal
+            <br />
+          </p>
+          <p class="q-pl-md text-subtitle1">
+            Ezen az oldalon találjuk az összes elérhető Tool használatával
+            kapcsolatos információkat. A kimutatások aggregált esemény adatokból
+            készültek.
+            <br />
+          </p>
+          <p class="q-pl-md text-subtitle1">
+            További információk találhatóak a diagrammok melletti
+            segédablakokban.
+            <br />
+            Ezen felül lehetőségünk van egy kiválasztott Tool-ról kimutatásokat
+            megtekinteni és több Tool-t összehasonlítani.
+          </p>
+        </div>
         <q-card class="col-4">
           <q-item :class="getTitleBgColor() + ' q-px-lg text-h6'">
-            <q-item-section underline>
+            <q-item-section underline v-if="isLangEng">
               <q-item-label>Additional informations</q-item-label>
               <q-item-label caption>
                 General information about the processed data</q-item-label
+              >
+            </q-item-section>
+            <q-item-section underline v-else>
+              <q-item-label>További információk</q-item-label>
+              <q-item-label caption>
+                Álltalános információk a feldolgozott adatokról</q-item-label
               >
             </q-item-section>
           </q-item>
           <q-separator />
           <q-item>
             <q-item-section>
-              <q-item-label>Available tools</q-item-label>
+              <q-item-label v-if="isLangEng">Available tools</q-item-label>
+              <q-iitem-label v-else>Elérhető eszközök</q-iitem-label>
             </q-item-section>
             <q-item-section side>
               <q-btn-dropdown no-caps dropdown-icon="sym_r_expand_more">
@@ -54,7 +85,8 @@
           </q-item>
           <q-item>
             <q-item-section>
-              <q-item-label>Processed time span</q-item-label>
+              <q-item-label v-if="isLangEng">Processed time span</q-item-label>
+              <q-item-label v-else>Feldolgozott időszak</q-item-label>
             </q-item-section>
             <q-item-section side class="text-bold"
               >{{ availableToolsTime[0] }} -
@@ -65,7 +97,8 @@
           </q-item>
           <q-item>
             <q-item-section>
-              <q-item-label>Number of events</q-item-label>
+              <q-item-label v-if="isLangEng">Number of events</q-item-label>
+              <q-item-label v-else>Események száma</q-item-label>
             </q-item-section>
             <q-item-section side class="text-bold">{{
               totalEvents
@@ -73,7 +106,8 @@
           </q-item>
           <q-item>
             <q-item-section>
-              <q-item-label>First event</q-item-label>
+              <q-item-label v-if="isLangEng">First event</q-item-label>
+              <q-item-label v-else>Első esemény</q-item-label>
             </q-item-section>
             <q-item-section side class="text-bold">
               {{ firstEvent }}</q-item-section
@@ -81,7 +115,8 @@
           </q-item>
           <q-item>
             <q-item-section>
-              <q-item-label>Last sync</q-item-label>
+              <q-item-label v-if="isLangEng">Last sync</q-item-label>
+              <q-item-label v-else>Utolsó szinkronizálás</q-item-label>
             </q-item-section>
             <q-item-section side class="text-bold">
               {{ lastSync }}</q-item-section
@@ -148,23 +183,22 @@
 
       <div class="row justify-evenly q-py-lg">
         <q-card
-          class="row justify-center col-xs-1 col-md-1 col-lg-2 q-gutter-sm"
+          class="column justify-center col-xs-1 col-md-1 col-lg-2 q-gutter-sm"
           style="height: 100px"
         >
           <q-radio
             style="width: 45%"
             v-model="monthMode"
             val="month"
-            label="Months"
+            :label="isLangEng ? 'Months' : 'Hónapok'"
             data-cy="radio-1"
           />
           <q-radio
             style="width: 45%"
             v-model="monthMode"
             val="day"
-            label="Days"
+            :label="isLangEng ? 'Days' : 'Napok'"
             data-cy="radio-2"
-            
           />
         </q-card>
 
@@ -335,6 +369,7 @@ export default defineComponent({
       availableToolsTime: computed(() => appStore.availableYears),
       firstEvent: computed(() => infoStore.getFirstEvent),
       totalEvents: computed(() => infoStore.getTotalEvents),
+      isLangEng: computed(() => appStore.getCurrentLang === 'English'),
       lastSync,
       monthMode,
       getCurrentTitle: (index: number) => {
